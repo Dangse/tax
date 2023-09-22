@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소득세 계산기</title>
+</head>
+<body>
+
+<h2>2023년 소득세 계산기</h2>
+<label for="income">과세표준 금액 입력:</label>
+<input type="number" id="income" placeholder="과세표준 금액을 입력해주세요">
+<button onclick="calculateTax()">세금 계산하기</button>
+
+<h3>계산 결과:</h3>
+<p id="result"></p>
+<h3>계산 과정:</h3>
+<p id="calculation"></p>
+
+<script>
+    function calculateTax() {
+        const income = parseFloat(document.getElementById("income").value);
+        let tax;
+        let calculationText = '';
+
+        if (income <= 14000000) {
+            tax = income * 0.06;
+            calculationText = `세금 = ${income} * 6% = ${tax.toLocaleString()}원`;
+        } else if (income <= 50000000) {
+            tax = income * 0.15 - 1260000;
+            calculationText = `세금 = ${income} * 15% - 1,260,000원 = ${tax.toLocaleString()}원`;
+        } else if (income <= 88000000) {
+            tax = income * 0.24 - 57600000;
+            calculationText = `세금 = ${income} * 24% - 5,760,000원 = ${tax.toLocaleString()}원`;
+        } else if (income <= 150000000) {
+            tax = income * 0.35 - 14900000;
+            calculationText = `세금 = ${income} * 35% - 14,900,000원 = ${tax.toLocaleString()}원`;
+        } else if (income <= 300000000) {
+            tax = income * 0.38 - 19400000;
+            calculationText = `세금 = ${income} * 38% - 19,400,000원 = ${tax.toLocaleString()}원`;
+        } else if (income <= 500000000) {
+            tax = income * 0.40 - 25400000;
+            calculationText = `세금 = ${income} * 40% - 25,400,000원 = ${tax.toLocaleString()}원`;
+        } else if (income <= 1000000000) {
+            tax = income * 0.42 - 35400000;
+            calculationText = `세금 = ${income} * 42% - 35,400,000원 = ${tax.toLocaleString()}원`;
+        } else {
+            tax = income * 0.45 - 65400000;
+            calculationText = `세금 = ${income} * 45% - 65,400,000원 = ${tax.toLocaleString()}원`;
+        }
+
+        document.getElementById("result").innerText = `세금: ${tax.toLocaleString()}원`;
+        document.getElementById("calculation").innerText = calculationText;
+    }
+</script>
+
+</body>
+</html>
