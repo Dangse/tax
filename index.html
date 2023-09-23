@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>간단한 웹 페이지</title>
+    <title>리스트와 링크 예시</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,27 +12,33 @@
             background-color: #f7f7f7;
         }
 
-        h1 {
-            color: #333;
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
         }
 
-        p {
-            color: #666;
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
-    <h1>환영합니다!</h1>
-    <p>이것은 간단한 HTML 문서 예시입니다.</p>
-    <p>아래 버튼을 클릭하면 메시지가 나타납니다.</p>
-    <button onclick="showMessage()">클릭하세요</button>
-
-    <script>
-        function showMessage() {
-            alert('안녕하세요! HTML 문서에서 메시지를 표시했습니다.');
-        }
-    </script>
+    <ul>
+        <li><a href="#소득세율URL">소득세율</a></li>
+        <li><a href="#양도세계산기URL">양도세계산기</a></li>
+        <li><a href="#종부세계산기URL">종부세계산기</a></li>
+        <li><a href="#종부세계산기URL">종부세계산기</a></li>
+    </ul>
 </body>
 
 </html>
