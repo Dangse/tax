@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산기</title>
+    <style>
+        .container {
+            max-width: 300px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <input type="number" id="inputA" placeholder="양도가액입력">
+        <input type="number" id="inputB" placeholder="-취득가액입력">
+        <input type="number" id="inputD" placeholder="기본공제 250만원 ">
+        
+        <input type="number" id="outputC" placeholder="=양도차익" readonly>
+        <input type="number" id="outputE" placeholder="과세표준" readonly>
+        <input type="number" id="outputF" placeholder=" 산출세액  " readonly>
+        <button onclick="calculate()">계산하기</button>
+    </div>
+
+    <script>
+        function calculate() {
+            const A = parseFloat(document.getElementById('inputA').value);
+            const B = parseFloat(document.getElementById('inputB').value);
+            const D = parseFloat(document.getElementById('inputD').value);
+
+            const C = A + B;
+            const E = C - D;
+            const F = E * 0.10;
+
+            document.getElementById('outputC').value = C;
+            document.getElementById('outputE').value = E;
+            document.getElementById('outputF').value = F;
+        }
+    </script>
+</body>
+
+</html>
