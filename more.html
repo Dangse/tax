@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show More Content</title>
+    <style>
+        .moreContent {display: none;}
+    </style>
+</head>
+<body>
+
+<div>
+    <p>This is the visible content for section 1.</p>
+    <div class="moreContent">
+        <p>This is additional content for section 1 that was hidden but is now visible.</p>
+    </div>
+    <button onclick="showMoreContent(this)">Show More</button>
+</div>
+
+
+<hr>
+<div>
+    <p>This is the visible content for section 2.</p>
+    <div class="moreContent">
+        <p>This is additional content for section 2 that was hidden but is now visible.</p>
+    </div>
+    <button onclick="showMoreContent(this)">Show More</button>
+</div>
+
+<hr>
+<div>
+    <p>This is the visible content for section 2.</p>
+    <div class="moreContent">
+        <p>This is additional content for section 2 that was hidden but is now visible.</p>
+    </div>
+    <button onclick="showMoreContent(this)">Show More</button>
+</div>
+
+
+<hr>
+<div>
+    <p>This is the visible content for section 2.</p>
+    <div class="moreContent">
+        <p>This is additional content for section 2 that was hidden but is now visible.</p>
+    </div>
+    <button onclick="showMoreContent(this)">Show More</button>
+</div>
+
+<hr>
+<div>
+    <p>This is the visible content for section 2.</p>
+    <div class="moreContent">
+        <p>This is additional content for section 2 that was hidden but is now visible.</p>
+    </div>
+    <button onclick="showMoreContent(this)">Show More</button>
+</div>
+
+
+
+<!-- Repeat the above block for as many sections as you need -->
+
+<script>
+function showMoreContent(button) {
+    var moreContent = button.previousElementSibling;
+
+    if (moreContent.style.display === 'none') {
+        moreContent.style.display = 'block';
+        button.textContent = 'Show Less';
+    } else {
+        moreContent.style.display = 'none';
+        button.textContent = 'Show More';
+    }
+}
+</script>
+
+</body>
+</html>
