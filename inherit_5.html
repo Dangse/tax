@@ -38,6 +38,90 @@
     
         .moreContent {display: none;}
     </style>
+
+<script>
+   
+
+    function calculateTax3_16() {
+            var inputNumber = document.getElementById('inputNumber1').value.replace(/,/g, '');
+            var tax = parseFloat(inputNumber) * 3.16 / 100;
+            var formattedTax = tax.toLocaleString('ko-KR', {
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0
+            });
+            document.getElementById('taxResult1').innerHTML = `취득세(시가표준액*3.16%): ${formattedTax}`;
+        }
+
+        function calculateTax2_56() {
+            var inputNumber = document.getElementById('inputNumber2').value.replace(/,/g, '');
+            var tax = parseFloat(inputNumber) * 2.56 / 100;
+            var formattedTax = tax.toLocaleString('ko-KR', {
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0
+            });
+            document.getElementById('taxResult2').innerHTML = `취득세(시가표준액*2.56%): ${formattedTax}`;
+        }
+
+        function calculateTaxes() {
+            var transferPrice = parseFloat(document.getElementById('transferPrice').value);
+            var acquisitionPrice = parseFloat(document.getElementById('acquisitionPrice').value);
+            var holdingPeriod = parseFloat(document.getElementById('holdingPeriod').value);
+           
+
+            var capitalGain = transferPrice - acquisitionPrice;
+            var longTermDeduction = calculateLongTermDeduction(capitalGain, holdingPeriod);
+            var taxableIncome = capitalGain - longTermDeduction;
+            var taxBase = Math.max(0, taxableIncome - 2500000);
+            var transferTax = calculateTransferTax(taxBase);
+            var localIncomeTax = transferTax * 0.1;
+            var totalTax = transferTax + localIncomeTax;
+
+            document.getElementById('transferValue').innerText = transferPrice.toLocaleString();
+            document.getElementById('acquisitionValue').innerText = acquisitionPrice.toLocaleString();
+            document.getElementById('capitalGain').innerText = capitalGain.toLocaleString();
+            document.getElementById('longTermDeduction').innerText = longTermDeduction.toLocaleString();
+            document.getElementById('taxableIncome').innerText = taxableIncome.toLocaleString();
+            document.getElementById('taxBase').innerText = taxBase.toLocaleString();
+            document.getElementById('transferTax').innerText = transferTax.toLocaleString();
+            document.getElementById('localIncomeTax').innerText = localIncomeTax.toLocaleString();
+            document.getElementById('totalTax').innerText = totalTax.toLocaleString();
+        }
+
+        function calculateLongTermDeduction(capitalGain, holdingPeriod) {
+             var deductionRate = 0;
+            if (holdingPeriod >= 3 && holdingPeriod < 4) {
+             deductionRate = 0.06;
+            } else if (holdingPeriod >= 4 && holdingPeriod < 5) {
+              deductionRate = 0.08;
+            } else if (holdingPeriod >= 5) {
+              deductionRate = Math.min(0.3, 0.02 * holdingPeriod);
+            }
+
+            return capitalGain * deductionRate;
+            }  
+
+    function calculateTransferTax(taxBase) {
+    if (taxBase <= 14000000) {
+        return taxBase * 0.06; // 6%
+    } else if (taxBase <= 50000000) {
+        return taxBase * 0.15 - 1260000; // 15%, 1260000원 공제
+    } else if (taxBase <= 88000000) {
+        return taxBase * 0.24 - 5760000; // 24%, 5760000원 공제
+    } else if (taxBase <= 150000000) {
+        return taxBase * 0.35 - 15440000; // 35%, 15440000원 공제
+    } else if (taxBase <= 300000000) {
+        return taxBase * 0.38 - 19940000; // 38%, 19940000원 공제
+    } else if (taxBase <= 500000000) {
+        return taxBase * 0.40 - 25940000; // 40%, 25940000원 공제
+    } else if (taxBase <= 1000000000) {
+        return taxBase * 0.42 - 35940000; // 42%, 35940000원 공제
+    } else {
+        return taxBase * 0.45 - 65940000; // 45%, 65940000원 공제
+    }
+}
+
+</script>
+
 </head>
 <body>
     <h1> 아버지께서 돌아가셨어요.🕊️ 아버지소유 1주택과 건물. 농지와 임야가 있는데, 세금이 얼마나 나오나요 ? 🔍 </h1>
@@ -60,39 +144,21 @@
     <h3>◈ 기본전제</h3>
     <ol>
         <li>돌아가신 아버지 1주택과 건물, 금융자산만 소유.</li>
-        <li>어머니와 자녀들는 모두 따로 떨어져( 별도세대 ) 살고 있음. </li>
+        <li>어머니와 자녀들는 모두 따로 떨어져(별도세대로 ) 살고 있음. </li>
     </ol>
     
-      <!-- Section (1) -->
-
-      <h3>◈ 기본내용</h3>
-    <table>
-        <tr>
-            <td>사망일</td>
-            <td><input type="date"></td>
-        </tr>
-        <tr>
-            <td>배우자</td>
-            <td>
-                <select>
-                    <option value="alive" selected>생존</option>
-                    
-                </select>
-            </td>
-        </tr>
-        
-    </table>
+     
     
     <h3>◈ 상속 재산내용</h3>
    
-    <h3>(1)본래의 상속재산 </h3>
+    <h3>(1) 본래의 상속재산 </h3>
      <p>사망일 당시 피상속인에게 귀속되는 국내외 모든 재산합계액</p>
 
      <strong>아버지소유 1주택</strong> <br>
     <table>        
 
         <tr>
-            <td>사망일 당시 주택 시가</td>
+            <td>사망일 당시 주택 <strong>시가</strong></td>
             <td><input type="text"></td>
         </tr>
         
@@ -101,7 +167,7 @@
     <strong>아버지소유 건물</strong> 
     <table>
         <tr>
-            <td>사망일 당시 건물 시가</td>
+            <td>사망일 당시 건물<strong>시가</strong> </td>
             <td><input type="text"></td>
         </tr>
      
@@ -110,11 +176,11 @@
     <strong>아버지소유 농지와 임야 </strong> 
     <table>
         <tr>
-            <td>사망일 당시 농지기준시가</td>
+            <td>사망일 당시 농지<strong>기준시가</strong></td>
             <td><input type="text"></td>
         </tr>
         <tr>
-            <td>사망일 당시 임야기준시가</td>
+            <td>사망일 당시 임야<strong>기준시가</strong></td>
             <td><input type="text"></td>
         </tr>
     </table><br>
@@ -132,21 +198,7 @@
     </table>
   
 
-<h3>(2) 장례비용</h3>
-<table>
-    
-    <tr>
-        <td>장례에 직접 소요된 금액 (1천한도,5백공제)</td>
-        <td>10,000,000</td>
-    </tr>
-    <tr>
-        <td>봉안시설 묘지포함 금액 ( 5백한도 ) </td>
-        <td>5,000,000 </td>
-    </tr>
-</table>
-
-<!-- Section (7) -->
-<h3>(3) 채무</h3>
+<h3>(2) 채무</h3>
 <table>
     
     <tr>
@@ -159,37 +211,27 @@
     </tr>
 </table>
 
-<!-- Section (8) -->
-<h3>(4) 사전증여재산</h3>
+<h3>(3) 사전증여재산</h3>
 <table>
     
     <tr>
-        <td>상속 개시 전 10년 이내에 피상속인이 상속인인 배우자에게 증여한 재산가액</td>
+        <td>사망일 전 10년 이내에 어머니에게 증여한 재산가액</td>
         <td><input type="text"></td>
     </tr>
     <tr>
-        <td>상속 개시 전 10년 이내에 피상속인이 배우자를 제외한 상속인에게 증여한 재산가액</td>
+        <td>사망일 전 10년 이내에 자녀에게 증여한 재산가액</td>
         <td><input type="text"></td>
     </tr>
     <tr>
-        <td>상속 개시 전 5년 이내에 피상속인이 상속인이 아닌 자에게 증여한 재산가액</td>
+        <td>사망일 전 5년이내에  상속인이 아닌 자(손자손녀. 친척. 타인)에게 증여한 재산가액</td>
         <td><input type="text"></td>
     </tr>
 </table>
 
-<!-- Section (9) -->
-<h3>(5) 감정평가수수료</h3>
-<table>
-    
-    <tr>
-        <td>부동산에 대한 수수료(5백만원 한도)</td>
-        <td><input type="text"></td>
-    </tr>
-    
-</table>
 
-<!-- Section (10) -->
-<h3>(6) 사전증여재산 세액공제</h3>
+
+
+<h3>(4) 사전증여재산 세액공제</h3>
 <p>* 상속재산에 합산되는 사전 증여신고 때 납부한 증여세</p>
 <table>
     
@@ -197,7 +239,8 @@
         <td><input type="text"></td>
     </tr>
 </table>
-<br>
+
+<br><br>
 <hr>
     <h1> 아버지께서 돌아가셨어요.🕊️ 아버지소유 1주택과 건물. 농지와 임야가 있는데, 세금이 얼마나 나오나요 ? 🔍 </h1>
 
@@ -219,7 +262,7 @@
 <h3>◈ 기본전제</h3>
     <ol>
         <li>돌아가신 아버지 1주택과 건물과 농지와 임야 및 금융자산만 소유.</li>
-        <li>어머니와 자녀들는 모두 따로 떨어져( 별도세대 ) 살고 있음. </li>
+        <li>어머니와 자녀들는 모두 따로 떨어져 별도세대로 살고 있음. </li>
     </ol>
 
 
@@ -229,8 +272,8 @@
 <table>        
 
     <tr>
-        <td>사망일 당시 주택 시가</td>
-        <td><input type="text"></td>
+        <td>사망일 당시 주택 <strong>시가</strong> </td>
+        <td></td>
     </tr>
     
 </table> <br>
@@ -238,8 +281,8 @@
 <strong>아버지소유 건물</strong> 
 <table>
     <tr>
-        <td>사망일 당시 건물 시가</td>
-        <td><input type="text"></td>
+        <td>사망일 당시 건물  <strong>시가</strong></td>
+        <td></td>
     </tr>
  
 </table><br>
@@ -247,12 +290,12 @@
 <strong>아버지소유 농지와 임야 </strong> 
 <table>
     <tr>
-        <td>사망일 당시 농지기준시가</td>
-        <td><input type="text"></td>
+        <td>사망일 당시 농지 <strong>기준시가</strong></td>
+        <td></td>
     </tr>
     <tr>
-        <td>사망일 당시 임야기준시가</td>
-        <td><input type="text"></td>
+        <td>사망일 당시 임야 <strong>기준시가</strong></td>
+        <td></td>
     </tr>
 </table><br>
 
@@ -260,72 +303,68 @@
 <table>
     <tr>
         <td>금융자산</td>
-        <td><input type="text"></td>
+        <td></td>
     </tr>
     <tr>
         <td>기타상속자산</td>
-        <td><input type="text"></td>
+        <td></td>
     </tr>
 </table><br>
 
 
 <strong>채무</strong>
 <table>
-<tr>
-    <td>금융기관 채무</td>
-    <td><input type="text"></td>
-</tr>
+   <tr>
+      <td>금융기관 채무</td>
+      <td></td>
+   </tr>
 <tr>
     <td>기타 채무</td>
-    <td><input type="text"></td>
+    <td></td>
 </tr>
 </table><br>
 
 <strong>사전증여재산</strong>
 <table>
+    
+    <tr>
+        <td>사망일 전 10년 이내에 어머니 에게 증여한 재산가액</td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td>사망일 전 10년 이내에 자녀에게 증여한 재산가액</td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td>사망일 전 5년이내에  상속인이 아닌 자(손자녀,친척 ,타인)에게 증여한 재산가액</td>
+        <td><input type="text"></td>
+    </tr>
+</table> <br>
 
-<tr>
-    <td>상속 개시 전 10년 이내에 피상속인이 상속인인 배우자에게 증여한 재산가액</td>
-    <td><input type="text"></td>
-</tr>
-<tr>
-    <td>상속 개시 전 10년 이내에 피상속인이 배우자를 제외한 상속인에게 증여한 재산가액</td>
-    <td><input type="text"></td>
-</tr>
-<tr>
-    <td>상속 개시 전 5년 이내에 피상속인이 상속인이 아닌 자에게 증여한 재산가액</td>
-    <td><input type="text"></td>
-</tr>
-</table><br>
 
-<!-- Section (9) -->
-<strong>감정평가수수료</strong>
-<table>
-<tr>
-    <td>부동산에 대한 수수료(5백만원 한도)</td>
-    <td><input type="text"></td>
-</tr>
-</table><br>
+
 
 <strong>사전증여재산 세액공제</strong>
-<p>* 상속재산에 합산되는 사전 증여신고 때 납부한 증여세</p>
-<table>
 
-    <td>사전증여재산에 대한 증여 당시의 증여세 산출세액</td>
-    <td><input type="text"></td>
-</tr>
-</table><br>
+<table>
+    
+        <td>사전증여재산에 대한 증여 당시 납부한 증여세 </td>
+        <td><input type="text"></td>
+    </tr>
+</table>
+
+
 
 
 <section>
     <h2>◈ 상속세는 얼마나 나올까요 ? </h2>
     
-    <P>상속세는 사망일 당시 피상속인의 모든 재산을 합산하여 과세합니다. 이렇게 해서 나온 상속세는 상속인이 연대납세의무를 지게 됩니다. 
+    <P>상속세는 사망일 당시 아버지의 모든 재산을 합산하여 과세합니다. 이렇게 해서 나온 상속세는 상속인이 연대납세의무를 지게 됩니다. 
         
      </P>
 
 <table border="1">
-    <caption><strong>상속세 및 계산내역</strong></caption>
+    
     <thead>
         <tr>
             <th>구분</th>
@@ -359,12 +398,12 @@
         <tr>
             <td>(5) 상속공제</td>
             <td></td>
-            <td></td>
+            <td>한도 = min [10억,(1)-(2)-(3)]  </td>
         </tr>
         <tr>
             <td>(6) 감정평가수수료</td>
-            <td></td>
-            <td></td>
+            <td>5,000,000</td>
+            <td>5백한도</td>
         </tr>
         <tr>
             <td>(7) 상속세 과세표준</td>
@@ -389,7 +428,7 @@
         <tr>
             <td>(11) 세액공제</td>
             <td></td>
-            <td></td>
+            <td>증여세액공제 + 신고세액공제 3% </td>
         </tr>
         <tr>
             <td>(12) 자진납부할세액</td>
@@ -402,23 +441,29 @@
 <br>
 
 
-<h3>▶  건물 평가시 유의점 📢 </h3>
+<h3>▶ 농지와 임야 그리고 건물 평가시 유의점 📢 </h3>
 <ul>
    
-    <li>모든 재산은 원칙적으로 시가로 평가합니다. 시가가 없을 경우 기준시가로 평가를 합니다.</li>
-    <li>건물평가 역시 시가로 하는 것이 원칙이었으며, 시가가 없는 경우 기준시가로 평가하여 과세하였습니다. </li>
-    <li>그러나 2020년부터 고가의 건물을 기준시가로 과세하는 것에 대한 과세 형평성 문제가 제기되었습니다. 
-        이에 따라 국세청은 자체 감정평가예산을 배정하여 예상감정가와 시가의 차액이 10억을 넘거나 , 10%이상 차이가 나는 경우 
-        감정평가를 하여 과세하고 있습니다.  [국세청 훈령 제2580호 상속세 및 증여세 사무처리 규정] </li>    
-    <li>
-    </li>
-   
+    <li>모든 재산은 원칙적으로 시가로 평가합니다. 시가가 없을 경우 기준시가로 평가 합니다.</li>
+    <li>농지와 임야는 시가로 평가하는 것이 원칙이나, 시가가 없는 경우 기준시가로 평가하여 과세하였습니다. </li>   
+    <li>고가의 건물의 경우, 2020년부터 기준시가로 과세하는 것에 대한 과세 형평성 문제가 제기되었습니다. 
+        이에, 국세청은 자체 감정평가예산을 배정하여 예상감정가와 시가의 차액이 10억을 넘거나 , 10%이상 차이가 나는 경우 
+        감정평가를 하여 과세하고 있습니다.  [국세청 훈령 제2580호 상속세 및 증여세 사무처리 규정] </li>       
 </ul>
 
 
 <div>
     <p><h2>◈ 상속세 절세방법이 있을까요 ? </h2></p>
     <div class="moreContent">
+
+       <h4>▶ 자녀가 농업 또는 임업에 종사하고 있다면 ? 영농상속공제를 적용받아요 ! </h4>
+        <ul>
+            <li> 내용 :자경에 해당하는 농지 또는 임야 전체를 공제해줍니다. 다만, 한도 30억을 한도로 합니다.  </li>
+            <li>아버지 조건 : 8년이상 계속 자경했어야 하고, 농지소재지 30킬로미터 이내 또는 농지 소재지 또는 인접 시군구 인접지역에 거주하고 있어야 합니다. </li>
+            
+            <li> 자녀 조건 : 18세이상으로서 사망일 2년전부터 계속 영농에 종사하고 있어야 합니다.  </li>
+       </ul>
+
        <h4>▶ 빌딩이 시가 평가가 예상되는 경우  감정평가를 미리 받아요! </h4>
         <ul>
             <li>국세청의 감정평가는 어떤 부동산에 대하여, 얼마 가격이상부터 감정평가를 한다는 선정기준에 대해서는 "공정한업무수행"에 지장을 초래한다는 
@@ -430,7 +475,7 @@
                
                 
                 
-            <h4>▶ 배우자상속공제 한도를 최대한 이용해요!</h4>
+        <h4>▶ 배우자상속공제 한도를 최대한 이용해요!</h4>
         
             <ul>
                 <li>배우자상속공제를 높이면 5억원이상 공제를 받을 수 있습니다. <br> 우리 사례의 경우 배우자공제를 최대한 받을수 있도록 하기 위해 
@@ -450,7 +495,7 @@
             
         // 배우자상속공제 한도 ( 계산기 만들때 참고내용임 ) <br>
         1. 거주자의 사망으로 상속이 개시되어 배우자가 실제 상속받은 금액<br>
-        2. (상속재산가액* × 배우자의 법정상속분) - 상속재산에 가산한 배우자가 사전증여받은 재산의 증여세 과세표준<br>
+        2. (상속재산가액* × 배우자의 법정상속분) - 상속재산에 가산한 배우자가 사전증여받은 재산의 증여세 과세표준 ( = 사전증여재산 - 6억)<br>
             *상속재산가액 = (본래+간주+추정)상속재산가액 + 사망일 전 10년 이내 상속인에게 증여한 재산가액 - 상속인이 아닌 수유자가 유증·사인증여 받은 재산가액 - 비과세 재산가액 - 공과금 및 채무 - 과세가액 불산입 재산가액<br>
         3. 30억원 // <br><br>
         
@@ -497,95 +542,25 @@
 <div>
     <p><h2>◈ 배우자와 자녀의 취득세는 얼마일까요 ?</h2></p>
     <div class="moreContent">
-        This is additional content for section 2 that was hidden but is now visible.
+       
         <p>아버지 사망일로부터 6개월이 속하는 달의 말일까지 취득세를 신고하고 납부해야 합니다.</p>
+        <p>취득세의 과세표준은  시가로 계산하지 않고 모두 시가표준액으로 계산합니다. 
+            주택는 공시가격, 농지와 임야는 개별공시지가, 건물은 시가표준액으로 계산합니다.</p>
 
-<주택 취득세>
-<table>
-    <thead>
-        <tr>
-            <th>구분</th>
-            <th>취득세(2.8%)</th>
-            <th>농특세(0.2%)</th>
-            <th>지방교육세(0.16%)</th>
-            <th>합계</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>어머니</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>자녀1</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>자녀2</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>자녀3</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tbody>
-</table> <br>
+            <h4> 내가 받은 주택 또는 건물 또는 임야의 취득세 </h4>
 
-<건물 취득세>
-<table>
-    <thead>
-        <tr>
-            <th>구분</th>
-            <th>취득세(2.8%)</th>
-            <th>농특세(0.2%)</th>
-            <th>지방교육세(0.16%)</th>
-            <th>합계</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>어머니</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>자녀1</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>자녀2</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>자녀3</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
+    <input type="text" id="inputNumber1" placeholder="취득금액을 입력하세요" oninput="formatInputNumber(this)">
+    <button onclick="calculateTax3_16()">계산하기</button>
 
+    <p id="taxResult1"></p>
+
+    <h4>내가 받은 농지의 취득세 </h4>
+
+    <input type="text" id="inputNumber2" placeholder="취득금액을 입력하세요" oninput="formatInputNumber(this)">
+    <button onclick="calculateTax2_56()">계산하기</button>
+
+    <p id="taxResult2"> </p>
+                
 <h2>◈ 취득세 절세 방법이 있을까요 ?</h2>
     <h4>1) 상속세 특례세율을 이용합니다. </h4>
     <ul>
@@ -594,7 +569,7 @@
         <li>1주택을 공동으로 상속받는 경우 지분이 가장 큰 사람의 소유로 보고, 
             지분이 동일한 경우 연장자의 소유로 보고 감면합니다. 
             예) 상속전 무주택자인 어머니와 자녀가 아버지의 상속주택 1개를 어머니가 50%, 세대분리된 아들이 50% 상속받음. 
-                이 경우 어머니 50%에 대하여만  0.8%의 특례세율 적용 받음.💕</li>
+                이 경우 어머니 50%에 대하여만  0.8%의 특례세율 적용 받음.</li>
     </ul>
 
 
@@ -605,7 +580,7 @@
         <li>어머니가 상속받는 경우, 주택이 있는 자녀가 주민등록표상에 같이 있다면 세대분리를 하는 것이 좋습니다.</li>
         <li>무주택 자녀가 상속받는 경우, 같이 사는 30세 이상인 세대원이 주택을 소유하고 있다면 
             그 세대원을 세대분리 하는 것이 좋습니다. </li>
-        <li>즉 주택상속받을 사람을 사망일 전에 무주택자로 만드는 것입니다. </li>
+        <li>즉, 주택상속받을 사람을 사망일 전에 무주택자로 만드는 것입니다. </li>
     </ul>
 
     </div>
@@ -614,10 +589,9 @@
 
 <hr>
 <div>
-    <h2>◈ 나의 종부세는 얼마나 될까요  ?</h2>
+    <h2>◈ 나의 종부세와 재산세는 얼마나 될까요  ?</h2>
     <div class="moreContent">
-        <strong>▶ 건물에 대한 종부세 </strong><br>
-       <p>공제금액이 80억원임니다.  80억 초과 ~200억 이하분에 대해서 0.5%, 200억초과 ~400억이하분 0.6%, 400억초과분 0.7%을 적용합니다.</p><br>
+        
 
     <strong>▶ 주택에 대한 종부세 </strong><br>
     
@@ -661,15 +635,12 @@
     <h4>2) 일부지분을 줄여 요건에 맞게 할수 있습니다.</h4>
     <p>시간이 지남에 따라서 소수지분이 기준시가가 처음엔 6억원이하 였다가,  6억원이 넘는 경우가 있을 수 있습니다. 이런 경우 
          일부지분을 증여 또는 양도를 통해서 6억이하로 만들어 종부세를 줄일 수 있습니다.</p>
-    </div>
-    <button onclick="showMoreContent(this)">Show More</button>
-</div>
+    
 
 
-<hr>
-<div>
+
     <h2>◈ 나의 재산세는 얼마나 될까요 ?</h2>
-    <div class="moreContent">
+   
         <strong>▶ 주택에 대한 재산세 </strong><br>
             <p>상속이후 상속받은 주택에도 역시 재산세를 납부하게 됩니다. 이 상속으로 재산세 증가액은 다음과 같습니다.</p>
         
@@ -742,240 +713,260 @@
         <P>※ 양도가액과 취득가액이 동일하여 양도차익이 없습니다.  사망일후 6개월사이에 매매가액이 곧 상속재산 
             평가가액이 됩니다. 이때는 이 주택매매가액이 시가임으로 상속세 신고를 위해 따로 감정을 받을 필요가 없겠죠. 
         </P>
-        <table>
-            <tr>
-                <th>구분</th>
-                <th>어머니</th>
-                <th>자녀1</th>
-                <th>자녀2</th>
-                <th>자녀3</th>
-            </tr>
-            <tr>
-                <td>양도가액</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>취득가액</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>양도차익</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>장특공제</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>기본공제</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>과세표준</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>양도세</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>지방소득세</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>합계</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-        참고 : <br>
+        <h4>나의 양도세 계산해 보기 </h4> 
+
+    <label for="transferPrice">양도가액 :</label>
+    <input type="number" id="transferPrice"><br>
+
+    <label for="acquisitionPrice">취득가액 :</label>
+    <input type="number" id="acquisitionPrice"><br>
+
+    <label for="holdingPeriod">보유기간(년):</label> 
+    <input type="number" id="holdingPeriod"><br><br>
+
+    
+
+    <button onclick="calculateTaxes()">계산하기</button>
+
+    <h4>계산 결과</h4>
+    <table border="1">
+        <tr>
+            <th>구분</th>
+            <th>금액</th>
+            <th>비고</th>   
+        </tr>
+        <tr>
+            <td>1)양도가액</td>
+            <td id="transferValue"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2)취득가액</td>
+            <td id="acquisitionValue"></td>
+            <td>양도가액과 일치</td>
+        </tr>
+        <tr>
+            <td>3)양도차익</td>
+            <td id="capitalGain"></td>
+            <td>1) -2)</td>
+        </tr>
+        <tr>
+            <td>4)장기보유특별공제</td>
+            <td id="longTermDeduction"></td>
+            <td>일반장기보유공제 표1</td>
+        </tr>
+        <tr>
+            <td>5)양도소득금액</td>
+            <td id="taxableIncome"></td>
+            <td>3)-4)</td>
+        </tr>
+        <tr>
+            <td>6)기본공제</td>
+            <td>2,500,000</td>
+            <td>1년에 1회만 공제</td>
+        </tr>
+        <tr>
+            <td>7)과세표준</td>
+            <td id="taxBase"></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td>8)양도세율</td>
+            <td > </td>
+            <td>일반누진세율</td>
+        <tr>
+            <td>9)양도세</td>
+            <td id="transferTax"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>10)지방소득세</td>
+            <td id="localIncomeTax"></td>
+            <td>양도세 * 10%</td>
+        </tr>
+        <tr>
+            <td>11)세액합계</td>
+            <td id="totalTax"></td>
+            <td></td>
+        </tr>
+    </table>
+
         상속으로 받은 주택의 취득시기 및 장기보유특별공제 : 사망일 <br>
         세율적용시 : 아버지가 취득한날 <br><br>
         
         
-        <h3>2) (     ) 후 (     )에 매도하는 경우 양도소득세  </h3>
+        <h3>2)상속세 시가 신고후 몇년 후에 매도하는 경우 양도소득세  </h3>
         <p>※ 상속세 신고후 몇년이 지난후를 예상한 경우입니다. 
         시간이 흐르면 상속주택 가격도 올라가 있겠지요! 이때 양도세가 얼마인지 보고, 
             사망일로부터 6개월 이내에 바로 팔아야 할지, 아니면 충분한 값을 팔고 팔아야 할지 비교해볼 수 있습니다 . 
         </p>
-        <table>
-            <tr>
-                <th>구분</th>
-                <th>어머니</th>
-                <th>자녀1</th>
-                <th>자녀2</th>
-                <th>자녀3</th>
-            </tr>
-            <tr>
-                <td>양도가액</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>취득가액</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>양도차익</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>장특공제</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>기본공제</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>과세표준</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>양도세</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>지방소득세</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>합계</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+        <h4>나의 양도세 계산해 보기 </h4> 
+
+    <label for="transferPrice">양도가액 :</label>
+    <input type="number" id="transferPrice"><br>
+
+    <label for="acquisitionPrice">취득가액 :</label>
+    <input type="number" id="acquisitionPrice"><br>
+
+    <label for="holdingPeriod">보유기간(년):</label>
+    <input type="number" id="holdingPeriod"><br><br>
+
+    
+
+    <button onclick="calculateTaxes()">계산하기</button>
+
+    <h4>계산 결과</h4>
+    <table border="1">
+        <tr>
+            <th>구분</th>
+            <th>금액</th>
+            <th>비고</th>   
+        </tr>
+        <tr>
+            <td>1)양도가액</td>
+            <td id="transferValue"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2)취득가액</td>
+            <td id="acquisitionValue"></td>
+            <td>양도가액과 일치</td>
+        </tr>
+        <tr>
+            <td>3)양도차익</td>
+            <td id="capitalGain"></td>
+            <td>1) -2)</td>
+        </tr>
+        <tr>
+            <td>4)장기보유특별공제</td>
+            <td id="longTermDeduction"></td>
+            <td>일반장기보유공제 표1</td>
+        </tr>
+        <tr>
+            <td>5)양도소득금액</td>
+            <td id="taxableIncome"></td>
+            <td>3)-4)</td>
+        </tr>
+        <tr>
+            <td>6)기본공제</td>
+            <td>2,500,000</td>
+            <td>1년에 1회만 공제</td>
+        </tr>
+        <tr>
+            <td>7)과세표준</td>
+            <td id="taxBase"></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td>8)양도세율</td>
+            <td > </td>
+            <td>일반누진세율</td>
+        <tr>
+            <td>9)양도세</td>
+            <td id="transferTax"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>10)지방소득세</td>
+            <td id="localIncomeTax"></td>
+            <td>양도세 * 10%</td>
+        </tr>
+        <tr>
+            <td>11)세액합계</td>
+            <td id="totalTax"></td>
+            <td></td>
+        </tr>
+    </table>
+
         참고 : <br>
         상속으로 받은 주택의 취득시기 및 장기보유특별공제 : 사망일 <br>
         세율적용시 : 아버지가 취득한날 <br><br>
         
-        <h3>3) 상속세를 신고하지 않고 (     )년 후 (        ) 매도하는 경우 양도소득세  </h3>
+        <h3>3) 상속세를 신고하지 않고 몇년 후 매도하는 경우 양도소득세  </h3>
         <p>※  상속세 신고를 하지 않아 상속받은 주택이 기준시가로 평가된 경우입니다.  위 사례들과 비교해서 양도세가 얼마나 늘어나는지 
             확인해 보고, 미래를 위해서 상속세 신고를 하는것이 좋겠지요. </p> 
         
-        <table>
-            <tr>
-                <th>구분</th>
-                <th>어머니</th>
-                <th>자녀1</th>
-                <th>자녀2</th>
-                <th>자녀3</th>
-            </tr>
-            <tr>
-                <td>양도가액</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>취득가액</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>양도차익</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>장특공제</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>기본공제</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>과세표준</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>양도세</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>지방소득세</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>합계</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+            <h4>나의 양도세 계산해 보기 </h4> 
+
+            <label for="transferPrice">양도가액 :</label>
+            <input type="number" id="transferPrice"><br>
+        
+            <label for="acquisitionPrice">취득가액 :</label>
+            <input type="number" id="acquisitionPrice"><br>
+        
+            <label for="holdingPeriod">보유기간(년):</label> 
+            <input type="number" id="holdingPeriod"><br><br>
+        
+            
+        
+            <button onclick="calculateTaxes()">계산하기</button>
+        
+            <h4>계산 결과</h4>
+            <table border="1">
+                <tr>
+                    <th>구분</th>
+                    <th>금액</th>
+                    <th>비고</th>   
+                </tr>
+                <tr>
+                    <td>1)양도가액</td>
+                    <td id="transferValue"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>2)취득가액</td>
+                    <td id="acquisitionValue"></td>
+                    <td>양도가액과 일치</td>
+                </tr>
+                <tr>
+                    <td>3)양도차익</td>
+                    <td id="capitalGain"></td>
+                    <td>1) -2)</td>
+                </tr>
+                <tr>
+                    <td>4)장기보유특별공제</td>
+                    <td id="longTermDeduction"></td>
+                    <td>일반장기보유공제 표1</td>
+                </tr>
+                <tr>
+                    <td>5)양도소득금액</td>
+                    <td id="taxableIncome"></td>
+                    <td>3)-4)</td>
+                </tr>
+                <tr>
+                    <td>6)기본공제</td>
+                    <td>2,500,000</td>
+                    <td>1년에 1회만 공제</td>
+                </tr>
+                <tr>
+                    <td>7)과세표준</td>
+                    <td id="taxBase"></td>
+                    <td></td>
+                </tr>
+        
+                <tr>
+                    <td>8)양도세율</td>
+                    <td > </td>
+                    <td>일반누진세율</td>
+                <tr>
+                    <td>9)양도세</td>
+                    <td id="transferTax"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>10)지방소득세</td>
+                    <td id="localIncomeTax"></td>
+                    <td>양도세 * 10%</td>
+                </tr>
+                <tr>
+                    <td>11)세액합계</td>
+                    <td id="totalTax"></td>
+                    <td></td>
+                </tr>
+            </table>
+        
         참고 : <br>
         상속으로 받은 주택의 취득시기 및 장기보유특별공제 : 사망일 <br>
         세율적용시 : 아버지가 취득한날 <br><br>
@@ -1185,6 +1176,7 @@
 <div>
     <h2>◈ 아버지가 받았던 월세 신고를 어떻게 해야 되나요 ?  </h2>
     <div class="moreContent">
+
         <h4>▶ 사업자등록 정정신고 </h4> 
 
         <ul>
@@ -1208,8 +1200,7 @@
         </ul>
         
     </div>
-
-    <button onclick="showMoreContent(this)">Show less</button>
+    <button onclick="showMoreContent(this)">Show More</button>
 </div>
 
 
@@ -1220,7 +1211,8 @@
 
 <div>
     <h2>◈ 상속주택때문에 아파트 청약을 받을수 없나요 ? </h2>
-    <div class="showMoreContent">
+   
+    <div class="moreContent">
         <p><strong>주택청약시 주택소유 여부를 판단할때,  주택을 단독 또는 공유지분으로 소유하고 있는 경우도 주택을 소유하고 있는 것으로 봅니다. 
             <br>그러나 다음의 상속주택은 없는 것으로 봅니다.</strong></p>
         
@@ -1275,16 +1267,15 @@
         <p>Q : 53조2호의 다항의 상속등에 증여도 포함되는지 ? </p>
         <p>A : 상속등에 의하여 이전받은 단독주택은 상속의 경우에만 인정되고 있으며 증여는 포함되지 않습니다. </p><br>
     </div>
-
-   
     <button onclick="showMoreContent(this)">Show More</button>
+   
+  
 </div>
    
     <hr>
 <div> 
     <h2>◈ 어머니가 노인기초연금을 받기 위해서 재산이 얼마 이하여야 하나요 ?</h2>
-
-    <div class="showMoreContent">
+    <div class="moreContent">
         <p>어머니가 서울에 거주하고 다른 소득이 없다면, 재산이 7억4,100만원이하인 경우 노인기초연금 지급대상이 됩니다.
             구체적인 내용을 보면 다음과 같습니다.
          </p>
@@ -1330,10 +1321,10 @@
             </tbody>
         </table>    <br>    
       
-    </div>
-    
+    </div>    
    
-    <button onclick="showMoreContent(this)">Show less</button>
+  
+    <button onclick="showMoreContent(this)">Show More</button>
 </div>
 
     

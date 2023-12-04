@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>취득세 계산기</title>
+    <script>
+        // formatInputNumber 함수는 그대로 유지합니다.
+
+        function calculateTax2_8() {
+            var inputNumber = document.getElementById('inputNumber1').value.replace(/,/g, '');
+            var tax = parseFloat(inputNumber) * 2.8 / 100;
+            var formattedTax = tax.toLocaleString('ko-KR', {
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0
+            });
+            document.getElementById('taxResult1').innerHTML = `취득세: ${formattedTax}`;
+        }
+
+        function calculateTax2_56() {
+            var inputNumber = document.getElementById('inputNumber2').value.replace(/,/g, '');
+            var tax = parseFloat(inputNumber) * 2.56 / 100;
+            var formattedTax = tax.toLocaleString('ko-KR', {
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0
+            });
+            document.getElementById('taxResult2').innerHTML = `취득세: ${formattedTax}`;
+        }
+    </script>
+</head>
+<body>
+
+    <h2>취득세 계산기 2.8%</h2>
+
+    <input type="text" id="inputNumber1" placeholder="취득금액을 입력하세요" oninput="formatInputNumber(this)">
+    <button onclick="calculateTax2_8()">계산하기</button>
+
+    <p id="taxResult1"></p>
+
+    <h2>취득세 계산기 2.56%</h2>
+
+    <input type="text" id="inputNumber2" placeholder="취득금액을 입력하세요" oninput="formatInputNumber(this)">
+    <button onclick="calculateTax2_56()">계산하기</button>
+
+    <p id="taxResult2"></p>
+
+</body>
+</html>
