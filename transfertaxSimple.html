@@ -2,156 +2,26 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>양도세 계산기</title>
-
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        h2, h3 {
-            color: #333;
-        }
-
-        label {
-            margin-top: 10px;
-            display: block;
-            font-weight: bold;
-        }
-
-        input[type="number"] {
-            width: 300px;
-            height: 30px;
-            margin-bottom: 10px;
-            padding: 5px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f0f0f0;
-        }
-
-        td {
-            background-color: #fff;
-        }
+    <title>양도세 계산기</title>    
+     
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/script.js"></script>
 
 
-        
-    </style>
-
-    <script>
-     function formatInputNumber(el) {
-        var value = el.value.replace(/[^0-9]/g, '');
-        el.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-        function calculateTaxes() {
-            var transferPrice = parseFloat(document.getElementById('transferPrice').value);
-            var acquisitionPrice = parseFloat(document.getElementById('acquisitionPrice').value);
-            var holdingPeriod = parseFloat(document.getElementById('holdingPeriod').value);
-           
-
-            var capitalGain = transferPrice - acquisitionPrice;
-            var longTermDeduction = calculateLongTermDeduction(capitalGain, holdingPeriod);
-            var taxableIncome = capitalGain - longTermDeduction;
-            var taxBase = Math.max(0, taxableIncome - 2500000);
-            var transferTax = calculateTransferTax(taxBase);
-            var localIncomeTax = transferTax * 0.1;
-            var totalTax = transferTax + localIncomeTax;
-
-            document.getElementById('transferValue').innerText = transferPrice.toLocaleString();
-            document.getElementById('acquisitionValue').innerText = acquisitionPrice.toLocaleString();
-            document.getElementById('capitalGain').innerText = capitalGain.toLocaleString();
-            document.getElementById('longTermDeduction').innerText = longTermDeduction.toLocaleString();
-            document.getElementById('taxableIncome').innerText = taxableIncome.toLocaleString();
-            document.getElementById('taxBase').innerText = taxBase.toLocaleString();
-            document.getElementById('transferTax').innerText = transferTax.toLocaleString();
-            document.getElementById('localIncomeTax').innerText = localIncomeTax.toLocaleString();
-            document.getElementById('totalTax').innerText = totalTax.toLocaleString();
-        }
-
-        function calculateLongTermDeduction(capitalGain, holdingPeriod) {
-             var deductionRate = 0;
-            if (holdingPeriod >= 3 && holdingPeriod < 4) {
-             deductionRate = 0.06;
-            } else if (holdingPeriod >= 4 && holdingPeriod < 5) {
-              deductionRate = 0.08;
-            } else if (holdingPeriod >= 5) {
-              deductionRate = Math.min(0.3, 0.02 * holdingPeriod);
-            }
-
-            return capitalGain * deductionRate;
-            }  
-
-    function calculateTransferTax(taxBase) {
-    if (taxBase <= 14000000) {
-        return taxBase * 0.06; // 6%
-    } else if (taxBase <= 50000000) {
-        return taxBase * 0.15 - 1260000; // 15%, 1260000원 공제
-    } else if (taxBase <= 88000000) {
-        return taxBase * 0.24 - 5760000; // 24%, 5760000원 공제
-    } else if (taxBase <= 150000000) {
-        return taxBase * 0.35 - 15440000; // 35%, 15440000원 공제
-    } else if (taxBase <= 300000000) {
-        return taxBase * 0.38 - 19940000; // 38%, 19940000원 공제
-    } else if (taxBase <= 500000000) {
-        return taxBase * 0.40 - 25940000; // 40%, 25940000원 공제
-    } else if (taxBase <= 1000000000) {
-        return taxBase * 0.42 - 35940000; // 42%, 35940000원 공제
-    } else {
-        return taxBase * 0.45 - 65940000; // 45%, 65940000원 공제
-    }
-}
-
-
-    </script>
 </head>
 <body>
     <h2>양도세 계산기</h2>
 
     <label for="transferPrice">양도가액 :</label>
-    <input type="number" id="transferPrice"><br>
+<input type="text" id="transferPrice" oninput="formatNumber(this)"><br>
 
-    <label for="acquisitionPrice">취득가액 :</label>
-    <input type="number" id="acquisitionPrice"><br>
+<label for="acquisitionPrice">취득가액 :</label>
+<input type="text" id="acquisitionPrice" oninput="formatNumber(this)"><br>
 
-    <label for="holdingPeriod">보유기간(년):</label>
-    <input type="number" id="holdingPeriod"><br><br>
+<label for="holdingPeriod">보유기간(년):</label>
+<input type="number" id="holdingPeriod"><br><br>
 
-    
-
-    <button onclick="calculateTaxes()">계산하기</button>
+<button onclick="calculateTaxes()">계산하기</button>
 
     <h3>계산 결과</h3>
     <table border="1">
@@ -161,59 +31,59 @@
             <th>비고</th>   
         </tr>
         <tr>
-            <td>1)양도가액</td>
-            <td id="transferValue"></td>
-            <td></td>
+            <td>1) 양도가액</td>
+            <td style="text-align: right;" id="transferValue"></td>
+            <td style="text-align: center;"></td>
         </tr>
         <tr>
-            <td>2)취득가액</td>
-            <td id="acquisitionValue"></td>
-            <td></td>
+            <td>2) 취득가액</td>
+            <td style="text-align: right;" id="acquisitionValue"></td>
+            <td style="text-align: center;"></td>
         </tr>
         <tr>
-            <td>3)양도차익</td>
-            <td id="capitalGain"></td>
-            <td>1) -2)</td>
+            <td>3) 양도차익</td>
+            <td style="text-align: right;" id="capitalGain"></td>
+            <td style="text-align: center;">1) -2)</td>
         </tr>
         <tr>
-            <td>4)장기보유특별공제</td>
-            <td id="longTermDeduction"></td>
-            <td>일반장기보유공제 표1</td>
+            <td>4) 장기보유특별공제</td>
+            <td style="text-align: right;" id="longTermDeduction"></td>
+            <td style="text-align: center;">일반장기보유공제 표1</td>
         </tr>
         <tr>
-            <td>5)양도소득금액</td>
-            <td id="taxableIncome"></td>
-            <td>3)-4)</td>
+            <td>5) 양도소득금액</td>
+            <td style="text-align: right;" id="taxableIncome"></td>
+            <td style="text-align: center;">3)-4)</td>
         </tr>
         <tr>
-            <td>6)기본공제</td>
-            <td>2,500,000</td>
-            <td>1년에 1회만 공제</td>
+            <td>6) 기본공제</td>
+            <td style="text-align: right;">2,500,000</td>
+            <td style="text-align: center;">1년에 1회만 공제</td>
         </tr>
         <tr>
-            <td>7)과세표준</td>
-            <td id="taxBase"></td>
-            <td></td>
-        </tr>
-
-        <tr>
-            <td>8)양도세율</td>
-            <td > </td>
-            <td>일반누진세율</td>
-        <tr>
-            <td>9)양도세</td>
-            <td id="transferTax"></td>
-            <td></td>
+            <td>7) 과세표준</td>
+            <td style="text-align: right;" id="taxBase"></td>
+            <td style="text-align: center;"></td>
         </tr>
         <tr>
-            <td>10)지방소득세</td>
-            <td id="localIncomeTax"></td>
-            <td>양도세 * 10%</td>
+            <td>8) 양도세율</td>
+            <td style="text-align: right;"></td>
+            <td style="text-align: center;">일반누진세율</td>
         </tr>
         <tr>
-            <td>11)세액합계</td>
-            <td id="totalTax"></td>
-            <td></td>
+            <td>9) 양도세</td>
+            <td style="text-align: right;" id="transferTax"></td>
+            <td style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>10) 지방소득세</td>
+            <td style="text-align: right;" id="localIncomeTax"></td>
+            <td style="text-align: center;">양도세 * 10%</td>
+        </tr>
+        <tr>
+            <td>11) 세액합계</td>
+            <td style="text-align: right;" id="totalTax"></td>
+            <td style="text-align: center;"></td>
         </tr>
     </table>
 </body>
