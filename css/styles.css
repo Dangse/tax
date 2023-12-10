@@ -8,7 +8,7 @@ body {
     margin: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+   
 }
 
 h2 {
@@ -72,6 +72,3 @@ td {
     background-color: #fff;
 }
 
-td.amount, td.note {
-    text-align: right;
-}
