@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>상속세 계산기</title>
+</head>
+<body>
+    <h2>상속세 계산기</h2>
+    <form id="inheritanceTaxForm">
+        <label>주택시가: <input type="number" id="houseValue"></label><br>
+        <label>건물시가: <input type="number" id="buildingValue"></label><br>
+        <label>농지기준시가: <input type="number" id="agriculturalLandValue"></label><br>
+        <label>임야기준시가: <input type="number" id="forestLandValue"></label><br>
+        <label>그외 상속재산: <input type="number" id="otherProperty"></label><br>
+        <label>채무 장례비용 공과금: <input type="number" id="debts"></label><br>
+        <h4>사전증여내용</h4>
+        <ul>
+            <li><label>10년 내 어머니 증여: <input type="number" id="giftFromMother"></label></li>
+            <li><label>10년 내 자녀 증여: <input type="number" id="giftToChildren"></label></li>
+            <li><label>5년 내 상속인 외 증여: <input type="number" id="giftToOthers"></label><br></li>
+        </ul>
+        <br>
+        <label>상속공제: <input type="number" id="inheritanceDeduction" value="1000000000"></label><br>
+        <label>증여세액공제: <input type="number" id="giftTaxDeduction"></label><br>
+        <button type="button" onclick="calculateInheritanceTax()">상속세 계산하기</button>
+    </form>
+
+    <table border="1" id="resultTable">
+        <thead>
+            <tr>
+                <th>구분</th>
+                <th>금액</th>
+                <th>비고</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>(1) 총상속재산가액</td>
+                <td id="totalPropertyValueCell"></td>
+                <td>상속재산 총합</td>
+            </tr>
+            <tr>
+                <td>(2) 공과금, 장례비용, 채무</td>
+                <td id="debtsValueCell"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>(3) 사전증여재산</td>
+                <td id="priorGiftsValueCell"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>(4) 상속세 과세가액</td>
+                <td id="taxableAmountValueCell"></td>
+                <td>(1) - (2) + (3)</td>
+            </tr>
+            <tr>
+                <td>(5) 상속공제</td>
+                <td id="inheritanceDeductionValueCell"></td>
+                <td>한도 = min [10억,(1)-(2)-(3)]</td>
+            </tr>
+            <tr>
+                <td>(6) 감정평가수수료</td>
+                <td id="appraisalFeeValueCell">5,000,000</td>
+                <td>5백만 원 한도</td>
+            </tr>
+            <tr>
+                <td>(7) 상속세 과세표준</td>
+                <td id="taxBaseValueCell"></td>
+                <td>(4) - (5) - (6)</td>
+            </tr>
+            <tr>
+                <td>(8) 세율</td>
+                <td id="taxRateValueCell">10%~50%</td>
+                <td>누진세율</td>
+            </tr>
+            <tr>
+                <td>(9) 산출세액</td>
+                <td id="calculatedTaxValueCell"></td>
+                <td>(7) × (8)</td>
+            </tr>
+            <tr>
+                <td>(10) 세액공제</td>
+                <td id="taxDeductionValueCell"></td>
+                <td>증여세액공제 + 신고세액공제 3%</td>
+            </tr>
+            <tr>
+                <td>(11) 자진납부할세액</td>
+                <td id="payableTaxValueCell"></td>
+                <td>(9) - (10)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function calculateInheritanceTax() {
+            // 변수 선언 및 입력값 가져오기
+            var houseValue = parseFloat(document.getElementById('houseValue').value) || 0;
+            var buildingValue = parseFloat(document.getElementById('buildingValue').value) || 0;
+            var agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value) || 0;
+            var forestLandValue = parseFloat(document.getElementById('forestLandValue').value) || 0;
+            var otherProperty = parseFloat(document.getElementById('otherProperty').value) || 0;
+            var debts = parseFloat(document.getElementById('debts').value) || 0;
+            var giftFromMother = parseFloat(document.getElementById('giftFromMother').value) || 0;
+            var giftToChildren = parseFloat(document.getElementById('giftToChildren').value) || 0;
+            var giftToOthers = parseFloat(document.getElementById('giftToOthers').value) || 0;
+            var inheritanceDeductionInput = parseFloat(document.getElementById('inheritanceDeduction').value);
+            var inheritanceDeduction = inheritanceDeductionInput || 1000000000; 
+            var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value) || 0;
+
+            // 계산
+            var totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
+            var priorGifts = giftFromMother + giftToChildren + giftToOthers;
+            var taxableAmount = totalProperty - debts + priorGifts;
+            var appraisalFee = 5000000;
+            var taxBase = Math.max(0, taxableAmount - inheritanceDeduction - appraisalFee);
+            var calculatedTax = calculateInheritTeriff(taxBase);
+            var taxDeduction = giftTaxDeduction + calculatedTax * 0.03;
+            var payableTax = Math.max(0, calculatedTax - taxDeduction);
+
+            // 결과를 테이블 셀에 삽입
+            document.getElementById('totalPropertyValueCell').innerText = totalProperty.toLocaleString();
+            document.getElementById('debtsValueCell').innerText = debts.toLocaleString();
+            document.getElementById('priorGiftsValueCell').innerText = priorGifts.toLocaleString();
+            document.getElementById('taxableAmountValueCell').innerText = taxableAmount.toLocaleString();
+            document.getElementById('inheritanceDeductionValueCell').innerText = inheritanceDeduction.toLocaleString();
+            document.getElementById('appraisalFeeValueCell').innerText = appraisalFee.toLocaleString();
+            document.getElementById('taxBaseValueCell').innerText = taxBase.toLocaleString();
+            document.getElementById('calculatedTaxValueCell').innerText = calculatedTax.toLocaleString();
+            document.getElementById('taxDeductionValueCell').innerText = taxDeduction.toLocaleString();
+            document.getElementById('payableTaxValueCell').innerText = payableTax.toLocaleString();
+        }
+
+        function calculateInheritTeriff(taxBase) {
+            // Progressive tax calculation logic
+            if (taxBase <= 100000000) {
+                return taxBase * 0.1; // 10%
+            } else if (taxBase <= 500000000) {
+                return taxBase * 0.2 - 10000000; // 20%, 10,000,000원 공제
+            } else if (taxBase <= 1000000000) {
+                return taxBase * 0.3 - 60000000; // 30%, 60,000,000원 공제
+            } else if (taxBase <= 3000000000) {
+                return taxBase * 0.4 - 160000000; // 40%, 160,000,000원 공제
+            } else {
+                return taxBase * 0.5 - 460000000; // 50%, 460,000,000원 공제
+            }
+        }
+    </script>
+</body>
+</html>
