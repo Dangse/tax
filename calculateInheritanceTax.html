@@ -8,21 +8,22 @@
 <body>
     <h2>상속세 계산기</h2>
     <form id="inheritanceTaxForm">
-        <label>주택시가: <input type="text" id="houseValue "inputmode="numeric"  oninput="formatNumber(this)"></label><br>
-        <label>건물시가: <input type="text" id="buildingValue" inputmode="numeric"  oninput="formatNumber(this)"></label><br>
-        <label>농지기준시가: <input type="text" id="agriculturalLandValue" inputmode="numeric"  oninput="formatNumber(this)"></label><br>
-        <label>임야기준시가: <input type="text" id="forestLandValue" inputmode="numeric"  oninput="formatNumber(this)"></label><br>
-        <label>그외 상속재산: <input type="text" id="otherProperty" inputmode="numeric"  oninput="formatNumber(this)"></label><br>
-        <label>채무 장례비용 공과금: <input type="text" id="debts" inputmode="numeric"  oninput="formatNumber(this)"></label><br>
+        <!-- 입력 필드는 그대로 두고, formatNumber 함수를 사용하여 쉼표(,)로 구분된 형식으로 표시합니다. -->
+        <label>주택시가: <input type="text" id="houseValue" inputmode="numeric" oninput="formatNumber(this)"></label><br>
+        <label>건물시가: <input type="text" id="buildingValue" inputmode="numeric" oninput="formatNumber(this)"></label><br>
+        <label>농지기준시가: <input type="text" id="agriculturalLandValue" inputmode="numeric" oninput="formatNumber(this)"></label><br>
+        <label>임야기준시가: <input type="text" id="forestLandValue" inputmode="numeric" oninput="formatNumber(this)"></label><br>
+        <label>그외 상속재산: <input type="text" id="otherProperty" inputmode="numeric" oninput="formatNumber(this)"></label><br>
+        <label>채무 장례비용 공과금: <input type="text" id="debts" inputmode="numeric" oninput="formatNumber(this)"></label><br>
         <h4>사전증여내용</h4>
         <ul>
-            <li><label>10년 내 어머니 증여: <input type="text" id="giftFromMother" inputmode="numeric"  oninput="formatNumber(this)"></label></li>
-            <li><label>10년 내 자녀 증여: <input type="text" id="giftToChildren" inputmode="numeric"  oninput="formatNumber(this)"></label></li>
-            <li><label>5년 내 상속인 외 증여: <input type="text" id="giftToOthers" inputmode="numeric"  oninput="formatNumber(this)"></label><br></li>
+            <li><label>10년 내 어머니 증여: <input type="text" id="giftFromMother" inputmode="numeric" oninput="formatNumber(this)"></label></li>
+            <li><label>10년 내 자녀 증여: <input type="text" id="giftToChildren" inputmode="numeric" oninput="formatNumber(this)"></label></li>
+            <li><label>5년 내 상속인 외 증여: <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)"></label></li>
         </ul>
         <br>
-        <label>상속공제: <input type="text" id="inheritanceDeduction"  inputmode="numeric"  oninput="formatNumber(this)"value="1000000000"></label><br>
-        <label>증여세액공제: <input type="text" id="giftTaxDeduction" inputmode="numeric"  oninput="formatNumber(this)"></label><br>
+        <label>상속공제: <input type="text" id="inheritanceDeduction" inputmode="numeric" oninput="formatNumber(this)" value="1000000000"></label><br>
+        <label>증여세액공제: <input type="text" id="giftTaxDeduction" inputmode="numeric" oninput="formatNumber(this)"></label><br>
         <button type="button" onclick="calculateInheritanceTax()">상속세 계산하기</button>
     </form>
 
@@ -94,32 +95,28 @@
     </table>
 
     <script>
-        function calculateInheritanceTax() {
-            // 변수 선언 및 입력값 가져오기
-            var houseValue = parseFloat(document.getElementById('houseValue').value) || 0;
-            var buildingValue = parseFloat(document.getElementById('buildingValue').value) || 0;
-            var agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value) || 0;
-            var forestLandValue = parseFloat(document.getElementById('forestLandValue').value) || 0;
-            var otherProperty = parseFloat(document.getElementById('otherProperty').value) || 0;
-            var debts = parseFloat(document.getElementById('debts').value) || 0;
-            var giftFromMother = parseFloat(document.getElementById('giftFromMother').value) || 0;
-            var giftToChildren = parseFloat(document.getElementById('giftToChildren').value) || 0;
-            var giftToOthers = parseFloat(document.getElementById('giftToOthers').value) || 0;
-            var inheritanceDeductionInput = parseFloat(document.getElementById('inheritanceDeduction').value);
-            var inheritanceDeduction = inheritanceDeductionInput || 1000000000; 
-            var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value) || 0;
+      function calculateInheritanceTax() {
+            var houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+            var buildingValue = parseFloat(document.getElementById('buildingValue').value.replace(/,/g, '')) || 0;
+            var agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value.replace(/,/g, '')) || 0;
+            var forestLandValue = parseFloat(document.getElementById('forestLandValue').value.replace(/,/g, '')) || 0;
+            var otherProperty = parseFloat(document.getElementById('otherProperty').value.replace(/,/g, '')) || 0;
+            var debts = parseFloat(document.getElementById('debts').value.replace(/,/g, '')) || 0;
+            var giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
+            var giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
+            var giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
+            var inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000; 
+            var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value.replace(/,/g, '')) || 0;
 
-            // 계산
             var totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
             var priorGifts = giftFromMother + giftToChildren + giftToOthers;
             var taxableAmount = totalProperty - debts + priorGifts;
-            var appraisalFee = 5000000;
+            var appraisalFee = 5000000; // 고정 값
             var taxBase = Math.max(0, taxableAmount - inheritanceDeduction - appraisalFee);
-            var calculatedTax = calculateInheritTeriff(taxBase);
+            var calculatedTax = calculateInheritTariff(taxBase);
             var taxDeduction = giftTaxDeduction + calculatedTax * 0.03;
             var payableTax = Math.max(0, calculatedTax - taxDeduction);
 
-            // 결과를 테이블 셀에 삽입
             document.getElementById('totalPropertyValueCell').innerText = totalProperty.toLocaleString();
             document.getElementById('debtsValueCell').innerText = debts.toLocaleString();
             document.getElementById('priorGiftsValueCell').innerText = priorGifts.toLocaleString();
@@ -132,8 +129,7 @@
             document.getElementById('payableTaxValueCell').innerText = payableTax.toLocaleString();
         }
 
-        function calculateInheritTeriff(taxBase) {
-            // Progressive tax calculation logic
+        function calculateInheritTariff(taxBase) {
             if (taxBase <= 100000000) {
                 return taxBase * 0.1; // 10%
             } else if (taxBase <= 500000000) {
@@ -145,6 +141,11 @@
             } else {
                 return taxBase * 0.5 - 460000000; // 50%, 460,000,000원 공제
             }
+        }
+
+        function formatNumber(input) {
+            var numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
+            input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
     </script>
 </body>

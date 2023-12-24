@@ -1,10 +1,12 @@
-
+// 쉼표 표시 함수
 function formatNumber(input) {
     // Remove commas and non-numeric characters
     var numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
     // Format with commas and update the input value
     input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+
 
 //간단한 양도세 계산기 
 
@@ -33,7 +35,7 @@ function calculateTaxes() {
         document.getElementById('localIncomeTax').innerText = localIncomeTax.toLocaleString();
         document.getElementById('totalTax').innerText = totalTax.toLocaleString();
     }
-
+//장기보유특별공제 표1
     function calculateLongTermDeduction(capitalGain, holdingPeriod) {
          var deductionRate = 0;
         if (holdingPeriod >= 3 && holdingPeriod < 4) {
@@ -45,8 +47,9 @@ function calculateTaxes() {
         }
 
         return capitalGain * deductionRate;
-        }  
+        } 
 
+// 양도세율표
 function calculateTransferTax(taxBase) {
 if (taxBase <= 14000000) {
     return taxBase * 0.06; // 6%
