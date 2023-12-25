@@ -70,3 +70,53 @@ if (taxBase <= 14000000) {
 }
 }
 
+//상속세 계산기
+function calculateInheritanceTax() {
+    var houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+    var buildingValue = parseFloat(document.getElementById('buildingValue').value.replace(/,/g, '')) || 0;
+    var agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value.replace(/,/g, '')) || 0;
+    var forestLandValue = parseFloat(document.getElementById('forestLandValue').value.replace(/,/g, '')) || 0;
+    var otherProperty = parseFloat(document.getElementById('otherProperty').value.replace(/,/g, '')) || 0;
+    var debts = parseFloat(document.getElementById('debts').value.replace(/,/g, '')) || 0;
+    var giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
+    var giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
+    var giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
+    var inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000; 
+    var appraisalFee = parseFloat(document.getElementById('appraisalFee').value.replace(/,/g, '')) || 5000000;
+    var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value.replace(/,/g, '')) || 0;
+
+    var totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
+    var priorGifts = giftFromMother + giftToChildren + giftToOthers;
+    var taxableAmount = totalProperty - debts + priorGifts;
+   
+    var taxBase = Math.max(0, taxableAmount - inheritanceDeduction - appraisalFee);
+    var calculatedTax = calculateInheritTariff(taxBase);
+    var taxDeduction = giftTaxDeduction + calculatedTax * 0.03;
+    var payableTax = Math.max(0, calculatedTax - taxDeduction);
+
+    document.getElementById('totalPropertyValueCell').innerText = totalProperty.toLocaleString();
+    document.getElementById('debtsValueCell').innerText = debts.toLocaleString();
+    document.getElementById('priorGiftsValueCell').innerText = priorGifts.toLocaleString();
+    document.getElementById('taxableAmountValueCell').innerText = taxableAmount.toLocaleString();
+    document.getElementById('inheritanceDeductionValueCell').innerText = inheritanceDeduction.toLocaleString();
+    document.getElementById('appraisalFeeValueCell').innerText = appraisalFee.toLocaleString();
+    document.getElementById('taxBaseValueCell').innerText = taxBase.toLocaleString();
+    document.getElementById('calculatedTaxValueCell').innerText = calculatedTax.toLocaleString();
+    document.getElementById('taxDeductionValueCell').innerText = taxDeduction.toLocaleString();
+    document.getElementById('payableTaxValueCell').innerText = payableTax.toLocaleString();
+}
+// 상속세율표
+
+function calculateInheritTariff(taxBase) {
+    if (taxBase <= 100000000) {
+        return taxBase * 0.1; // 10%
+    } else if (taxBase <= 500000000) {
+        return taxBase * 0.2 - 10000000; // 20%, 10,000,000원 공제
+    } else if (taxBase <= 1000000000) {
+        return taxBase * 0.3 - 60000000; // 30%, 60,000,000원 공제
+    } else if (taxBase <= 3000000000) {
+        return taxBase * 0.4 - 160000000; // 40%, 160,000,000원 공제
+    } else {
+        return taxBase * 0.5 - 460000000; // 50%, 460,000,000원 공제
+    }
+}

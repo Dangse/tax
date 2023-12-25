@@ -3,6 +3,9 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/script.js"></script>
+
+
     <title>상속세 계산기</title>
 </head>
 <body>
@@ -15,14 +18,15 @@
         <label>임야기준시가: <input type="text" id="forestLandValue" inputmode="numeric" oninput="formatNumber(this)"></label><br>
         <label>그외 상속재산: <input type="text" id="otherProperty" inputmode="numeric" oninput="formatNumber(this)"></label><br>
         <label>채무 장례비용 공과금: <input type="text" id="debts" inputmode="numeric" oninput="formatNumber(this)"></label><br>
-        <h4>사전증여내용</h4>
+        <h4>사전증여자산</h4>
         <ul>
             <li><label>10년 내 어머니 증여: <input type="text" id="giftFromMother" inputmode="numeric" oninput="formatNumber(this)"></label></li>
             <li><label>10년 내 자녀 증여: <input type="text" id="giftToChildren" inputmode="numeric" oninput="formatNumber(this)"></label></li>
-            <li><label>5년 내 상속인 외 증여: <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)"></label></li>
+            <li><label>5년 내 상속인 외 증여 (손자녀 사위 며느리): <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)"></label></li>
         </ul>
         <br>
         <label>상속공제: <input type="text" id="inheritanceDeduction" inputmode="numeric" oninput="formatNumber(this)" value="1000000000"></label><br>
+        <label>감정평가수수료: <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)" value="5000000"></label><br>
         <label>증여세액공제: <input type="text" id="giftTaxDeduction" inputmode="numeric" oninput="formatNumber(this)"></label><br>
         <button type="button" onclick="calculateInheritanceTax()">상속세 계산하기</button>
     </form>
@@ -63,7 +67,7 @@
             </tr>
             <tr>
                 <td>(6) 감정평가수수료</td>
-                <td id="appraisalFeeValueCell">5,000,000</td>
+                <td id="appraisalFeeValueCell"></td>
                 <td>5백만 원 한도</td>
             </tr>
             <tr>
@@ -94,59 +98,6 @@
         </tbody>
     </table>
 
-    <script>
-      function calculateInheritanceTax() {
-            var houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
-            var buildingValue = parseFloat(document.getElementById('buildingValue').value.replace(/,/g, '')) || 0;
-            var agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value.replace(/,/g, '')) || 0;
-            var forestLandValue = parseFloat(document.getElementById('forestLandValue').value.replace(/,/g, '')) || 0;
-            var otherProperty = parseFloat(document.getElementById('otherProperty').value.replace(/,/g, '')) || 0;
-            var debts = parseFloat(document.getElementById('debts').value.replace(/,/g, '')) || 0;
-            var giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
-            var giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
-            var giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
-            var inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000; 
-            var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value.replace(/,/g, '')) || 0;
-
-            var totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
-            var priorGifts = giftFromMother + giftToChildren + giftToOthers;
-            var taxableAmount = totalProperty - debts + priorGifts;
-            var appraisalFee = 5000000; // 고정 값
-            var taxBase = Math.max(0, taxableAmount - inheritanceDeduction - appraisalFee);
-            var calculatedTax = calculateInheritTariff(taxBase);
-            var taxDeduction = giftTaxDeduction + calculatedTax * 0.03;
-            var payableTax = Math.max(0, calculatedTax - taxDeduction);
-
-            document.getElementById('totalPropertyValueCell').innerText = totalProperty.toLocaleString();
-            document.getElementById('debtsValueCell').innerText = debts.toLocaleString();
-            document.getElementById('priorGiftsValueCell').innerText = priorGifts.toLocaleString();
-            document.getElementById('taxableAmountValueCell').innerText = taxableAmount.toLocaleString();
-            document.getElementById('inheritanceDeductionValueCell').innerText = inheritanceDeduction.toLocaleString();
-            document.getElementById('appraisalFeeValueCell').innerText = appraisalFee.toLocaleString();
-            document.getElementById('taxBaseValueCell').innerText = taxBase.toLocaleString();
-            document.getElementById('calculatedTaxValueCell').innerText = calculatedTax.toLocaleString();
-            document.getElementById('taxDeductionValueCell').innerText = taxDeduction.toLocaleString();
-            document.getElementById('payableTaxValueCell').innerText = payableTax.toLocaleString();
-        }
-
-        function calculateInheritTariff(taxBase) {
-            if (taxBase <= 100000000) {
-                return taxBase * 0.1; // 10%
-            } else if (taxBase <= 500000000) {
-                return taxBase * 0.2 - 10000000; // 20%, 10,000,000원 공제
-            } else if (taxBase <= 1000000000) {
-                return taxBase * 0.3 - 60000000; // 30%, 60,000,000원 공제
-            } else if (taxBase <= 3000000000) {
-                return taxBase * 0.4 - 160000000; // 40%, 160,000,000원 공제
-            } else {
-                return taxBase * 0.5 - 460000000; // 50%, 460,000,000원 공제
-            }
-        }
-
-        function formatNumber(input) {
-            var numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
-            input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-    </script>
+    
 </body>
 </html>
