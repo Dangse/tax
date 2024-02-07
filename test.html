@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>상속세 셀프신고 </title>  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">  
+
+    <script src="js/script.js"></script>
+
+</head>
+<body>
+
+    <div id="step1" class="step">
+        <h2>Step 1</h2>
+        <p>주택가격</P>
+        <p><input type="text" placeholder="주택가액"></p>
+        <button type="button" id="next1">Next</button>
+      </div>
+      
+      <div id="step2" class="step" style="display:none">
+        <h2>Step 2</h2>
+        <p>금융재산가액</p>
+        <p><input type="text" placeholder="금융자산"></p>
+        <button type="button" id="prev2">Previous</button>
+        <button type="button" id="next2">Next</button>
+      </div>
+      
+      <div id="step3" class="step" style="display:none">
+        <h2>Step 3</h2>
+        <p>부채가액</p>
+        <p><input type="text" placeholder="부채가액"></p>
+        <button type="button" id="prev3">Previous</button>
+        <button type="button" id="submit">Submit</button>
+      </div>
+
+
+
+
+  <script>
+    document.getElementById('next1').addEventListener('click', function() {
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+});
+
+document.getElementById('prev2').addEventListener('click', function() {
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step1').style.display = 'block';
+});
+
+document.getElementById('next2').addEventListener('click', function() {
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step3').style.display = 'block';
+});
+
+document.getElementById('prev3').addEventListener('click', function() {
+  document.getElementById('step3').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+});
+
+document.getElementById('submit').addEventListener('click', function() {
+  // 폼 제출 로직을 여기에 추가
+  alert('Form Submitted!');
+});
+
+  </script>    
+</body>
+
+</html>

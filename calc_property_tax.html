@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>재산세 계산기</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <h1>재산세 계산기</h1>
+    
+    <label for="houseType">주택 유형:</label>
+    <select id="houseType">
+        <option value="1세대1주택">1세대1주택</option>
+        <option value="다주택">다주택</option>
+    </select><br>
+    
+    <label for="officialPrice">공시지가(원):</label>
+    <input type="number" id="officialPrice" placeholder="공시지가 입력"><br><br>
+
+    <button onclick="cal_property_tax()">계산하기</button>
+
+    <h2>계산 결과</h2>
+    <div id="results">
+        <p>재산세: <span id="propertyTax"></span></p>
+        <p>도시지역세: <span id="urbanTax"></span></p>
+        <p>지방교육세: <span id="educationTax"></span></p>
+    </div>
+
+
+
+    //---------------------------------------------
+    //
+    //   재산세 계산함수
+    //
+    //  입력: one_o_one "1세대1주택" "다주택" 
+    //        official_price 공시지가
+    //
+    //
+    //----------------------------------------------
+    <script>
+    function calc_property_tax(one_o_one, gongsi){
+    
+        var tax_base = 0, dosi_tax, p_edu_tax, property_tax;
+    
+        // 과세표준 = 공시지가*60%. 2022.6.16 1세대1주택자 하향조정
+        // if(one_o_one == "1세대1주택") {tax_base = gongsi*0.45;}
+        // 2023.6.1 이후 적용
+        
+        if(one_o_one == "1세대1주택") {
+            if(gongsi <= 300000000) {tax_base = gongsi*0.43;}
+            else if(gongsi <= 600000000){tax_base = gongsi*0.44;}
+            else {tax_base = gongsi*0.45;}
+        }
+        else {tax_base = gongsi*0.6;}; 
+        
+        if (gongsi <= 900000000) { //시가표준액9억이하인 경우 과표6억이하특례 2021-2023한시적운영
+            switch (true){
+            case tax_base <= 60000000:
+                property_tax = tax_base*0.0005;
+                    break;
+            case tax_base <= 150000000:
+                property_tax = 30000 + (tax_base-60000000)*0.001;
+                break;
+            case tax_base <= 300000000:
+                property_tax = 120000 + (tax_base-150000000)*0.002;
+                break;
+            default: //3억초과
+                property_tax = 420000 + (tax_base-300000000)*0.0035;
+            }
+        }
+        else //9억초과세율 
+        {
+            switch (true){
+            case tax_base <= 60000000:
+                property_tax = tax_base*0.001;
+                break;
+            case tax_base <= 150000000:
+                property_tax = 60000 + (tax_base-60000000)*0.0015;
+                break;
+            case tax_base <= 300000000:
+                property_tax = 195000 + (tax_base-150000000)*0.0025;
+                break;
+            default: //3억초과
+                property_tax = 570000 + (tax_base-300000000)*0.004;
+            }
+        }    
+    
+        dosi_tax = tax_base*14/10000;
+        p_edu_tax = property_tax*2/10;
+    
+        return [property_tax, dosi_tax, p_edu_tax];
+    
+        };
+    </script>
+</body>
+</html>

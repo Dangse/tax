@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/script.js"></script>
+    <title>상속세 계산기</title>
+   
+</head>
+<body>
+    <h1>상속세 계산기 </h1>
+
+    <div id="step1">
+        <h2>단계 1: 값 a 입력</h2>
+        <input type="number" id="valueA" placeholder="값 a 입력">
+        <button onclick="nextStep(2)">다음</button>
+    </div>
+
+    <div id="step2" style="display: none;">
+        <h2>단계 2: 값 b 입력</h2>
+        <input type="number" id="valueB" placeholder="값 b 입력">
+        <button onclick="previousStep(1)">뒤로가기</button>
+        <button onclick="nextStep(3)">다음</button>
+    </div>
+
+    <div id="step3" style="display: none;">
+        <h2>단계 3: 값 c 입력</h2>
+        <input type="number" id="valueC" placeholder="값 c 입력">
+        <button onclick="previousStep(2)">뒤로가기</button>
+        <button onclick="nextStep(4)">다음</button>
+    </div>
+
+    <div id="step4" style="display: none;">
+        <h2>단계 4: 값 d 입력</h2>
+        <input type="number" id="valueD" placeholder="값 d 입력">
+        <button onclick="previousStep(3)">뒤로가기</button>
+        <button onclick="nextStep(5)">다음</button>
+    </div>
+
+    <div id="step5" style="display: none;">
+        <h2>단계 5: 값 e 입력</h2>
+        <input type="number" id="valueE" placeholder="값 e 입력">
+        <button onclick="previousStep(4)">뒤로가기</button>
+        <button onclick="showResults()">결과 보기</button>
+    </div>
+
+    <div id="results" style="display: none;">
+        <h2>계산 결과</h2>
+        <table>
+            <tr><th>항목</th><th>결과</th></tr>
+            <tr><td>총합</td><td id="totalSum"></td></tr>
+        </table>
+        <button onclick="previousStep(5)">입력 수정</button>
+    </div>
+
+    <script>
+        function nextStep(stepNum) {
+            document.getElementById("step" + (stepNum - 1)).style.display = "none";
+            document.getElementById("step" + stepNum).style.display = "block";
+        }
+
+        function previousStep(stepNum) {
+            document.getElementById("step" + (stepNum + 1)).style.display = "none";
+            document.getElementById("step" + stepNum).style.display = "block";
+        }
+
+        function showResults() {
+            var valueA = parseFloat(document.getElementById('valueA').value) || 0;
+            var valueB = parseFloat(document.getElementById('valueB').value) || 0;
+            var valueC = parseFloat(document.getElementById('valueC').value) || 0;
+            var valueD = parseFloat(document.getElementById('valueD').value) || 0;
+            var valueE = parseFloat(document.getElementById('valueE').value) || 0;
+
+            var totalSum = valueA + valueB + valueC + valueD + valueE;
+
+            document.getElementById('totalSum').innerText = totalSum;
+
+            document.getElementById("step5").style.display = "none";
+            document.getElementById("results").style.display = "block";
+        }
+    </script>
+</body>
+</html>

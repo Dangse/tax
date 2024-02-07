@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>상속주택 취득세 계산기</title>
+    
+        
+       
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/styles.css">     
+        <script src="js/script.js"></script>
+
+      
+
+</head>
+<body>
+    <h1>상속주택 취득세 계산기</h1>
+    
+    <label for="marketValue">시가표준액:</label>
+    <input type="text" id="marketValue"  inputmode="numeric"  oninput="formatNumber(this)" placeholder="시가표준액 입력">
+    
+    <div>
+        <input type="checkbox" id="nationalHousingSize">
+        <label for="nationalHousingSize">국민주택규모 해당 여부</label>
+    </div>
+
+    <div>
+        <input type="checkbox" id="firstTimeHomeBuyer">
+        <label for="firstTimeHomeBuyer">무주택자 상속 여부</label>
+    </div>
+
+    <button onclick="calculateTax()">취득세 계산</button>
+
+    <h3>계산 결과</h3>
+    <div id="result"></div>
+
+    <h3>세율표</h3>
+    <table id="taxTable">
+        <tr>
+            <th>구분</th>
+            <th>총세율</th>
+            <th>취득세</th>
+            <th>농특세</th>
+            <th>지방교육세</th>
+        </tr>
+        <tr>
+            <td>특례 〇</td>
+            <td>0.96%</td>
+            <td>0.8%</td>
+            <td>비과세</td>
+            <td>0.16%</td>
+        </tr>
+        <tr>
+            <td>특례X, 국민주택규모〇</td>
+            <td>2.96%</td>
+            <td>2.8%</td>
+            <td>비과세</td>
+            <td>0.16%</td>
+        </tr>
+        <tr>
+            <td>특례X, 국민주택규모X</td>
+            <td>3.16%</td>
+            <td>2.8%</td>
+            <td>0.2%</td>
+            <td>0.16%</td>
+        </tr>
+    </table>
+
+    <script>
+        function formatNumber(el) {
+            var value = el.value.replace(/[^0-9]/g, '');
+            el.value = parseFloat(value).toLocaleString();
+        }
+
+        function calculateTax() {
+            var marketValue = parseFloat(document.getElementById('marketValue').value.replace(/,/g, ''));
+            var isNationalHousingSize = document.getElementById('nationalHousingSize').checked;
+            var isFirstTimeHomeBuyer = document.getElementById('firstTimeHomeBuyer').checked;
+        
+            var taxRate = 3.16; // Default tax rate
+        
+            if (isFirstTimeHomeBuyer) {
+                taxRate = 0.96;
+            } else if (isNationalHousingSize) {
+                taxRate = 2.96;
+            }
+        
+            var tax = marketValue * (taxRate / 100);
+            document.getElementById('result').innerText = `계산된 취득세: ${tax.toLocaleString()}원`;
+            document.getElementById('result').style.display = 'block'; // Show the result
+            document.getElementById('taxTable').style.display = 'table'; // Show the tax table
+        }
+    </script>
+</body>
+</html>
