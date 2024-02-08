@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/script.js"></script>
     <title>상속세 계산기</title>
@@ -50,7 +50,7 @@
             <tr><th>항목</th><th>결과</th></tr>
             <tr><td>총합</td><td id="totalSum"></td></tr>
         </table>
-        <button onclick="previousStep(5)">입력 수정</button>
+        <button onclick="previousStep(4)">수정하기</button>
     </div>
 
     <script>
@@ -62,6 +62,8 @@
         function previousStep(stepNum) {
             document.getElementById("step" + (stepNum + 1)).style.display = "none";
             document.getElementById("step" + stepNum).style.display = "block";
+            document.getElementById("results").style.display = "none";
+
         }
 
         function showResults() {
