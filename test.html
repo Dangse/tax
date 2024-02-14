@@ -2,30 +2,243 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>숫자를 한국어로 변환</title>
+    <title>상속세 셀프 계산기</title>
+    <style>
+        .step { display: none; }
+        .show { display: block; }
+    </style>
 </head>
 <body>
-    <label for="numberInput">숫자 입력:</label>
-    <input type="number" id="numberInput" placeholder="값 입력" oninput="convertToKorean(this.value)">
-    <div id="koreanOutput"></div>
+    <h1>상속세 셀프 계산기</h1>
+
+    <div id="step1" class="step show">
+        <h2>주택: 시가</h2>
+        <input type="text" id="houseValue" inputmode="numeric" oninput="formatNumber(this)">
+        <button onclick="nextStep(2)">다음</button>
+    </div>
+    
+    <div id="step2" class="step">
+        <h2>건물: 시가</h2>
+        <input type="text" id="buildingValue" inputmode="numeric" oninput="formatNumber(this)">
+        <button onclick="previousStep(1)">뒤로가기</button>
+        <button onclick="nextStep(3)">다음</button>
+    </div>
+
+    <div id="step3" class="step">
+        <h2>농지: 기준시가</h2>
+        <input type="text" id="agriculturalLandValue" inputmode="numeric" oninput="formatNumber(this)">
+        <button onclick="previousStep(2)">뒤로가기</button>
+        <button onclick="nextStep(4)">다음</button>
+    </div>
+
+    <div id="step4" style="display: none;">
+        <h2>임야 </h2>
+        <input type="text" id="forestLandValue" inputmode="numeric" oninput="formatNumber(this)">       
+        <button onclick="previousStep(3)">뒤로가기</button>
+        <button onclick="nextStep(5)">다음</button>
+    </div>
+
+    <div id="step5" style="display: none;">
+        <h2>그외상속재산</h2>
+        <input type="text" id="otherProperty" inputmode="numeric" oninput="formatNumber(this)">       
+        <button onclick="previousStep(4)">뒤로가기</button>
+        <button onclick="nextStep(6)">다음</button>
+    </div>
+
+    <div id="step6" style="display: none;">
+        <h2>10년내 어머니 증여</h2>
+        <input type="text" id="giftFromMother" inputmode="numeric" oninput="formatNumber(this)">        
+        <button onclick="previousStep(5)">뒤로가기</button>
+        <button onclick="nextStep(7)">다음</button>
+    </div>
+
+    <div id="step7" style="display: none;">
+        <h2>10년내 자녀증여</h2>
+        <input type="text" id="giftToChildren" inputmode="numeric" oninput="formatNumber(this)">        
+        <button onclick="previousStep(6)">뒤로가기</button>
+        <button onclick="nextStep(8)">다음</button>
+    </div>
+
+    <div id="step8" style="display: none;">
+        <h2>5년내 상속인 외 증여</h2>
+        <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)">       
+        <button onclick="previousStep(7)">뒤로가기</button>
+        <button onclick="nextStep(9)">다음</button>
+    </div>
+
+    <div id="step9" style="display: none;">
+        <h2>상속공제</h2>
+        <input type="text" id="inheritanceDeduction" inputmode="numeric" oninput="formatNumber(this)">    
+        <button onclick="previousStep(8)">뒤로가기</button>
+        <button onclick="nextStep(10)">다음</button>
+    </div>
+
+    <div id="step10" style="display: none;">
+        <h2>감정평가수수료</h2>
+        <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">       
+        <button onclick="previousStep(9)">뒤로가기</button>
+        <button onclick="nextStep(11)">다음</button>
+    </div>
+
+    <div id="results" class="step">
+        <h2>계산 결과</h2>
+        <table border="1" id="resultTable">
+            <thead>
+                <tr>
+                    <th>구분</th>
+                    <th>금액</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>(1) 총상속재산가액</td>
+                    <td id="totalPropertyValueCell"></td>
+                    <td>상속재산 총합</td>
+                </tr>
+                <tr>
+                    <td>(2) 공과금, 장례비용, 채무</td>
+                    <td id="debtsValueCell"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>(3) 사전증여재산</td>
+                    <td id="priorGiftsValueCell"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>(4) 상속세 과세가액</td>
+                    <td id="taxableAmountValueCell"></td>
+                    <td>(1) - (2) + (3)</td>
+                </tr>
+                <tr>
+                    <td>(5) 상속공제</td>
+                    <td id="inheritanceDeductionValueCell"></td>
+                    <td>한도 = min [10억,(1)-(2)-(3)]</td>
+                </tr>
+                <tr>
+                    <td>(6) 감정평가수수료</td>
+                    <td id="appraisalFeeValueCell"></td>
+                    <td>5백만 원 한도</td>
+                </tr>
+                <tr>
+                    <td>(7) 상속세 과세표준</td>
+                    <td id="taxBaseValueCell"></td>
+                    <td>(4) - (5) - (6)</td>
+                </tr>
+                <tr>
+                    <td>(8) 세율</td>
+                    <td id="taxRateValueCell">10%~50%</td>
+                    <td>누진세율</td>
+                </tr>
+                <tr>
+                    <td>(9) 산출세액</td>
+                    <td id="calculatedTaxValueCell"></td>
+                    <td>(7) × (8)</td>
+                </tr>
+                <tr>
+                    <td>(10) 세액공제</td>
+                    <td id="taxDeductionValueCell"></td>
+                    <td>증여세액공제 + 신고세액공제 3%</td>
+                </tr>
+                <tr>
+                    <td>(11) 자진납부할세액</td>
+                    <td id="payableTaxValueCell"></td>
+                    <td>(9) - (10)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button onclick="previousStep(10)">수정하기</button>
+    </div>
 
     <script>
-        function convertToKorean(number) {
-            const units = ["", "만", "억", "조", "경"];
-            let output = "";
-            let unitIndex = 0;
+        function nextStep(stepNum) {
+            var currentStep = document.querySelector('.step.show');
+            currentStep.classList.remove('show');
 
-            while (number > 0) {
-                let part = number % 10000;
-                if (part > 0) {
-                    output = part.toLocaleString() + units[unitIndex] + " " + output;
-                }
-                number = Math.floor(number / 10000);
-                unitIndex++;
-            }
-
-            document.getElementById('koreanOutput').innerText = output.trim() + "원";
+            var nextStep = document.getElementById('step' + stepNum);
+            nextStep.classList.add('show');
         }
+
+        function previousStep(stepNum) {
+            var currentStep = document.querySelector('.step.show');
+            currentStep.classList.remove('show');
+
+            var prevStep = document.getElementById('step' + stepNum);
+            prevStep.classList.add('show');
+        }
+
+        function showResults() {
+            calculateInheritanceTax();
+            var currentStep = document.querySelector('.step.show');
+            currentStep.classList.remove('show');
+
+            var results = document.getElementById('results');
+            results.classList.add('show');
+        }
+
+        function calculateInheritanceTax() {
+            
+            var houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+            var buildingValue = parseFloat(document.getElementById('buildingValue').value.replace(/,/g, '')) || 0;
+            var agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value.replace(/,/g, '')) || 0;
+            var forestLandValue = parseFloat(document.getElementById('forestLandValue').value.replace(/,/g, '')) || 0;
+            var otherProperty = parseFloat(document.getElementById('otherProperty').value.replace(/,/g, '')) || 0;
+            var debts = parseFloat(document.getElementById('debts').value.replace(/,/g, '')) || 0;
+            var giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
+            var giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
+            var giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
+            var inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000; 
+            var appraisalFee = parseFloat(document.getElementById('appraisalFee').value.replace(/,/g, '')) || 5000000;
+            var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value.replace(/,/g, '')) || 0;
+
+            var totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
+            var priorGifts = giftFromMother + giftToChildren + giftToOthers;
+            var taxableAmount = totalProperty - debts + priorGifts;
+        
+            var taxBase = Math.max(0, taxableAmount - inheritanceDeduction - appraisalFee);
+            var calculatedTax = calculateInheritTariff(taxBase);
+            var taxDeduction = giftTaxDeduction + calculatedTax * 0.03;
+            var payableTax = Math.max(0, calculatedTax - taxDeduction);
+
+            document.getElementById('totalPropertyValueCell').innerText = totalProperty.toLocaleString();
+            document.getElementById('debtsValueCell').innerText = debts.toLocaleString();
+            document.getElementById('priorGiftsValueCell').innerText = priorGifts.toLocaleString();
+            document.getElementById('taxableAmountValueCell').innerText = taxableAmount.toLocaleString();
+            document.getElementById('inheritanceDeductionValueCell').innerText = inheritanceDeduction.toLocaleString();
+            document.getElementById('appraisalFeeValueCell').innerText = appraisalFee.toLocaleString();
+            document.getElementById('taxBaseValueCell').innerText = taxBase.toLocaleString();
+            document.getElementById('calculatedTaxValueCell').innerText = calculatedTax.toLocaleString();
+            document.getElementById('taxDeductionValueCell').innerText = taxDeduction.toLocaleString();
+            document.getElementById('payableTaxValueCell').innerText = payableTax.toLocaleString();
+        }// 계산 로직
+            // 결과값을 'results' 섹션에 표시
+        
+
+        function formatNumber(input) {
+            var numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
+            input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+       
+            // 세율 계산 로직
+        
+        function calculateInheritTariff(taxBase) {
+            if (taxBase <= 100000000) {
+                return taxBase * 0.1; // 10%
+            } else if (taxBase <= 500000000) {
+                return taxBase * 0.2 - 10000000; // 20%, 10,000,000원 공제
+            } else if (taxBase <= 1000000000) {
+                return taxBase * 0.3 - 60000000; // 30%, 60,000,000원 공제
+            } else if (taxBase <= 3000000000) {
+                return taxBase * 0.4 - 160000000; // 40%, 160,000,000원 공제
+            } else {
+                return taxBase * 0.5 - 460000000; // 50%, 460,000,000원 공제
+            }
+        }
+
+        
     </script>
 </body>
 </html>

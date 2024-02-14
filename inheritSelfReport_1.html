@@ -3,56 +3,241 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
-    <script src="js/script.js"></script>
-    <title>상속세 계산기</title>
+    
+    <title>상속세셀프계산기</title>
    
 </head>
 <body>
-    <h1>상속세 계산기 </h1>
+    <h1>상속세 셀프 계산기 </h1>
+
+    <h3>◈ 기본사항</h3>
+    <ol>
+        <li>돌아가신 아버지 1주택과 건물과 농지와 임야 및 금융자산만 소유.</li>
+        <li>어머니는 생존해 계심 </li>
+        <li>모든 자산과 부채는 사망일 당시 ( 사망신고일이 아님) 금액.</li>
+    </ol>
 
     <div id="step1">
-        <h2>단계 1: 값 a 입력</h2>
-        <input type="number" id="valueA" placeholder="값 a 입력">
+        <h2>주택</h2>      
+             
+        <input type="text" id="houseValue" inputmode="numeric" oninput="formatNumber(this)">
         <button onclick="nextStep(2)">다음</button>
+
+        <ul>
+            <li>시가로 평가합니다.</li>
+            <li>시가는 이 주택의 감정평가액 또는 매매사례가액입니다.</li>
+            <li>시가가 없는 경우 기준시가로 평가 합니다.</li>
+        </ul>
     </div>
 
     <div id="step2" style="display: none;">
-        <h2>단계 2: 값 b 입력</h2>
-        <input type="number" id="valueB" placeholder="값 b 입력">
+        <h2>건물 </h2>       
+        
+        <input type="text" id="buildingValue" inputmode="numeric" oninput="formatNumber(this)">
+        
         <button onclick="previousStep(1)">뒤로가기</button>
         <button onclick="nextStep(3)">다음</button>
+
+        <ul>
+            <li>시가로 평가합니다.</li>
+            <li>감정평가가액이 있는 경우 감정가액.</li>
+            <li>시가가 없는 경우 기준시가로 평가 합니다.</li>
+            <li>고가의 건물의 경우, 2020년부터 기준시가로 과세하는 것에 대한 과세 형평성 문제가 제기되었습니다.</li>
+            <li>이에, 국세청은 자체 감정평가예산을 배정하여 예상감정가와 시가의 차액이 10억을 넘거나 , 10%이상 차이가 나는 경우 감정평가를 하여 과세하고 있습니다.  [국세청 훈령 제2580호 상속세 및 증여세 사무처리 규정]</li>
+        </ul>
     </div>
 
     <div id="step3" style="display: none;">
-        <h2>단계 3: 값 c 입력</h2>
-        <input type="number" id="valueC" placeholder="값 c 입력">
+        <h2> 농지 </h2>        
+
+        <input type="text" id="agriculturalLandValue" inputmode="numeric" oninput="formatNumber(this)">        
         <button onclick="previousStep(2)">뒤로가기</button>
         <button onclick="nextStep(4)">다음</button>
+        <ul>
+            <li>시가로 평가합니다.</li>
+            <li>시가는 감정평가액이 될수 있습니다.</li>
+            <li>시가가 없는 경우 기준시가로 평가 합니다.</li>   
+        </ul> 
     </div>
 
     <div id="step4" style="display: none;">
-        <h2>단계 4: 값 d 입력</h2>
-        <input type="number" id="valueD" placeholder="값 d 입력">
+        <h2>임야 </h2>
+       
+      
+        <input type="text" id="forestLandValue" inputmode="numeric" oninput="formatNumber(this)">       
         <button onclick="previousStep(3)">뒤로가기</button>
         <button onclick="nextStep(5)">다음</button>
+        
+        <ul>
+            <li>시가로 평가합니다.</li>
+            <li>시가는 감정평가액이 될수 있습니다.</li>
+            <li>시가가 없는 경우 기준시가로 평가 합니다.</li>
     </div>
 
     <div id="step5" style="display: none;">
-        <h2>단계 5: 값 e 입력</h2>
-        <input type="number" id="valueE" placeholder="값 e 입력">
+        <h2>금융자산 등 그외상속재산</h2>
+        <input type="text" id="otherProperty" inputmode="numeric" oninput="formatNumber(this)">       
         <button onclick="previousStep(4)">뒤로가기</button>
-        <button onclick="showResults()">결과 보기</button>
+        <button onclick="nextStep(6)">다음</button>
     </div>
 
-    <div id="results" style="display: none;">
+    <div id="step6" style="display: none;">
+        <h2>채무 장례비용 공과금</h2>
+        <input type="text" id="debts" inputmode="numeric" oninput="formatNumber(this)">       
+        <button onclick="previousStep(5)">뒤로가기</button>
+        <button onclick="nextStep(7)">다음</button>
+    </div>
+
+    <div id="step7" style="display: none;">
+        <h2>10년내 어머니 증여 합산</h2>
+        <input type="text" id="giftFromMother" inputmode="numeric" oninput="formatNumber(this)">        
+        <button onclick="previousStep(6)">뒤로가기</button>
+        <button onclick="nextStep(8)">다음</button>
+    </div>
+
+    <div id="step8" style="display: none;">
+        <h2>10년내 자녀증여 합산</h2>
+        <input type="text" id="giftToChildren" inputmode="numeric" oninput="formatNumber(this)">        
+        <button onclick="previousStep(7)">뒤로가기</button>
+        <button onclick="nextStep(9)">다음</button>
+    </div>
+
+    <div id="step9" style="display: none;">
+        <h2>5년내 상속인 외 증여 합산</h2>
+        <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)">       
+        <button onclick="previousStep(8)">뒤로가기</button>
+        <button onclick="nextStep(10)">다음</button>
+    </div>
+
+    <div id="step10" style="display: none;">
+        <h2>상속공제</h2>
+       
+        <input type="text" id="inheritanceDeduction" inputmode="numeric" oninput="formatNumber(this)">    
+        <button onclick="previousStep(9)">뒤로가기</button>
+        <button onclick="nextStep(11)">다음</button>
+
+        <ul>
+            <li>배우자가 생존해 있는 경우 10억원입니다.</li>
+            <li>그외 금융상속공제, 동거주택상속공제 등이 있습니다.</li>
+            <li>상속공제금액도 한도가 있습니다.</li>
+        </ul>
+
+    </div>
+
+    <div id="step11" style="display: none;">
+        <h2>감정평가수수료</h2>
+        
+        <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">       
+        <button onclick="previousStep(10)">뒤로가기</button>
+        <button onclick="nextStep(12)">다음</button>
+
+        <ul>
+            <li>5백만원 한도가 있습니다.</li>
+            <li>감정평가수수료는 상속재산의 감정평가액에 대한 수수료입니다.</li>    
+        </ul>
+
+    </div>
+
+    <div id="step12" style="display: none;">
+        <h2>증여세액공제</h2>
+        
+        <input type="text" id="giftTaxDeduction" inputmode="numeric" oninput="formatNumber(this)">    
+        <button onclick="previousStep(11)">뒤로가기</button>
+        <button onclick="nextStep(13) ; calculateInheritanceTax( );">결과보기</button>
+
+        <ul>
+            <li>증여세액공제는 사전증여시 납부한 세액 합계입니다.</li>
+                  
+        </ul>
+    </div>
+
+    
+
+    <div id="step13"  style="display: none;">
+
         <h2>계산 결과</h2>
-        <table>
-            <tr><th>항목</th><th>결과</th></tr>
-            <tr><td>총합</td><td id="totalSum"></td></tr>
+        <table border="1" id="resultTable">
+            <thead>
+                <tr>
+                    <th>구분</th>
+                    <th>금액</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>(1) 총상속재산가액</td>
+                    <td id="totalPropertyValueCell"></td>
+                    <td>상속재산 총합</td>
+                </tr>
+                <tr>
+                    <td>(2) 공과금, 장례비용, 채무</td>
+                    <td id="debtsValueCell"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>(3) 사전증여재산</td>
+                    <td id="priorGiftsValueCell"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>(4) 상속세 과세가액</td>
+                    <td id="taxableAmountValueCell"></td>
+                    <td>(1) - (2) + (3)</td>
+                </tr>
+                <tr>
+                    <td>(5) 상속공제</td>
+                    <td id="inheritanceDeductionValueCell"></td>
+                    <td>배우자 생존시 최소 10억</td>
+                </tr>
+                <tr>
+                    <td>(6) 감정평가수수료</td>
+                    <td id="appraisalFeeValueCell"></td>
+                    <td>5백만 원 한도</td>
+                </tr>
+                <tr>
+                    <td>(7) 상속세 과세표준</td>
+                    <td id="taxBaseValueCell"></td>
+                    <td>(4) - (5) - (6)</td>
+                </tr>
+                <tr>
+                    <td>(8) 세율</td>
+                    <td id="taxRateValueCell">10%~50%</td>
+                    <td>누진세율</td>
+                </tr>
+                <tr>
+                    <td>(9) 산출세액</td>
+                    <td id="calculatedTaxValueCell"></td>
+                    <td>(7) × (8)</td>
+                </tr>
+                <tr>
+                    <td>(10) 세액공제</td>
+                    <td id="taxDeductionValueCell"></td>
+                    <td>증여세액공제 + 신고세액공제 3%</td>
+                </tr>
+                <tr>
+                    <td>(11) 자진납부할세액</td>
+                    <td id="payableTaxValueCell"></td>
+                    <td>(9) - (10)</td>
+                </tr>
+            </tbody>
         </table>
-        <button onclick="previousStep(4)">수정하기</button>
+
+        <button onclick="previousStep(12)">뒤로가기</button>  
+
+        <h2>절세 방법을 알고 싶으신가요? </h2>
+        <button onclick="previousStep(14)"> 상속세 절세방법 </button>  
+
+        <h2>주택을 상속받을때 향후 양도세 종부세 취득세 ?</h2>
+        <button onclick="previousStep(14)"> 상속받은 주택의 절세 방법</button>  
+
+        <h2>상속세 셀프신고서를 만들고 싶은가요 ?</h2>
+        <button onclick="previousStep(14)"> 상속세 셀프신고서</button> 
+
+           
     </div>
 
+    
     <script>
         function nextStep(stepNum) {
             document.getElementById("step" + (stepNum - 1)).style.display = "none";
@@ -63,23 +248,71 @@
             document.getElementById("step" + (stepNum + 1)).style.display = "none";
             document.getElementById("step" + stepNum).style.display = "block";
             document.getElementById("results").style.display = "none";
+           
 
         }
 
-        function showResults() {
-            var valueA = parseFloat(document.getElementById('valueA').value) || 0;
-            var valueB = parseFloat(document.getElementById('valueB').value) || 0;
-            var valueC = parseFloat(document.getElementById('valueC').value) || 0;
-            var valueD = parseFloat(document.getElementById('valueD').value) || 0;
-            var valueE = parseFloat(document.getElementById('valueE').value) || 0;
+       
+        
 
-            var totalSum = valueA + valueB + valueC + valueD + valueE;
+        //상속세 계산기
+        function calculateInheritanceTax() {
+            var houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+            var buildingValue = parseFloat(document.getElementById('buildingValue').value.replace(/,/g, '')) || 0;
+            var agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value.replace(/,/g, '')) || 0;
+            var forestLandValue = parseFloat(document.getElementById('forestLandValue').value.replace(/,/g, '')) || 0;
+            var otherProperty = parseFloat(document.getElementById('otherProperty').value.replace(/,/g, '')) || 0;
+            var debts = parseFloat(document.getElementById('debts').value.replace(/,/g, '')) || 0;
+            var giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
+            var giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
+            var giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
+            var inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000; 
+            var appraisalFee = parseFloat(document.getElementById('appraisalFee').value.replace(/,/g, '')) || 5000000;
+            var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value.replace(/,/g, '')) || 0;
 
-            document.getElementById('totalSum').innerText = totalSum;
+            var totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
+            var priorGifts = giftFromMother + giftToChildren + giftToOthers;
+            var taxableAmount = totalProperty - debts + priorGifts;
+        
+            var taxBase = Math.max(0, taxableAmount - inheritanceDeduction - appraisalFee);
+            var calculatedTax = calculateInheritTariff(taxBase);
+            var taxDeduction = giftTaxDeduction + calculatedTax * 0.03;
+            var payableTax = Math.max(0, calculatedTax - taxDeduction);
 
-            document.getElementById("step5").style.display = "none";
-            document.getElementById("results").style.display = "block";
+            document.getElementById('totalPropertyValueCell').innerText = totalProperty.toLocaleString();
+            document.getElementById('debtsValueCell').innerText = debts.toLocaleString();
+            document.getElementById('priorGiftsValueCell').innerText = priorGifts.toLocaleString();
+            document.getElementById('taxableAmountValueCell').innerText = taxableAmount.toLocaleString();
+            document.getElementById('inheritanceDeductionValueCell').innerText = inheritanceDeduction.toLocaleString();
+            document.getElementById('appraisalFeeValueCell').innerText = appraisalFee.toLocaleString();
+            document.getElementById('taxBaseValueCell').innerText = taxBase.toLocaleString();
+            document.getElementById('calculatedTaxValueCell').innerText = calculatedTax.toLocaleString();
+            document.getElementById('taxDeductionValueCell').innerText = taxDeduction.toLocaleString();
+            document.getElementById('payableTaxValueCell').innerText = payableTax.toLocaleString();
         }
+// 상속세율표
+
+function calculateInheritTariff(taxBase) {
+    if (taxBase <= 100000000) {
+        return taxBase * 0.1; // 10%
+    } else if (taxBase <= 500000000) {
+        return taxBase * 0.2 - 10000000; // 20%, 10,000,000원 공제
+    } else if (taxBase <= 1000000000) {
+        return taxBase * 0.3 - 60000000; // 30%, 60,000,000원 공제
+    } else if (taxBase <= 3000000000) {
+        return taxBase * 0.4 - 160000000; // 40%, 160,000,000원 공제
+    } else {
+        return taxBase * 0.5 - 460000000; // 50%, 460,000,000원 공제
+    }
+}
+  
+    function formatNumber(input) {
+        // Remove commas and non-numeric characters
+        var numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
+        // Format with commas and update the input value
+        input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     </script>
 </body>
 </html>
