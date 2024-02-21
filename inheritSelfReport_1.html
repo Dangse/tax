@@ -8,317 +8,714 @@
    
 </head>
 <body>
-    <h1>상속세 셀프 계산기 </h1>
-
-    <h3>◈ 기본사항</h3>
-    <ol>
-        <li>부모님중 한분이 먼저 돌아가신 경우.</li>
-        <li>돌아가신 피상속인이 1주택과 그외 자산을 소유.</li>
-        <li>자산과 부채는 사망일 당시금액. 사망신고일이 아님 유의.</li>
-    </ol>
-
-    <div id="step1">
-        <h2>주택</h2>      
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="houseValue" inputmode="numeric" oninput="formatNumber(this)">
-            <button onclick="nextStep(2)">다음</button>
-        </div>   
-        
-
-        <ul>
-            <li>시가평가 원칙.</li>
-            <li>시가는 이 주택의 감정평가액 또는 매매사례가액.</li>
-            <li>시가가 없는 경우 기준시가 평가.</li>
-        </ul>
-    </div>
-
-    <div id="step2" style="display: none;">
-        <h2>건물(대지 포함) </h2>       
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="buildingValue" inputmode="numeric" oninput="formatNumber(this)">
-            
-            <div style="display: flex; justify-content:left ; gap: 20px;">
-                <button onclick="previousStep(1)">뒤로가기</button>
-                <button onclick="nextStep(3)">다음</button>
-            </div>
-        </div>
-        <ul>
-            <li>시가로 평가.</li>
-            <li>감정평가가액이 있는 경우 감정가액.</li>
-            <li>시가가 없는 경우 기준시가로 평가.</li>
-            <li>고가의 건물의 경우, 2020년부터 기준시가로 과세하는 것에 대한 과세 형평성 문제가 제기되었습니다.</li>
-            <li>국세청은 자체 감정평가예산을 배정하여 예상감정가와 시가의 차액이 10억을 넘거나 , 
-                10%이상 차이가 나는 경우 감정평가를 하여 과세하고 있습니다.  
-                [국세청 훈령 제2580호 상속세 및 증여세 사무처리 규정]</li>
-        </ul>
-    </div>
-
-    <div id="step3" style="display: none;">
-        <h2> 농지 </h2>        
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="agriculturalLandValue" inputmode="numeric" oninput="formatNumber(this)">
-            
-            <div style="display: flex; justify-content:left ; gap: 20px;">
-                <button onclick="previousStep(2)">뒤로가기</button>
-                <button onclick="nextStep(4)">다음</button>   
-            </div>
-        </div>             
-        
-        
-        <ul>
-            <li>시가로 평가.</li>
-            <li>시가는 감정평가액이 될수 있음.</li>
-            <li>시가가 없는 경우 기준시가로 평가.</li>   
-        </ul> 
-    </div>
-
-    <div id="step4" style="display: none;">
-        <h2>임야(산)</h2>
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="forestLandValue" inputmode="numeric" oninput="formatNumber(this)">
-            
-            <div style="display: flex; justify-content:left ; gap: 20px;">
-                <button onclick="previousStep(3)">뒤로가기</button>
-                <button onclick="nextStep(5)">다음</button>
-            </div>   
-        </div>       
-               
-        
-        
-        <ul>
-            <li>시가로 평가.</li>
-            <li>시가는 감정평가액이 될수 있음.</li>
-            <li>시가가 없는 경우 기준시가로 평가.</li>
-    </div>
-
-    <div id="step5" style="display: none;">
-        <h2>금융자산 등 그외상속재산</h2>
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="otherProperty" inputmode="numeric" oninput="formatNumber(this)">   
-            <div style="display: flex; justify-content:left ; gap: 20px;">
-                <button onclick="previousStep(4)">뒤로가기</button>
-                <button onclick="nextStep(6)">다음</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="step6" style="display: none;">
-        <h2>채무 및 공과금</h2>
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="debts" inputmode="numeric" oninput="formatNumber(this)">       
-            <div style="display: flex; justify-content:left ; gap: 20px;">
-                <button onclick="previousStep(5)">뒤로가기</button>
-                <button onclick="nextStep(7)">다음</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="step7" style="display: none;">
-        <h2>장례비용</h2>
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="funeralExpense" inputmode="numeric" oninput="formatNumber(this)" placeholder="5백이하시 5,000,000">    
-            <div style="display: flex; justify-content:left ; gap: 20px;">   
-                <button onclick="previousStep(6)">뒤로가기</button>
-                <button onclick="nextStep(8)">다음</button>
-            </div>
-
-        </div>
-        <ul>
-           
-            <li>장례비(봉안시설비 제외),5백만원 미만시 최소 5백만원 공제, 1천만원 초과시 1천만원까지만 공제.</li> 
-            <li>봉안시설, 자연장지에 사용된 금액은 별도로 5백만원을 한도로 공제.</li> 
-            <li>따라서 장례비 (한도 1천만) +봉안시설( 한도 5백만원) = 1천5백만원 한도로 공제 </li> 
-                  
-        </ul>
-    </div>
-
-    <div id="step8" style="display: none;">
-        <h2>사전증여재산</h2>
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;"></div>
-            <input type="text" id="giftFromMother" inputmode="numeric" oninput="formatNumber(this)" placeholder="10년내 배우자 증여 금액"> 
-            <input type="text" id="giftToChildren" inputmode="numeric" oninput="formatNumber(this)" placeholder="10년 자녀 증여 증여 금액">  
-            <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)" placeholder="5년내 상속인 외 증여 금액 예) 손자 손녀">
-            <input type="text" id="giftTaxDeduction" inputmode="numeric" oninput="formatNumber(this)" placeholder="위 증여시 산출된 증여세 합계">  
-       
-            <div style="display: flex; justify-content:left ; gap: 20px;"></div>
-                <button onclick="previousStep(7)">뒤로가기</button>
-                <button onclick="nextStep(9)">다음</button>
-            </div>    
-        </div>
-    </div>
-
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-wrapper">
+                    <h1>상속세 셀프 계산기 </h1>
     
-    <div id="step9" style="display: none;">
-        <h2>상속공제</h2>
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="inheritanceDeduction" inputmode="numeric" oninput="formatNumber(this)"placeholder=" 최소 1,000,000,000을 적으세요 " >  
-            <div style="display: flex; justify-content:left ; gap: 20px;">
-                <button onclick="previousStep(8)">뒤로가기</button>
-                <button onclick="nextStep(10)">다음</button>
+    
+                    <h3>◈ 기본사항</h3>
+                    <ol>
+                        <li>부모님중 한분이 먼저 돌아가신 경우.</li>
+                        <li>피상속인(돌아가신분)이 1주택과 그외 자산을 소유.</li>
+                        <li>자산과 부채는 사망일 당시금액. 사망신고일이 아님 유의.</li>
+                    </ol>
+                    </div>
+                </div>
             </div>
         </div>
-        <ul>
-            <li>배우자가 생존해 있는 경우 최소 10억원.</li>
-            <li>사전증여가 많은 경우 10억이 안될수 있음.</li>
-            
-            
-        </ul>
+    
+    
+    
+    
+    
+    
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="cal-wrapper">
+    
+    
+                    <div id="step1">
+                        <h2>주택과 자녀 수 </h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="houseValue" inputmode="numeric" oninput="formatNumber(this)"placeholder="주택가격 ">
+                            <input type="number"  placeholder="자녀  명 ">
+                            <button onclick="nextStep(2)">다음</button>
+                        </div>
+    
+    
+    
+    
+                        <ul>
+                            <li>시가평가 원칙.</li>
+                            <li>시가는 이 주택의 감정평가액 또는 매매사례가액.</li>
+                            <li>시가가 없는 경우 기준시가 평가.</li>
+                        </ul>
+                    </div>
+    
+    
+                    <div id="step2" style="display: none;">
+                        <h2>건물(대지 포함) </h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="buildingValue" inputmode="numeric" oninput="formatNumber(this)">
+    
+    
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(1)">뒤로가기</button>
+                                <button onclick="nextStep(3)">다음</button>
+                            </div>
+                        </div>
+                        <ul>
+                            <li>시가로 평가.</li>
+                            <li>감정평가가액이 있는 경우 감정가액.</li>
+                            <li>시가가 없는 경우 기준시가로 평가.</li>
+                            <li>고가의 건물의 경우, 2020년부터 기준시가로 과세하는 것에 대한 과세 형평성 문제가 제기되었습니다.</li>
+                            <li>국세청은 자체 감정평가예산을 배정하여 예상감정가와 시가의 차액이 10억을 넘거나 ,
+                                10%이상 차이가 나는 경우 감정평가를 하여 과세하고 있습니다.
+                                [국세청 훈령 제2580호 상속세 및 증여세 사무처리 규정]</li>
+                        </ul>
+                    </div>
+    
+    
+                    <div id="step3" style="display: none;">
+                        <h2> 농지 </h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="agriculturalLandValue" inputmode="numeric" oninput="formatNumber(this)">
+    
+    
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(2)">뒤로가기</button>
+                                <button onclick="nextStep(4)">다음</button>
+                            </div>
+                        </div>
+    
+    
+    
+    
+                        <ul>
+                            <li>시가로 평가.</li>
+                            <li>시가는 감정평가액이 될수 있음.</li>
+                            <li>시가가 없는 경우 기준시가로 평가.</li>
+                        </ul>
+                    </div>
+    
+    
+                    <div id="step4" style="display: none;">
+                        <h2>임야(산) </h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="forestLandValue" inputmode="numeric" oninput="formatNumber(this)">
+    
+    
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(3)">뒤로가기</button>
+                                <button onclick="nextStep(5)">다음</button>
+                            </div>
+                        </div>
+    
+    
+    
+    
+    
+    
+                        <ul>
+                            <li>시가로 평가.</li>
+                            <li>시가는 감정평가액이 될수 있음.</li>
+                            <li>시가가 없는 경우 기준시가로 평가.</li>
+                    </div>
+    
+    
+                    <div id="step5" style="display: none;">
+                        <h2>금융자산 등 그외상속재산</h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="otherProperty" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(4)">뒤로가기</button>
+                                <button onclick="nextStep(6)">다음</button>
+                            </div>
+                        </div>
+                    </div>
+    
+    
+                    <div id="step6" style="display: none;">
+                        <h2>채무 및 공과금</h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="debts" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(5)">뒤로가기</button>
+                                <button onclick="nextStep(7)">다음</button>
+                            </div>
+                        </div>
+                    </div>
+    
+    
+                    <div id="step7" style="display: none;">
+                        <h2>장례비용</h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="funeralExpense" inputmode="numeric" oninput="formatNumber(this)" placeholder="5백이하시 5,000,000을 쓰세요">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(6)">뒤로가기</button>
+                                <button onclick="nextStep(8)">다음</button>
+                            </div>
+                        </div>
+                        <ul>
+                            <li>장례비(봉안시설비 제외) : 5백만원 미만시 최소 5백만원 공제. 1천만원 초과시 1천만원까지만 공제.<</li>
+                            <li>봉안시설, 자연장지에 사용된 금액 : 별도로 5백만원을 한도로 공제./li>
+                            <li> 합계 1천5백만원까지 한도  </li>
+                        </ul>
+                    </div>
+    
+    
+                    <div id="step8" style="display: none;">
+                        <h2>사전증여재산</h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;"></div>
+                        <input type="text" id="giftFromMother" inputmode="numeric" oninput="formatNumber(this)" placeholder="10년내 배우자 증여 금액">
+                        <input type="text" id="giftToChildren" inputmode="numeric" oninput="formatNumber(this)" placeholder="10년 자녀 증여 증여 금액">
+                        <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)" placeholder="5년내 상속인 외 증여 금액 예) 손자 손녀">
+                        <input type="text" id="giftTaxDeduction" inputmode="numeric" oninput="formatNumber(this)" placeholder="위 증여시 산출된 증여세 합계">
+    
+    
+                        <div style="display: flex; justify-content:left ; gap: 20px;"></div>
+                        <button class="col-btn" onclick="previousStep(7)">뒤로가기</button>
+                        <button onclick="nextStep(9)">다음</button>
+                    </div>
+    
+    
+                    <div id="step9" style="display: none;">
+                        <h2>상속공제</h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="inheritanceDeduction" inputmode="numeric" oninput="formatNumber(this)"placeholder=" 최소 1,000,000,000을 적으세요 " >
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(8)">뒤로가기</button>
+                                <button onclick="nextStep(10)">다음</button>
+                            </div>
+                        </div>
+                        <ul>
+                            <li>배우자가 생존해 있는 경우 최소 10억원.</li>
+                            <li>사전증여가 많은 경우 10억이 안될수 있음.</li>
+                            <li>그외 금융상속공제, 동거주택상속공제 등이 있음.</li>
+    
+    
+                        </ul>
+    
+    
+                    </div>
+    
+    
+                    <div id="step10" style="display: none;">
+                        <h2>감정평가수수료</h2>
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(9)">뒤로가기</button>
+                                <button onclick="nextStep(11); calculateInheritanceTax();">상속세계산</button>
+                            </div>   
+                        </div>    
+    
+                        <ul>
+                            <li>5백만원 한도</li>    
+                        </ul>
+    
+    
+                    </div>
+    
+    
+                    <div id="step11"  style="display: none;">
+    
+                        <style>
+                            #totalPropertyValue:hover {
+                                cursor: pointer; /* 커서를 포인터(손 모양)로 변경 */
+                                background-color: #f0f0f0; /* 배경색을 밝은 회색으로 변경 */
+                            }
+                        </style>
 
-    </div>
+                        <h2>계산 결과</h2>
+                        <table border="1" id="resultTable">
+                            <thead>
+                            <tr>
+                                <th>구분</th>
+                                <th>금액</th>
+                                <th>비고</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr onclick="goToStep1()">
+                                <td id="totalPropertyValue">(1) 총상속재산가액</td> // 커서를 클릭버튼으로 바꾸기 위해 아이디를 추가
+                                <td id="totalPropertyValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;">상속재산 총합 </td>
+                            </tr>                          
+                                                            
+                            <tr>
+                                <td>(2) 채무 및 공과금</td>
+                                <td id="debtsValueCell" style="text-align: right;"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(3) 장례비용 </td>
+                                <td id="funeralExpenseValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;">최소 5백공제. 최대 1천5백 한도.</td>
+                            </tr>
+                            <tr>
+                                <td>(4) 사전증여재산</td>
+                                <td id="priorGiftsValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;"></td>
+                            </tr>
+                            
+                            <tr>
+                                <td>(5) 상속세 과세가액</td>
+                                <td id="taxableAmountValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;">(1) - (2) + (3)</td>
+                            </tr>
+                            <tr>
+                                <td>(6) 상속공제</td>
+                                <td id="inheritanceDeductionValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;">배우자 생존시 최소 10억</td>
+                            </tr>
+                            <tr>
+                                <td>(7) 감정평가수수료</td>
+                                <td id="appraisalFeeValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;"> 5백만 원 한도</td>
+                            </tr>
+                            <tr>
+                                <td>(8) 상속세 과세표준</td>
+                                <td id="taxBaseValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;">(4) - (5) - (6)</td>
+                            </tr>
+                            <tr>
+                                <td>(9) 세율</td>
+                                <td id="taxRateValueCell" style="text-align: right;">10%~50%</td>
+                                <td style="text-align: center;">누진세율</td>
+                            </tr>
+                            <tr>
+                                <td>(10) 산출세액</td>
+                                <td id="calculatedTaxValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;">(7) × (8)</td>
+                            </tr>
+                            <tr>
+                                <td>(11) 세액공제</td>
+                                <td id="taxDeductionValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;">증여세액공제 + 신고세액공제 3%</td>
+                            </tr>
+                            <tr>
+                                <td>(12) 자진납부할세액</td>
+                                <td id="payableTaxValueCell" style="text-align: right;"></td>
+                                <td style="text-align: center;">(9) - (10)</td>
+                            </tr>
+                            </tbody>
+                        </table> <br><br>
+    
 
-    <div id="step10" style="display: none;">
-        <h2>감정평가수수료</h2>
-        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">  
-            <div style="display: flex; justify-content:left ; gap: 20px;">
-                <button onclick="previousStep(9)">뒤로가기</button>
-                <button onclick="nextStep(11); calculateInheritanceTax();">상속세계산</button>
+
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(10)">뒤로가기</button>
+                                <button onclick="nextStep(12); calculateInheritanceTax();">상속세 신고시 반드시 알아야 할  절세 방법 (준비중)</button>
+                            </div>   
+                        </div>        
+                              
+                        <button onclick="previousStep(14)"> 상속세 셀프 신고서 작성  (준비중)</button> <br><br>    
+    
+                     
+                    </div>
+    
+                    <div id="step12" style="display: none;">
+                        <h2> 상속세 신고시 반드시 알아야 할  절세 방법 </h2>
+                        <blockquote>
+                            <h4>"상속세 !   (    ) 원을 줄일 수 있습니다."   중요 !</h4>                            
+                        </blockquote>
+                        
+                        <blockquote>
+                            <h4>"취득세 !  75% 적게 낼수 있습니다."   이것도 중요 !</h4>                            
+                        </blockquote>
+
+                        <blockquote>
+                            <h4>" 종부세 !  피할수  있습니다."   꼭 알아야 합니다.</h4>                            
+                        </blockquote>
+
+                        <blockquote>
+                            <h4>"상속 받은 주택과  농지, 임야 매도할때 ! 세금  " 0 " 만들수 있습니다."   매우 중요 !!</h4>
+                        </blockquote>
+
+                        <blockquote>
+                            <h4>"상속 받은 주택 외 가지고 있던 주택 양도시 ! 1세대 1주택 비과세 만들수 있습니다. "   한순간의 선택이 ?! </h4>
+                        </blockquote>
+                        
+
+                        <blockquote>
+                            <h4>" 주택 상속으로 2주택인 경우 ? 자녀들의 청약기회 ! 살릴수 있습니다.!"</h4>    
+                        </blockquote>
+
+                        <blockquote>
+                            <h4>" 부모님 노인기초연금  받게 할 순 없을까요  ? "</h4>
+                        </blockquote>
+
+                        
+
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="nextStep(11); calculateInheritanceTax();">뒤로가기</button>
+                                <button onclick="nextStep(13); ">절세하러 가기</button>
+                                
+                            </div>   
+                        </div>    
+                        <button onclick="nextStep(30); "> 99,000 원 결제하러 가기</button>
+                       
+    
+    
+                    </div>
+
+                    <div id="step13" style="display: none;">
+                        <h2> 상속세 절세 방법 </h2>                       
+                      
+                        <h4>▶ 배우자상속공제를 최대로 받기 위해 배우자 한도를 최대한 이용해요!</h4>
+                        <p> 배우자상속공제를 최대로 높이기 위해서 배우자가 상속받아야 할 순상속재산은 다음과 같습니다. </p>
+                        <p> 순 상속재산은 상속재산에서 부채도 승계받은 경우 부채를 뺀 금액을 말합니다. </p>
+
+                        <table>
+                            <tr>
+                                <th>구분</th>
+                                <th>금액</th>
+                                <th>비고</th>
+                            </tr>
+                            <tr>
+                                <td>상속재산가액</td>
+                                <td>Data 2</td>
+                                <td>아래참고</td>
+                            </tr>
+                            <tr>
+                                <td>법정상속지분</td>
+                                <td> </td>
+                                <td>1.5/3.5</td>
+                            </tr>
+                            <tr>
+                                <td>실제상속받아야 할금액</td>
+                                <td>Data 4</td>
+                                <td>법정상속분보다 좀더 받는게 좋음</td>
+                            </tr>
+                            <tr>
+                                <td>10억 공제시 상속세</td>
+                                <td>Data 4</td>
+                                <td>이괄 5억+ 배우자 5억</td>
+                            </tr>
+                            <tr>
+                                <td> 최대공제시 상속세 </td>
+                                <td>Data 4</td>
+                                <td>Data 4</td>
+                            </tr>
+                            <tr>
+                                <td>절세액 </td>
+                                <td>Data 4</td>
+                                <td>  </td>
+                        </table>
+                            
+                            <ul>
+                                <li>배우자상속공제를 높이면 5억원이상 공제를 받을 수 있습니다. 배우자 공제는 30억까지 가능한데 다만, 실제 상속받은 금액과 법정상속분을 한도로 하고 있습니다.<br> 
+                                    </li><br>
+                        
+                                <li>상속세 조사과정에서 배우자에게 사전 증여한 것이 있다면, 
+                                        한도가 줄어 들수 있어 법정상속분보다 좀더 상속 받은 것이 좋습니다.</li><br>
+                                    
+                        
+                                <li>배우자 상속공제는 상속세과세표준신고기한의 다음날부터 9개월이 되는 날까지 배우자 몫으로
+                                    상속재산을 분할한 경우에 적용합니다.<br> 이때 등기 등록이 필요한 부동산등이 있는 경우는 <strong>반드시 등기 등록을 해야 합니다.</strong> </li><br>
+                        
+                                <li> 상속인은 상속재산의 분할사실을 <strong>상속세과세표준신고기한의 다음날부터 9개월이 되는 날까지 납세지 관할세무서장에게 
+                                    반드시 신고해야 합니다.</strong></li><br>
+                            </ul>
+                        
+                            <h4>배우자상속공제 한도 : min (1. 2. 3.)</h4>
+                            <ul>
+                                <li>1. 거주자의 사망으로 상속이 개시되어 배우자가 실제 상속받은 금액</li><br>
+                                <li>2. (상속재산가액* × 배우자의 법정상속분) - 상속재산에 가산한 배우자가 사전증여받은 재산의 증여세 과세표준 ( = 사전증여재산 - 6억)<br><br>
+                                    * 상속재산가액 = (본래+간주+추정)상속재산가액 + 사망일 전 10년 이내 상속인에게 증여한 재산가액 - 상속인이 아닌 수유자가 유증·사인증여 받은 재산가액 - 비과세 재산가액 - 공과금 및 채무 - 과세가액 불산입 재산가액</li><br>
+                                <li>3. 30억원</li> 
+                            </ul>
+
+                            
+                        <h4>▶ 만약! 부모님과 같이 살았다면 동거주택상속공제를 받아요!  </h4>
+                                    
+                            동거주택가격의 100%를 공제합니다 , 다만 6억 한도을 한도로 하며, 다음 요건을 모두 충족해야 합니다. 
+                                <ul>             
+                                    <li>사망일 전 부터 10년이상 계속 같이 하나의 주택에서 거주할것</li>
+                                    <li>동거한 상속인이 상속받을 것</li>               
+                                </ul>
+                            
+                        <h4> ▶ 금융자산상속공제를 받아요!  </h4>
+                            
+                            금융재산에서 금융채무를 제외한 순금융재금액이 상속세과세가액에서 다음과 같이 공제 됩니다.
+                            <ul>
+                                <li>순금융재산의 가액이 2천만원 초과일 경우: 순금융재산 가액의 20% 혹은 2천만원 중 더 큰 금액이 공제됩니다. 
+                                    단, 이 공제 금액은 최대 2억원까지입니다.</li>
+                                <li>순금융재산의 가액이 2천만원 이하일 경우: 순금융재산의 전액이 과세가액에서 공제됩니다.</li>
+                            </ul>
+                            
+                            <h4>▶  감정평가를 이용해 향후 양도세를 줄여요 !</h4>
+                            
+                            <ul>
+                                <li>주택, 빌딩, 그 외 자산의 가치가 10억원 미만인 경우, 상속 주택을 가능한 한 높게 평가하여 상속세 신고를 하는 것이 
+                                    양도소득세를 절감하는 데 도움이 됩니다. 상속세 신고 시 평가된 가액이 양도세의 취득가액으로 적용되기 때문입니다. 
+                                    아파트와 달리 단독주택 등 매매 사례가 없는 경우에는 감정평가를 통해 신고할 수 있습니다. </li>
+                                <li>상속 재산의 가치가 10억원을 초과하는 경우에도, 상속세와 양도세를 비교하여 양도세 절감 효과가 크다면,
+                                    감정평가 등을 통해 시가로 신고하는 것을 고려해야 합니다.</li>
+                            </ul>
+                            
+                            <h4>▶ 자녀가 농업 또는 임업에 종사하고 있다면 ? 영농상속공제를 적용받아요 ! </h4>
+                            <ul>
+                                <li> 내용 :자경에 해당하는 농지 또는 임야 전체를 공제해줍니다. 다만, 한도 30억을 한도로 합니다.  </li>
+                                <li>아버지 조건 : 8년이상 계속 자경했어야 하고, 농지소재지 30킬로미터 이내 또는 농지 소재지 또는 인접 시군구 인접지역에 거주하고 있어야 합니다. </li>
+                                
+                                <li> 자녀 조건 : 18세이상으로서 사망일 2년전부터 계속 영농에 종사하고 있어야 합니다.  </li>
+                            </ul>
+                    
+                        <h4>▶ 빌딩이 시가 평가가 예상되는 경우  감정평가를 미리 받아요! </h4>
+                            <ul>
+                                <li>국세청의 감정평가는 어떤 부동산에 대하여, 얼마 가격이상부터 감정평가를 한다는 선정기준에 대해서는 "공정한업무수행"에 지장을 초래한다는 
+                                    이유로 공표 하지 않고 있습니다. </li><br>
+                                <li>그럼에도 불구하고 시가 평가가 예상되는 경우 미리 유리한 감정평가를 받아 적용하는 것이 상당한 효과를 거둘 수 있습니다.</li>
+                            </ul>
+                            
+                        <h4>▶  사망일로부터 10년 전 계좌 이체에 주의하고, 절세를 위한 중장기 계획을 세워요!</h4>
+                                <ul>
+                                <li>금융자산의 경우, 상속일 기준으로 소급하여 10년 이내의 입출금 내역 및 사용처를 모두 조사합니다. 이를 미리 검토하는 것이 중요합니다.</li>
+                                <li>동거주택상속공제, 금융자산 상속공제 등 공제가 큰 재산으로의 이동이 필요하므로 중장기 계획을 세우는 것이 좋습니다.</li>     
+                                </ul>  
+                              
+                
+
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(12); ">뒤로가기</button>
+                                <button onclick="nextStep(14); "> 취득세절세하러 가기</button>
+                                
+                            </div>   
+                        </div>     
+
+                                           
+                    </div>
+                    <div id="step14" style="display: none;">  // 취득세 절세                     
+                        <h2>◈ 배우자와 자녀의 취득세는 얼마일까요 ?</h2>
+                        
+                           
+                            <p>아버지 사망일로부터 6개월이 속하는 달의 말일까지 취득세를 신고하고 납부해야 합니다.</p>
+                            <p>취득세의 과세표준은  시가로 계산하지 않고 모두 시가표준액으로 계산합니다. 
+                                주택는 공시가격, 농지와 임야는 개별공시지가, 건물은 시가표준액으로 계산합니다.</p>
+                    
+                                <h4> 내가 받은 주택 또는 건물 또는 임야의 취득세 </h4>
+                    
+                        <input type="text" id="inputNumber1" placeholder="취득금액을 입력하세요" oninput="formatInputNumber(this)">
+                        <button onclick="calculateTax3_16()">계산하기</button>
+                    
+                        <p id="taxResult1"></p>
+                    
+                        <h4>내가 받은 농지의 취득세 </h4>
+                    
+                        <input type="text" id="inputNumber2" placeholder="취득금액을 입력하세요" oninput="formatInputNumber(this)">
+                        <button onclick="calculateTax2_56()">계산하기</button>
+                    
+                        <p id="taxResult2"> </p>
+                                    
+                        <h2>◈ 취득세 절세 방법이 있을까요 ?</h2>
+                          <h4>1) 상속세 특례세율을 이용합니다. </h4>
+                           <ul>
+                                <li>상속으로 주택 취득한 경우 취득세, 농특세, 지방교육세 합하여 3.16% 입니다.</li>
+                                <li>무주택 세대주가 상속으로 인하여 1세대 1주택이 된 경우 취득세는 0.8% 입니다.</li>
+                                <li>1주택을 공동으로 상속받는 경우 지분이 가장 큰 사람의 소유로 보고, 
+                                    지분이 동일한 경우 연장자의 소유로 보고 감면합니다. 
+                                    예) 상속전 무주택자인 어머니와 자녀가 아버지의 상속주택 1개를 어머니가 50%, 세대분리된 아들이 50% 상속받음. 
+                                        이 경우 어머니 50%에 대하여만  0.8%의 특례세율 적용 받음.</li>
+                            </ul>
+                    
+                    
+                    
+                        <h4>2) 사망일전에 세대분리를 분리하여 무주택세대를 만듭니다. </h4>
+                            <ul>
+                                <li>상속받을 세대는 무주택세대가 받는 것이 좋습니다. </li>
+                                <li>어머니가 상속받는 경우, 주택이 있는 자녀가 주민등록표상에 같이 있다면 세대분리를 하는 것이 좋습니다.</li>
+                                <li>무주택 자녀가 상속받는 경우, 같이 사는 30세 이상인 세대원이 주택을 소유하고 있다면 
+                                    그 세대원을 세대분리 하는 것이 좋습니다. </li>
+                                <li>즉, 주택상속받을 사람을 사망일 전에 무주택자로 만드는 것입니다. </li>
+                            </ul>
+                            
+                
+                            <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;"> // 
+                                
+                                <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                                <div style="display: flex; justify-content:left ; gap: 20px;">
+                                    <button onclick="previousStep(13); ">뒤로가기</button>
+                                    <button onclick="nextStep(15); "> 취득세절세하러 가기</button>
+                                    
+                                </div>   
+                            </div>    
+                                         
+                    </div>
+
+                    <div id="step15" style="display: none;">                       
+                             
+                
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(14); ">뒤로가기</button>
+                                <button onclick="nextStep(16); "> 종부세절세하러 가기</button>
+                                
+                            </div>   
+                        </div>    
+                                         
+                    </div>
+
+                    <div id="step16" style="display: none;">                       
+                             
+                
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(15); ">뒤로가기</button>
+                                <button onclick="nextStep(17); "> 상속받은 부동산 매도시 양도세 줄이기 </button>
+                                
+                            </div>   
+                        </div>    
+                                         
+                    </div>
+
+                    <div id="step17" style="display: none;">                       
+                             
+                
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(16); ">뒤로가기</button>
+                                <button onclick="nextStep(18); "> 종전 주택 팔때 1세대 1주택 만들기  </button>
+                                
+                            </div>   
+                        </div>    
+                                         
+                    </div>
+
+                    <div id="step18" style="display: none;">                       
+                             
+                
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(17); ">뒤로가기</button>
+                                <button onclick="nextStep(19); "> 상속받은 주택때문에 주택청약을 할수 있나 ?  </button>
+                                
+                            </div>   
+                        </div>    
+                                         
+                    </div>
+
+                    <div id="step19" style="display: none;">                       
+                             
+                
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(17); ">뒤로가기</button>
+                                <button onclick="nextStep(20); "> 부모님이 기초연금을 받으려면 ?  </button>
+                                
+                            </div>   
+                        </div>    
+                                         
+                    </div>
+                    
+                    <div id="step19" style="display: none;">                       
+                             
+                
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; justify-content:left ; gap: 20px;">
+                                <button onclick="previousStep(17); ">뒤로가기</button>                
+                                
+                            </div>   
+                        </div>    
+                                         
+                    </div>
+
+
+                </div>
             </div>
-            
-
         </div>
-
-        <ul>
-            <li>5백만원 한도</li>
-               
-        </ul>
-
-    </div>  
-
-    <div id="step11"  style="display: none;">
-
-        <h2>계산 결과</h2>
-        <table border="1" id="resultTable">
-            <thead>
-                <tr>
-                    <th>구분</th>
-                    <th>금액</th>
-                    <th>비고</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>(1) 총상속재산가액</td>
-                    <td id="totalPropertyValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;">상속재산 총합 </td>
-                </tr>
-                <tr>
-                    <td>(2) 채무 및 공과금</td>
-                    <td id="debtsValueCell" style="text-align: right;"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>(3) 장례비용 </td>
-                    <td id="funeralExpenseValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;">최소 5백공제. 최대 1천5백 한도.</td>
-                </tr>
-                <tr>
-                    <td>(4) 사전증여재산</td>
-                    <td id="priorGiftsValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;"></td>
-                </tr>
-                <tr>
-                    <td>(5) 상속세 과세가액</td>
-                    <td id="taxableAmountValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;">(1) - (2) + (3)</td>
-                </tr>
-                <tr>
-                    <td>(6) 상속공제</td>
-                    <td id="inheritanceDeductionValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;">배우자 생존시 최소 10억</td>
-                </tr>
-                <tr>
-                    <td>(7) 감정평가수수료</td>
-                    <td id="appraisalFeeValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;"> 5백만 원 한도</td>
-                </tr>
-                <tr>
-                    <td>(8) 상속세 과세표준</td>
-                    <td id="taxBaseValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;">(4) - (5) - (6)</td>
-                </tr>
-                <tr>
-                    <td>(9) 세율</td>
-                    <td id="taxRateValueCell" style="text-align: right;">10%~50%</td>
-                    <td style="text-align: center;">누진세율</td>
-                </tr>
-                <tr>
-                    <td>(10) 산출세액</td>
-                    <td id="calculatedTaxValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;">(7) × (8)</td>
-                </tr>
-                <tr>
-                    <td>(11) 세액공제</td>
-                    <td id="taxDeductionValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;">증여세액공제 + 신고세액공제 3%</td>
-                </tr>
-                <tr>
-                    <td>(12) 자진납부할세액</td>
-                    <td id="payableTaxValueCell" style="text-align: right;"></td>
-                    <td style="text-align: center;">(9) - (10)</td>
-                </tr>
-            </tbody>
-        </table><br> <br> 
-
-        <button onclick="previousStep(10)">뒤로가기</button> <br> <br> 
-
-        
-        <button onclick="previousStep(14)"> 상속세 절세방법 (준비중) </button> <br><br>
-
-        
-        <button onclick="previousStep(14)"> 상속받은 주택 이렇게 하세요! (준비중)</button> <br><br>  
-
-        
-
-           
-    </div>
-
+        </div>
+    </section>
+    
+    
+    
+    
+    
     
     <script>
         function nextStep(stepNum) {
             document.getElementById("step" + (stepNum - 1)).style.display = "none";
             document.getElementById("step" + stepNum).style.display = "block";
         }
-
+    
+    
         function previousStep(stepNum) {
             document.getElementById("step" + (stepNum + 1)).style.display = "none";
             document.getElementById("step" + stepNum).style.display = "block";
             document.getElementById("results").style.display = "none";
-           
+    
+    
         }
-     
- //상속세 계산기
+    
+    
+        //상속세 계산기
         function calculateInheritanceTax() {
-            var houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
-            var buildingValue = parseFloat(document.getElementById('buildingValue').value.replace(/,/g, '')) || 0;
-            var agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value.replace(/,/g, '')) || 0;
-            var forestLandValue = parseFloat(document.getElementById('forestLandValue').value.replace(/,/g, '')) || 0;
-            var otherProperty = parseFloat(document.getElementById('otherProperty').value.replace(/,/g, '')) || 0;
-            var debts = parseFloat(document.getElementById('debts').value.replace(/,/g, '')) || 0;
+            let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+            let buildingValue = parseFloat(document.getElementById('buildingValue').value.replace(/,/g, '')) || 0;
+            let agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value.replace(/,/g, '')) || 0;
+            let forestLandValue = parseFloat(document.getElementById('forestLandValue').value.replace(/,/g, '')) || 0;
+            let otherProperty = parseFloat(document.getElementById('otherProperty').value.replace(/,/g, '')) || 0;
+            let debts = parseFloat(document.getElementById('debts').value.replace(/,/g, '')) || 0;
+    
+    
+            let funeralExpenseInput = parseFloat(document.getElementById('funeralExpense').value.replace(/,/g, ''));
 
-            var funeralExpenseInput = parseFloat(document.getElementById('funeralExpense').value.replace(/,/g, '')); // 입력값
-            var funeralExpense = funeralExpenseInput || 5000000; // 입력값이 없을 경우 기본값은 500만원
-            // 입력값이 150만을 초과하는 경우 150만으로 조정
-            if (funeralExpense > 15000000) {
-                funeralExpense = 15000000;
-            }
+                // 입력값이 숫자가 아니거나(Not a Number, 즉 입력이 비어 있거나 숫자가 아닌 경우) 5,000,000보다 작은지 확인
+                if (isNaN(funeralExpenseInput) || funeralExpenseInput < 5000000) {
+                    funeralExpenseInput = 5000000; // 입력값이 비어 있거나 5,000,000보다 작을 경우 기본값으로 5,000,000 설정
+                }
 
-            var giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
-            var giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
-            var giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
-            var inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000; 
-            var appraisalFee = parseFloat(document.getElementById('appraisalFee').value.replace(/,/g, '')) || 0;
-            var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value.replace(/,/g, '')) || 0;
+                // 이제 입력값은 최소 5,000,000임이 보장됩니다
+                let funeralExpense = funeralExpenseInput; // 입력값 또는 기본값을 사용
 
-            var totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
-            var priorGifts = giftFromMother + giftToChildren + giftToOthers;
-            var taxableAmount = totalProperty - debts - funeralExpense + priorGifts;
-        
-            var taxBase = Math.max(0, taxableAmount - inheritanceDeduction - appraisalFee);
-            var calculatedTax = calculateInheritTariff(taxBase); calculatedTax = Math.floor(calculatedTax); // 소수점 이하를 절사하여 할당           
-            var taxDeduction = giftTaxDeduction + (calculatedTax -giftTaxDeduction) * 0.03; taxDeduction = Math.floor(taxDeduction); // 소수점 이하를 절사하여 할당
-            var payableTax = Math.max(0, calculatedTax - taxDeduction);payableTax = Math.floor(payableTax / 10) * 10; // 10의 자리를 절사하여 할당
+                // 입력값이 15,000,000을 초과하는 경우 15,000,000으로 설정
+                if (funeralExpense > 15000000) {
+                    funeralExpense = 15000000;
+                }
 
+    
+    
+            let giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
+            let giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
+            let giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
+            let inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000;
+
+           
+            let appraisalFeeInput = parseFloat(document.getElementById('appraisalFee').value.replace(/,/g, '')) || 0; // 사용자 입력값을 숫자로 변환
+            let appraisalFee = appraisalFeeInput > 5000000 ? 5000000 : appraisalFeeInput; // 입력값이 500만원을 초과하면 500만원으로 설정, 그렇지 않으면 입력값 사용
+
+
+            let giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value.replace(/,/g, '')) || 0;
+    
+    
+            let totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
+            let priorGifts = giftFromMother + giftToChildren + giftToOthers;
+            let taxableAmount = totalProperty - debts - funeralExpense + priorGifts;
+    
+    
+            let taxBase = Math.max(0, taxableAmount - inheritanceDeduction - appraisalFee);
+            let calculatedTax = calculateInheritTariff(taxBase); calculatedTax = Math.floor(calculatedTax); // 소수점 이하를 절사하여 할당
+            let taxDeduction = giftTaxDeduction + (calculatedTax -giftTaxDeduction) * 0.03; taxDeduction = Math.floor(taxDeduction); // 소수점 이하를 절사하여 할당
+            let payableTax = Math.max(0, calculatedTax - taxDeduction);payableTax = Math.floor(payableTax / 10) * 10; // 10의 자리를 절사하여 할당
+    
+    
             document.getElementById('totalPropertyValueCell').innerText = totalProperty.toLocaleString();
             document.getElementById('debtsValueCell').innerText = debts.toLocaleString();
             document.getElementById('funeralExpenseValueCell').innerText = funeralExpense.toLocaleString();
@@ -331,29 +728,47 @@
             document.getElementById('taxDeductionValueCell').innerText = taxDeduction.toLocaleString();
             document.getElementById('payableTaxValueCell').innerText = payableTax.toLocaleString();
         }
-// 상속세율표
+        // 상속세율표
+    
+    
+        function calculateInheritTariff(taxBase) {
+            if (taxBase <= 100000000) {
+                return taxBase * 0.1; // 10%
+            } else if (taxBase <= 500000000) {
+                return taxBase * 0.2 - 10000000; // 20%, 10,000,000원 공제
+            } else if (taxBase <= 1000000000) {
+                return taxBase * 0.3 - 60000000; // 30%, 60,000,000원 공제
+            } else if (taxBase <= 3000000000) {
+                return taxBase * 0.4 - 160000000; // 40%, 160,000,000원 공제
+            } else {
+                return taxBase * 0.5 - 460000000; // 50%, 460,000,000원 공제
+            }
+        }
+    
+    
+        function formatNumber(input) {
+            // Remove commas and non-numeric characters
+            let numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
+            // Format with commas and update the input value
+            input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    
+        function goToStep1() {
+        // 모든 단계를 숨깁니다.
+        for (let i = 1; i <= 11; i++) { // 여기서 11은 단계의 총 수입니다. 실제 단계의 수에 따라 조정해야 할 수 있습니다.
+            document.getElementById("step" + i).style.display = "none";
+        }
+        
 
-function calculateInheritTariff(taxBase) {
-    if (taxBase <= 100000000) {
-        return taxBase * 0.1; // 10%
-    } else if (taxBase <= 500000000) {
-        return taxBase * 0.2 - 10000000; // 20%, 10,000,000원 공제
-    } else if (taxBase <= 1000000000) {
-        return taxBase * 0.3 - 60000000; // 30%, 60,000,000원 공제
-    } else if (taxBase <= 3000000000) {
-        return taxBase * 0.4 - 160000000; // 40%, 160,000,000원 공제
-    } else {
-        return taxBase * 0.5 - 460000000; // 50%, 460,000,000원 공제
-    }
-}
-  
-    function formatNumber(input) {
-        // Remove commas and non-numeric characters
-        var numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
-        // Format with commas and update the input value
-        input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+        // 첫 번째 단계만 보여줍니다.
+        document.getElementById("step1").style.display = "block";
+        }
 
+        // "총상속재산가액" 셀에 클릭 이벤트 리스너를 추가합니다.
+        document.getElementById("goToStep1").addEventListener("click", goToStep1);
+    
     </script>
+     
+     
 </body>
 </html>
