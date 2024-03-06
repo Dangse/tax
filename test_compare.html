@@ -24,25 +24,49 @@
     let inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value) || 0;
     let inheritanceDeduction1 = parseFloat(document.getElementById('inheritanceDeduction1').value) || 0;
 
-    let taxForDeduction1 = calculateInheritanceTax(inheritanceDeduction);
-    let taxForDeduction2 = calculateInheritanceTax(inheritanceDeduction1);
+    let taxForDeduction = calculateInheritanceTax(inheritanceDeduction);
+    let taxForDeduction1 = calculateInheritanceTax(inheritanceDeduction1);
 
     // 상속세 절세 계산
-    let taxSavings = taxForDeduction1 - taxForDeduction2;
+    let taxSavings = taxForDeduction - taxForDeduction1;
 
     // 결과를 HTML에 표시
     document.getElementById('result').innerHTML = `
-        <p>상속공제: ${taxForDeduction1}</p>
-        <p>상속공제 1: ${taxForDeduction2}</p>
-        <p>상속세 절세: ${taxSavings}</p>
-    `;
+    <table border="1">
+        <thead>
+            <tr>
+                <th>항목</th>
+                <th>금액</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>상속공제</td>
+                <td>${taxForDeduction}</td>
+            </tr>
+            <tr>
+                <td>상속공제 1</td>
+                <td>${taxForDeduction1}</td>
+            </tr>
+            <tr>
+                <td>상속세 절세</td>
+                <td>${taxSavings}</td>
+            </tr>
+        </tbody>
+    </table>
+`;
+
 }
 
 
     function calculateInheritanceTax(inheritanceDeduction,inheritanceDeduction1) {
+        let tax = (inheritanceDeduction +100000000) * 0.1;
+        let tax1 = (inheritanceDeduction1 +100000000) * 0.1;
         // 예시 계산 로직, 실제 계산 로직으로 대체 필요
-        return inheritanceDeduction * 0.1;
-        return inheritanceDeduction1 * 0.2;
+        
+
+        return tax;
+        return tax1;
     }
     </script>
 </body>

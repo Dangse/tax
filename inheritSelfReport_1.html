@@ -462,8 +462,23 @@
 
 
                         <h4>▶ 상속공제 합계 </h4>
-                        <input type="text" id="inheritanceDeduction"inputmode="numeric" oninput="formatNumber(this)"placeholder=" 최소 1,000,000,000을 적으세요 ">
-                            
+                        
+                        
+                            <p>상속공제에 따른 비교</p>
+
+                            <form id="taxForm" onsubmit="event.preventDefault(); performDeductionComparison();">
+                                <label for="inheritanceDeduction">상속공제 (10억일경우):</label><br>
+                                <input type="number" id="inheritanceDeduction" name="상속공제" value="1000000000" readonly><br>
+
+                                <label for="inheritanceDeduction1">상속공제 총합계 :</label><br>
+                                <input type="number" id="inheritanceDeduction1" name="inheritanceDeduction1"><br>
+
+                                <input type="submit" value="Submit">
+                            </form>
+
+                            <div id="result"></div>
+
+
                         <h4>▶  감정평가를 이용해 향후 양도세를 줄여요 !</h4>
                             
                             <ul>
@@ -1320,7 +1335,7 @@
     
     
         //상속세 계산기
-        function calculateInheritanceTax() {
+        function calculateInheritanceTax(inheritanceDeduction,inheritanceDeduction1) {
             let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
             let buildingValue = parseFloat(document.getElementById('buildingValue').value.replace(/,/g, '')) || 0;
             let agriculturalLandValue = parseFloat(document.getElementById('agriculturalLandValue').value.replace(/,/g, '')) || 0;
@@ -1349,7 +1364,7 @@
             let giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
             let giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
             let giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
-            let inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000;
+            let inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 0;
 
            
             let appraisalFeeInput = parseFloat(document.getElementById('appraisalFee').value.replace(/,/g, '')) || 0; // 사용자 입력값을 숫자로 변환
@@ -1369,12 +1384,16 @@
             let taxDeduction = giftTaxDeduction + (calculatedTax -giftTaxDeduction) * 0.03; taxDeduction = Math.floor(taxDeduction); // 소수점 이하를 절사하여 할당
             let payableTax = Math.max(0, calculatedTax - taxDeduction);payableTax = Math.floor(payableTax / 10) * 10; // 10의 자리를 절사하여 할당
 
+            return payableTax;
+            return payableTax1;
+
             // 배우자 상속공제 한도 계산
             let inheritedProperty = totalProperty +  giftFromMother + giftToChildren - debts; // 상속재산 가액
             let spouseInheritanceDeduction = Math.min(
-                inheritedProperty * (1.5 / (childrensNumber + 0.5)) - (giftFromMother - 600000000),
-                3000000000
-            );
+            inheritedProperty * (1.5 / (childrensNumber + 1.5)) - Math.max(giftFromMother - 600000000, 0),
+            3000000000
+             ); // 배우자 상속공제 한도 계산 
+             
             spouseInheritanceDeduction = Math.max(spouseInheritanceDeduction, 500000000); // 최소 5억으로 설정
             spouseInheritanceDeduction = Math.floor(spouseInheritanceDeduction); //소수점 이하를 절사하여 할당
 
@@ -1424,7 +1443,46 @@
         }    
        
     
-    
+        // 상속공제에 따른 상속세 비교
+        function performDeductionComparison() {
+            let inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value) || 0;
+            let inheritanceDeduction1 = parseFloat(document.getElementById('inheritanceDeduction1').value) || 0;
+
+            let taxForDeduction = calculateInheritanceTax(inheritanceDeduction);
+            let taxForDeduction1 = calculateInheritanceTax(inheritanceDeduction1);
+
+            // 상속세 절세 계산
+            let taxSavings = taxForDeduction1 - taxForDeduction2;
+
+            // 결과를 HTML에 표시
+            document.getElementById('result').innerHTML = `
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>금액</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>상속공제</td>
+                        <td>${taxForDeduction}</td>
+                    </tr>
+                    <tr>
+                        <td>상속공제 1</td>
+                        <td>${taxForDeduction1}</td>
+                    </tr>
+                    <tr>
+                        <td>상속세 절세</td>
+                        <td>${taxSavings}</td>
+                    </tr>
+                </tbody>
+            </table>
+        `;
+
+        }
+
+
     </script>
      
      
