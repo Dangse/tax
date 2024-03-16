@@ -191,7 +191,7 @@
                     <div id="step9" style="display: none;">
                         <h2>상속공제</h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-                            <input type="text" id="inheritanceDeduction" value="1,000,000,000" readonly  oninput="formatNumber(this)>
+                            <input type="number" id="inheritanceDeduction" name="상속공제" value="1000000000" readonly>
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(8)">뒤로가기</button>
                                 <button onclick="nextStep(10)">다음</button>
@@ -215,7 +215,7 @@
                             <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(9)">뒤로가기</button>
-                                <button onclick="nextStep(11); calculateInheritanceTax();">상속세계산</button>
+                                <button onclick="nextStep(11); calculateInheritanceTax(parseInt(document.getElementById('inheritanceDeduction').value));">상속세계산</button>
                             </div>   
                         </div>    
     
@@ -247,7 +247,7 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td id="totalPropertyValue">(1) 총상속재산가액</td> // 커서를 클릭버튼으로 바꾸기 위해 아이디를 추가
+                                <td id="totalPropertyValue">(1) 총상속재산가액</td> 
                                 <td id="totalPropertyValueCell" style="text-align: right;"></td>
                                 <td style="text-align: center;">상속재산 총합 </td>
                             </tr>                          
@@ -330,7 +330,7 @@
 
                         <h2> 상속세 신고시 반드시 알아야 할  절세 방법 </h2>
                         <blockquote>
-                            <h4>"상속세 !   (    ) 원을 줄일 수 있습니다."   중요 !</h4>                            
+                            <h4>"상속세 !  확실히  줄일 수 있습니다."   중요 !</h4>                            
                         </blockquote>
                         
                         <blockquote>
@@ -462,16 +462,15 @@
                             </ul>
 
 
-                        <h4>▶ 상속공제 합계 </h4>
+                        <h4>▶ 상속공제에 따른 비교 </h4>                       
                         
                         
-                        <p>상속공제에 따른 비교</p>
 
-                        <label for="inheritanceDeduction1">상속공제 (10억일경우):</label><br>
-                        <input type="number" id="inheritanceDeduction1" name="상속공제" value="1000000000" readonly><br>
+                        <label for="inheritanceDeduction1">상속공제가 10억일 경우( 기본공제 5억 + 배우자공제 5억)</label><br>
+                        <input type="number" id="inheritanceDeduction1" name="상속공제" value="1000000000" readonly ><br>
                         
-                        <label for="inheritanceDeduction2">상속공제 총합계:</label><br>
-                        <input type="number" id="inheritanceDeduction2" name="inheritanceDeduction2"><br>
+                        <label for="inheritanceDeduction2">상속공제 모두 받을경우 상속공제 합계액:</label><br>
+                        <input type="number" id="inheritanceDeduction2" name="inheritanceDeduction2" placeholder="기본공제 5억+배우자공제+금융공제+동거상속공제+기타공제 "><br>
                         
                         <button onclick="performDeductionComparison()">계산</button>
                     
@@ -1468,21 +1467,21 @@
             <table border="1">
                 <thead>
                     <tr>
-                        <th>항목</th>
-                        <th>금액</th>
+                        <th>구분</th>
+                        <th>상속세</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>상속공제</td>
+                        <td>10억 상속공제 시 상속세</td>
                         <td>${taxForDeduction1.toLocaleString()}</td>
                     </tr>
                     <tr>
-                        <td>상속공제 1</td>
+                        <td>위 상속공제 다 받을시 상속세 </td>
                         <td>${taxForDeduction2.toLocaleString()}</td>
                     </tr>
                     <tr>
-                        <td>상속세 절세</td>
+                        <td>절세되는 상속세 금액</td>
                         <td>${taxSavings.toLocaleString()}</td>
                     </tr>
                 </tbody>
