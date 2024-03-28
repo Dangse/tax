@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>상속 취득세 계산기</title>
+</head>
+<body>
+  <h1>상속 취득세 계산기</h1>
+
+  <h2>주택</h2>
+  <label for="houseValue">주택 공시가격(원):</label>
+  <input type="number" id="houseValue" min="0" step="1" value="0" required>
+  
+  <label for="houseType">주택 규모:</label>
+  <select id="houseType">
+    <option value="small">국민주택규모 이하</option>
+    <option value="big">국민주택규모 초과</option>
+  </select>
+  
+  <h2>건물</h2>
+  <label for="buildingValue">건물 공시가격(원):</label>
+  <input type="number" id="buildingValue" min="0" step="1" value="0" required>
+  
+  <h2>임야</h2>
+  <label for="landValue">임야 공시가격(원):</label>
+  <input type="number" id="landValue" min="0" step="1" value="0" required>
+  
+  <h2>농지</h2>
+  <label for="farmlandValue">농지 공시가격(원):</label>
+  <input type="number" id="farmlandValue" min="0" step="1" value="0" required>
+  
+  <button onclick="calculateInheritAcquisionTax()">취득세 계산</button>
+  
+  <h2>계산 결과</h2>
+  <table>
+    <tr>
+      <th>구분</th>
+      <th style="text-align: center;">취득세</th>
+      <th style="text-align: center;">농어촌특별세</th>
+      <th style="text-align: center;">지방교육세</th>
+      <th style="text-align: left;">합계</th>
+    </tr>
+    <tr>
+      <td>주택</td>
+      <td style="text-align: center;"><span id="houseAcquisitionTax"></span></td>
+      <td style="text-align: center;"><span id="houseAgtax"></span></td>
+      <td style="text-align: center;"><span id="houseEduTax"></span></td>
+      <td style="text-align: left;"><span id="houseTotalTax"></span></td>
+    </tr>
+    <tr>
+      <td>건물</td>
+      <td style="text-align: center;"><span id="buildingAcquisitionTax"></span></td>
+      <td style="text-align: center;"><span id="buildingAgtax"></span></td>
+      <td style="text-align: center;"><span id="buildingEduTax"></span></td>
+      <td style="text-align: left;"><span id="buildingTotalTax"></span></td>
+    </tr>
+    <tr>
+      <td>임야</td>
+      <td style="text-align: center;"><span id="landAcquisitionTax"></span></td>
+      <td style="text-align: center;"><span id="landAgtax"></span></td>
+      <td style="text-align: center;"><span id="landEduTax"></span></td>
+      <td style="text-align: left;"><span id="landTotalTax"></span></td>
+    </tr>
+    <tr>
+      <td>농지</td>
+      <td style="text-align: center;"><span id="farmlandAcquisitionTax"></span></td>
+      <td style="text-align: center;"><span id="farmlandAgtax"></span></td>
+      <td style="text-align: center;"><span id="farmlandEduTax"></span></td>
+      <td style="text-align: left;"><span id="farmlandTotalTax"></span></td>
+    </tr>
+    <tr>
+      <td>합계</td>
+      <td style="text-align: center;"><span id="totalAcquisitionTax"></span></td>
+      <td style="text-align: center;"><span id="totalAgtax"></span></td>
+      <td style="text-align: center;"><span id="totalEduTax"></span></td>
+      <td style="text-align: left;"><span id="totalTax"></span></td>
+    </tr>
+  </table>
+  
+  <script>
+    function calculateInheritAcquisionTax() {
+      const houseValue = parseInt(document.getElementById('houseValue').value);
+      const houseType = document.getElementById('houseType').value;
+      const buildingValue = parseInt(document.getElementById('buildingValue').value);
+      const landValue = parseInt(document.getElementById('landValue').value);
+      const farmlandValue = parseInt(document.getElementById('farmlandValue').value);
+
+      const houseTax = InheritAcTaxDetail(houseValue, 2.8, houseType === 'small' ? 0 : 0.2, 0.16);
+      const buildingTax = InheritAcTaxDetail(buildingValue, 2.8, 0.2, 0.16);
+      const landTax = InheritAcTaxDetail(landValue, 2.8, 0.2, 0.16);
+      const farmlandTax = InheritAcTaxDetail(farmlandValue, 2.3, 0.2, 0.06);
+
+      const totalAcquisitionTax = houseTax[0] + buildingTax[0] + landTax[0] + farmlandTax[0];
+      const totalAgtax = houseTax[1] + buildingTax[1] + landTax[1] + farmlandTax[1];
+      const totalEduTax = houseTax[2] + buildingTax[2] + landTax[2] + farmlandTax[2];
+      const totalTax = totalAcquisitionTax + totalAgtax + totalEduTax;
+
+      displayTax('house', houseTax);
+      displayTax('building', buildingTax);
+      displayTax('land', landTax);
+      displayTax('farmland', farmlandTax);
+
+      document.getElementById('totalAcquisitionTax').textContent = totalAcquisitionTax.toLocaleString();
+      document.getElementById('totalAgtax').textContent = totalAgtax.toLocaleString();
+      document.getElementById('totalEduTax').textContent = totalEduTax.toLocaleString();
+      document.getElementById('totalTax').textContent = totalTax.toLocaleString();
+    }
+
+    function InheritAcTaxDetail(value, acquisitionRate, agtaxRate, eduTaxRate) {
+      const acquisitionTax = Math.round(value * acquisitionRate / 100);
+      const agtax = Math.round(value * agtaxRate / 100);
+      const eduTax = Math.round(value * eduTaxRate / 100);
+      return [acquisitionTax, agtax, eduTax];
+    }
+
+    function displayTax(type, tax) {
+      document.getElementById(type + 'AcquisitionTax').textContent = tax[0].toLocaleString();
+      document.getElementById(type + 'Agtax').textContent = tax[1].toLocaleString();
+      document.getElementById(type + 'EduTax').textContent = tax[2].toLocaleString();
+      document.getElementById(type + 'TotalTax').textContent = (tax[0] + tax[1] + tax[2]).toLocaleString();
+    }
+  </script>
+</body>
+</html>
