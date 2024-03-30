@@ -10,7 +10,7 @@
 <h2>2023년 소득세 계산기</h2>
 <label for="income">과세표준 금액 입력:</label>
 <input type="number" id="income" placeholder="과세표준 금액을 입력해주세요">
-<button onclick="calculateTax()">세금 계산하기</button>
+<button onclick="calculateCompreTax()">세금 계산하기</button>
 
 <h3>계산 결과:</h3> 
 24년 소득세율도 동일합니다.  수정요청합니다.
@@ -21,7 +21,7 @@
 <p id="calculation"></p>
 <p>24년 소득세율도 동일합니다.</p>
 <script>
-    function calculateTax() {
+    function calculateCompreTax() {
         const income = parseFloat(document.getElementById("income").value);
         let tax;
         let calculationText = '';

@@ -1,0 +1,309 @@
+오류를 찾고 수정한 전체 코드는 다음과 같습니다:
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>종합부동산세 계산기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h4>상속 후 재산세 비교</h4>
+  <label for="owned_houses">상속 전 소유주택 수:</label>
+  <input type="number" id="owned_houses" value="0">
+  <br>
+  <label for="gongsi_1">상속전 주택공시가 합 :</label>
+  <input type="number" id="gongsi_1" value="0">
+  <br>
+  <label for="gongsi_2">상속주택분 공시가격:</label>
+  <input type="number" id="gongsi_2" value="0">
+  <br>
+  <button onclick="comparePropertyTax()">계산하기</button>
+  <table id="resultTableProperty" style="display: none;">
+    <thead>
+      <tr>
+        <th>구분</th>
+        <th>종전주택만 있는 경우</th>
+        <th>상속주택 추가된 경우</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>재산세</td>
+        <td id="property_tax_1"></td>
+        <td id="property_tax_2"></td>
+      </tr>
+      <tr>
+        <td>도시계획세</td>
+        <td id="dosi_tax_1"></td>
+        <td id="dosi_tax_2"></td>
+      </tr>
+      <tr>
+        <td>지방교육세</td>
+        <td id="p_edu_tax_1"></td>
+        <td id="p_edu_tax_2"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>종부세비교하기</h4>
+  <label for="age">상속받는 나의 연령(만):</label>
+  <input type="number" id="age"><br>
+  <label for="period">상속전 나의 주택 보유기간(년):</label>
+  <input type="number" id="period"><br>
+  <button onclick="compareComprehensiveTax()">계산</button>
+
+  <h2>결과</h2>
+  <div id="result"></div>
+
+  <script>
+    function calc_property_tax(gongsiBefore, gongsiAfter, owned_houses) {
+      // 1세대 1주택 여부에 따른 과세표준 비율 결정
+      let taxBaseRate = 0.6; // 기본값으로 다주택일 경우 세율 적용
+      if (owned_houses <= 1) {
+        if (gongsiBefore <= 300000000) {
+          taxBaseRate = 0.43; // 3억 이하
+        } else if (gongsiBefore <= 600000000) {
+          taxBaseRate = 0.44; // 6억 이하
+        } else {
+          taxBaseRate = 0.45; // 6억 초과
+        }
+      }
+
+      // 과세표준 계산
+      let taxBaseBefore = gongsiBefore * taxBaseRate;
+      let taxBaseAfter = gongsiAfter * taxBaseRate;
+
+      // 재산세 계산 로직
+      let propertyTaxBefore, propertyTaxAfter;
+      if (gongsiBefore <= 900000000) { // 9억 이하 공시가격 구간
+        if (taxBaseBefore <= 60000000) {
+          propertyTaxBefore = taxBaseBefore * 0.0005;
+        } else if (taxBaseBefore <= 150000000) {
+          propertyTaxBefore = 30000 + (taxBaseBefore - 60000000) * 0.001;
+        } else if (taxBaseBefore <= 300000000) {
+          propertyTaxBefore = 120000 + (taxBaseBefore - 150000000) * 0.002;
+        } else {
+          propertyTaxBefore = 420000 + (taxBaseBefore - 300000000) * 0.0035;
+        }
+      } else { // 9억 초과 공시가격 구간
+        if (taxBaseBefore <= 60000000) {
+          propertyTaxBefore = taxBaseBefore * 0.001;
+        } else if (taxBaseBefore <= 150000000) {
+          propertyTaxBefore = 60000 + (taxBaseBefore - 60000000) * 0.0015;
+        } else if (taxBaseBefore <= 300000000) {
+          propertyTaxBefore = 195000 + (taxBaseBefore - 150000000) * 0.0025;
+        } else {
+          propertyTaxBefore = 570000 + (taxBaseBefore - 300000000) * 0.004;
+        }
+      }
+
+      if (gongsiAfter <= 900000000) { // 9억 이하 공시가격 구간
+        if (taxBaseAfter <= 60000000) {
+          propertyTaxAfter = taxBaseAfter * 0.0005;
+        } else if (taxBaseAfter <= 150000000) {
+          propertyTaxAfter = 30000 + (taxBaseAfter - 60000000) * 0.001;
+        } else if (taxBaseAfter <= 300000000) {
+          propertyTaxAfter = 120000 + (taxBaseAfter - 150000000) * 0.002;
+        } else {
+          propertyTaxAfter = 420000 + (taxBaseAfter - 300000000) * 0.0035;
+        }
+      } else { // 9억 초과 공시가격 구간
+        if (taxBaseAfter <= 60000000) {
+          propertyTaxAfter = taxBaseAfter * 0.001;
+        } else if (taxBaseAfter <= 150000000) {
+          propertyTaxAfter = 60000 + (taxBaseAfter - 60000000) * 0.0015;
+        } else if (taxBaseAfter <= 300000000) {
+          propertyTaxAfter = 195000 + (taxBaseAfter - 150000000) * 0.0025;
+        } else {
+          propertyTaxAfter = 570000 + (taxBaseAfter - 300000000) * 0.004;
+        }
+      }
+
+      // 도시계획세 계산
+      let dosiTaxBefore = taxBaseBefore * 0.0014;
+      let dosiTaxAfter = taxBaseAfter * 0.0014;
+
+      // 지방교육세 계산
+      let eduTaxBefore = propertyTaxBefore * 0.2;
+      let eduTaxAfter = propertyTaxAfter * 0.2;
+
+      // 계산된 세금 값들을 객체로 반환, 세금을 정수로 반올림
+      return {
+        propertyTaxBefore: Math.floor(propertyTaxBefore),
+        dosiTaxBefore: Math.floor(dosiTaxBefore),
+        eduTaxBefore: Math.floor(eduTaxBefore),
+        propertyTaxAfter: Math.floor(propertyTaxAfter),
+        dosiTaxAfter: Math.floor(dosiTaxAfter),
+        eduTaxAfter: Math.floor(eduTaxAfter)
+      };
+    }
+
+    function comparePropertyTax() {
+      // HTML에서 주택 공시가격 정보 가져오기
+      const gongsi_1 = parseFloat(document.getElementById("gongsi_1").value) || 0;
+      const gongsi_2 = parseFloat(document.getElementById("gongsi_2").value) || 0;
+      const owned_houses = parseInt(document.getElementById("owned_houses").value, 10);
+
+      // 상속 전후의 주택 공시가격 합산
+      const gongsiBefore = gongsi_1;
+      const gongsiAfter = gongsi_1 + gongsi_2;
+
+      // 상속 전후의 재산세 계산
+      const taxes = calc_property_tax(gongsiBefore, gongsiAfter, owned_houses);
+
+      // 결과 표시 설정
+      document.getElementById("resultTableProperty").style.display = "table";
+      document.getElementById("property_tax_1").textContent = taxes.propertyTaxBefore.toLocaleString() + "원";
+      document.getElementById("dosi_tax_1").textContent = taxes.dosiTaxBefore.toLocaleString() + "원";
+      document.getElementById("p_edu_tax_1").textContent = taxes.eduTaxBefore.toLocaleString() + "원";
+      document.getElementById("property_tax_2").textContent = taxes.propertyTaxAfter.toLocaleString() + "원";
+      document.getElementById("dosi_tax_2").textContent = taxes.dosiTaxAfter.toLocaleString() + "원";
+      document.getElementById("p_edu_tax_2").textContent = taxes.eduTaxAfter.toLocaleString() + "원";
+
+      return {
+        before: taxes.propertyTaxBefore,
+        after: taxes.propertyTaxAfter
+      };
+    }
+
+    // 종합부동산세 계산 함수
+    function calculateComprehensiveTax(gongsi, owned_houses, age, period, property_tax) {
+      // 공제액 계산 (주택 수에 따라 결정), 상속 전 보유주택이 1주택이라면 상속주택이 있어도 12억원 공제
+      let deduction = owned_houses <= 1 ? 1200000000 : 900000000;
+
+      // 공정시장가액 비율 (0.6으로 고정)
+      let fair_value_ratio = 0.6;
+
+      // 과세표준 계산
+      let tax_base = (gongsi - deduction) * fair_value_ratio;
+
+      // 종부세 세액 계산
+      let tax = comprehensiveTax(tax_base, owned_houses);
+
+      // 종합부동산산출세액 계산
+      let comprehensive_tax = tax - property_tax;
+
+      // 연령별 세액공제율 계산
+      let age_deduction_rate = 0;
+      if (age >= 60 && age < 65) {
+        age_deduction_rate = 0.2;
+      } else if (age >= 65 && age < 70) {
+        age_deduction_rate = 0.3;
+      } else if (age >= 70) {
+        age_deduction_rate = 0.4;
+      }
+
+      // 연령별 세액공제액 계산
+      let age_deduction = calComDeduction(comprehensive_tax, age_deduction_rate, 0.8);
+
+      // 보유기간별 세액공제율 계산
+      let period_deduction_rate = 0;
+      if (period >= 5 && period < 10) {
+        period_deduction_rate = 0.2;
+      } else if (period >= 10 && period < 15) {
+        period_deduction_rate = 0.4;
+      } else if (period >= 15) {
+        period_deduction_rate = 0.5;
+      }
+
+      // 보유기간별 세액공제액 계산
+      let period_deduction = calComDeduction(comprehensive_tax, period_deduction_rate, 0.8);
+
+      // 납부할 세액 계산
+      let payable_tax = comprehensive_tax - age_deduction - period_deduction;
+
+      // 결과 반환
+      return {
+        tax_base: tax_base,
+        tax: tax,
+        property_tax: property_tax,
+        comprehensive_tax: comprehensive_tax,
+        age_deduction: age_deduction,
+        period_deduction: period_deduction,
+        payable_tax: payable_tax
+      };
+    }
+
+    // 세액 계산 함수
+    function comprehensiveTax(tax_base, owned_houses) {
+      let tax = 0;
+
+      // 주택 수에 따른 세율 적용
+      if (owned_houses <= 2) {
+        // 2주택 이하인 경우의 세율 적용
+        if (tax_base <= 300000000) {
+          tax = tax_base * 0.005;
+        } else if (tax_base <= 600000000) {
+          tax = tax_base * 0.007 - 600000;
+        } else if (tax_base <= 1200000000) {
+          tax = tax_base * 0.01 - 2400000;
+        } else if (tax_base <= 2500000000) {
+          tax = tax_base * 0.013 - 6000000;
+        } else if (tax_base <= 5000000000) {
+          tax = tax_base * 0.015 - 11000000;
+        } else if (tax_base <= 9400000000) {
+          tax = tax_base * 0.02 - 36000000;
+        } else {
+          tax = tax_base * 0.027 - 101800000;
+        }
+      } else {
+        // 3주택 이상인 경우의 세율 적용
+        if (tax_base <= 300000000) {
+          tax = tax_base * 0.005;
+        } else if (tax_base <= 600000000) {
+          tax = tax_base * 0.007 - 600000;
+        } else if (tax_base <= 1200000000) {
+          tax = tax_base * 0.01 - 2400000;
+        } else if (tax_base <= 2500000000) {
+          tax = tax_base * 0.02 - 14400000;
+        } else if (tax_base <= 5000000000) {
+          tax = tax_base * 0.03 - 39400000;
+        } else if (tax_base <= 9400000000) {
+          tax = tax_base * 0.04 - 89400000;
+        } else {
+          tax = tax_base * 0.05 - 183400000;
+        }
+      }
+
+      return tax;
+    }
+
+    // 세액공제액 계산 함수
+    function calComDeduction(comprehensive_tax, deduction_rate, limit) {
+      let deduction = comprehensive_tax * deduction_rate;
+      deduction = Math.min(deduction, comprehensive_tax * limit);
+      return deduction;
+    }
+
+    // 계산 실행 함수
+    function compareComprehensiveTax() {
+      // 입력값 가져오기
+      let gongsi_1 = parseInt(document.getElementById('gongsi_1').value);
+      let gongsi_2 = parseInt(document.getElementById('gongsi_2').value);
+      let owned_houses = parseInt(document.getElementById('owned_houses').value);
+      let age = parseInt(document.getElementById('age').value);
+      let period = parseInt(document.getElementById('period').value);
+
+      // 재산세 비교 계산기 함수 호출하여 상속 전후 재산세 값 가져오기
+      const propertyTaxes = comparePropertyTax();
+
+      // 상속 전후 계산 결과 저// 상속 전후 계산 결과 저장
+  let result1 = calculateComprehensiveTax(gongsi_1, owned_houses, age, period, propertyTaxes.before);
+  let result2 = calculateComprehensiveTax(gongsi_1 + gongsi_2, owned_houses, age, period, propertyTaxes.after);
+
+  // 결과 테이블 생성
+  let table = '<table border="1">';
+  table += '<tr><th></th><th>상속 전</th><th>상속 후</th></tr>';
+  table += '<tr><td>과세표준</td><td>' + result1.tax_base.toLocaleString() + '</td><td>' + result2.tax_base.toLocaleString() + '</td></tr>';
+  table += '<tr><td>종합부동산세액</td><td>' + result1.tax.toLocaleString() + '</td><td>' + result2.tax.toLocaleString() + '</td></tr>';
+  table += '<tr><td>공제할 재산세액</td><td>' + result1.property_tax.toLocaleString() + '</td><td>' + result2.property_tax.toLocaleString() + '</td></tr>';
+  table += '<tr><td>종합부동산산출세액</td><td>' + result1.comprehensive_tax.toLocaleString() + '</td><td>' + result2.comprehensive_tax.toLocaleString() + '</td></tr>';
+  table += '<tr><td>연령별 세액공제</td><td>' + result1.age_deduction.toLocaleString() + '</td><td>' + result2.age_deduction.toLocaleString() + '</td></tr>';
+  table += '<tr><td>보유기간 세액공제</td><td>' + result1.period_deduction.toLocaleString() + '</td><td>' + result2.period_deduction.toLocaleString() + '</td></tr>';
+  table += '<tr><td>납부할 세액</td><td>' + result1.payable_tax.toLocaleString() + '</td><td>' + result2.payable_tax.toLocaleString() + '</td></tr>';
+  table += '</table>';
+
+  // 결과 출력
+  document.getElementById('result').innerHTML = table;
+}
