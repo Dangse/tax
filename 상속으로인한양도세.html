@@ -14,7 +14,7 @@
     <input type="text" id="acquisitionPrice1" readonly><br>
     <label for="holdingPeriod1">보유기간(년): 6개월 이내</label>
     <input type="number" id="holdingPeriod1" value="0.5" readonly><br><br>
-    <button onclick="calculateTaxes(1)">계산하기</button>
+    <button onclick="calculateTaxes1()">계산하기</button>
     <div id="resultTable1" style="display:none;">
         <h3>계산 결과</h3>
         <table border="1">
@@ -81,153 +81,158 @@
         </table>
     </div>
 
-<h2>시가 신고후 미래 양도시</h2>
-<label for="transferPrice2">양도가액:</label>
+    <h2>시가 신고후 미래 양도시</h2>
+    <label for="transferPrice2">양도가액:</label>
 <input type="text" id="transferPrice2" inputmode="numeric" oninput="formatNumber(this)"><br>
 <label for="acquisitionPrice2">취득가액:</label>
 <input type="text" id="acquisitionPrice2" inputmode="numeric" oninput="formatNumber(this)"><br>
 <label for="holdingPeriod2">보유기간(년): 사망일로부터 양도일까지</label>
 <input type="number" id="holdingPeriod2"><br><br>
 <button onclick="calculateTaxes2()">계산하기</button>
-<div id="resultTable2" style="display:none;">
-    <h3>계산 결과</h3>
-    <table border="1">
-        <tr>
-            <th>구분</th>
-            <th>금액</th>
-            <th>비고</th>
-        </tr>
-        <tr>
-            <td>1) 양도가액</td>
-            <td style="text-align: right;" id="transferValue2"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>2) 취득가액</td>
-            <td style="text-align: right;" id="acquisitionValue2"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>3) 양도차익</td>
-            <td style="text-align: right;" id="capitalGain2"></td>
-            <td style="text-align: center;">1) - 2)</td>
-        </tr>
-        <tr>
-            <td>4) 장기보유특별공제</td>
-            <td style="text-align: right;" id="longTermDeduction2"></td>
-            <td style="text-align: center;">해당 없음</td>
-        </tr>
-        <tr>
-            <td>5) 양도소득금액</td>
-            <td style="text-align: right;" id="taxableIncome2"></td>
-            <td style="text-align: center;">3) - 4)</td>
-        </tr>
-        <tr>
-            <td>6) 기본공제</td>
-            <td style="text-align: right;">해당 없음</td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>7) 과세표준</td>
-            <td style="text-align: right;" id="taxBase2"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>8) 양도세율</td>
-            <td style="text-align: right;">해당 없음</td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>9) 양도세</td>
-            <td style="text-align: right;" id="transferTax2"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>10) 지방소득세</td>
-            <td style="text-align: right;" id="localIncomeTax2"></td>
-            <td style="text-align: center;">양도세 * 10%</td>
-        </tr>
-        <tr>
-            <td>11) 세액합계</td>
-            <td style="text-align: right;" id="totalTax2"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-    </table>
-</div>
+    
+    <div id="resultTable2" style="display:none;">
+        <h3>계산 결과</h3>
+        <table border="1">
+            <tr>
+                <th>구분</th>
+                <th>금액</th>
+                <th>비고</th>
+            </tr>
+            <tr>
+                <td>1) 양도가액</td>
+                <td style="text-align: right;" id="transferValue2"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>2) 취득가액</td>
+                <td style="text-align: right;" id="acquisitionValue2"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>3) 양도차익</td>
+                <td style="text-align: right;" id="capitalGain2"></td>
+                <td style="text-align: center;">1) - 2)</td>
+            </tr>
+            <tr>
+                <td>4) 장기보유특별공제</td>
+                <td style="text-align: right;" id="longTermDeduction2"></td>
+                <td style="text-align: center;">해당 없음</td>
+            </tr>
+            <tr>
+                <td>5) 양도소득금액</td>
+                <td style="text-align: right;" id="taxableIncome2"></td>
+                <td style="text-align: center;">3) - 4)</td>
+            </tr>
+            <tr>
+                <td>6) 기본공제</td>
+                <td style="text-align: right;">해당 없음</td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>7) 과세표준</td>
+                <td style="text-align: right;" id="taxBase2"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>8) 양도세율</td>
+                <td style="text-align: right;">해당 없음</td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>9) 양도세</td>
+                <td style="text-align: right;" id="transferTax2"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>10) 지방소득세</td>
+                <td style="text-align: right;" id="localIncomeTax2"></td>
+                <td style="text-align: center;">양도세 * 10%</td>
+            </tr>
+            <tr>
+                <td>11) 세액합계</td>
+                <td style="text-align: right;" id="totalTax2"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+        </table>
+        
+    </div>
 
-<h2>기준시가 신고후 미래 양도시</h2>
-<label for="transferPrice3">양도가액:</label>
-<input type="text" id="transferPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
-<label for="acquisitionPrice3">취득가액:</label>
-<input type="text" id="acquisitionPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
-<label for="holdingPeriod3">보유기간(년): 사망일로부터 양도일까지</label>
-<input type="number" id="holdingPeriod3"><br><br>
-<button onclick="calculateTaxes3()">계산하기</button>
-<div id="resultTable3" style="display:none;">
-    <h3>계산 결과</h3>
-    <table border="1">
-        <tr>
-            <th>구분</th>
-            <th>금액</th>
-            <th>비고</th>
-        </tr>
-        <tr>
-            <td>1) 양도가액</td>
-            <td style="text-align: right;" id="transferValue3"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>2) 취득가액</td>
-            <td style="text-align: right;" id="acquisitionValue3"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>3) 양도차익</td>
-            <td style="text-align: right;" id="capitalGain3"></td>
-            <td style="text-align: center;">1) - 2)</td>
-        </tr>
-        <tr>
-            <td>4) 장기보유특별공제</td>
-            <td style="text-align: right;" id="longTermDeduction3"></td>
-            <td style="text-align: center;">해당 없음</td>
-        </tr>
-        <tr>
-            <td>5) 양도소득금액</td>
-            <td style="text-align: right;" id="taxableIncome3"></td>
-            <td style="text-align: center;">3) - 4)</td>
-        </tr>
-        <tr>
-            <td>6) 기본공제</td>
-            <td style="text-align: right;">해당 없음</td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>7) 과세표준</td>
-            <td style="text-align: right;" id="taxBase3"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>8) 양도세율</td>
-            <td style="text-align: right;">해당 없음</td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>9) 양도세</td>
-            <td style="text-align: right;" id="transferTax3"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-        <tr>
-            <td>10) 지방소득세</td>
-            <td style="text-align: right;" id="localIncomeTax3"></td>
-            <td style="text-align: center;">양도세 * 10%</td>
-        </tr>
-        <tr>
-            <td>11) 세액합계</td>
-            <td style="text-align: right;" id="totalTax3"></td>
-            <td style="text-align: center;"></td>
-        </tr>
-    </table>
-</div>
+    <h2>기준시가 신고후 미래 양도시</h2>
+    
+    <label for="transferPrice3">양도가액:</label>
+    <input type="text" id="transferPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
+    <label for="acquisitionPrice3">취득가액:</label>
+    <input type="text" id="acquisitionPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
+    <label for="holdingPeriod3">보유기간(년): 사망일로부터 양도일까지</label>
+    <input type="number" id="holdingPeriod3"><br><br><!-- 동일한 구조의 입력 필드 및 버튼 -->
+    <button onclick="calculateTaxes3()">계산하기</button>
+
+    <div id="resultTable3" style="display:none;">
+        
+        <h3>계산 결과</h3>
+        <table border="1">
+            <tr>
+                <th>구분</th>
+                <th>금액</th>
+                <th>비고</th>
+            </tr>
+            <tr>
+                <td>1) 양도가액</td>
+                <td style="text-align: right;" id="transferValue3"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>2) 취득가액</td>
+                <td style="text-align: right;" id="acquisitionValue3"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>3) 양도차익</td>
+                <td style="text-align: right;" id="capitalGain3"></td>
+                <td style="text-align: center;">1) - 2)</td>
+            </tr>
+            <tr>
+                <td>4) 장기보유특별공제</td>
+                <td style="text-align: right;" id="longTermDeduction3"></td>
+                <td style="text-align: center;">해당 없음</td>
+            </tr>
+            <tr>
+                <td>5) 양도소득금액</td>
+                <td style="text-align: right;" id="taxableIncome3"></td>
+                <td style="text-align: center;">3) - 4)</td>
+            </tr>
+            <tr>
+                <td>6) 기본공제</td>
+                <td style="text-align: right;">해당 없음</td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>7) 과세표준</td>
+                <td style="text-align: right;" id="taxBase3"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>8) 양도세율</td>
+                <td style="text-align: right;">해당 없음</td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>9) 양도세</td>
+                <td style="text-align: right;" id="transferTax3"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>10) 지방소득세</td>
+                <td style="text-align: right;" id="localIncomeTax3"></td>
+                <td style="text-align: center;">양도세 * 10%</td>
+            </tr>
+            <tr>
+                <td>11) 세액합계</td>
+                <td style="text-align: right;" id="totalTax3"></td>
+                <td style="text-align: center;"></td>
+            </tr>
+        </table>
+    </div>
 
 <script>
     function formatNumber(input) {
