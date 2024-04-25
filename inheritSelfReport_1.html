@@ -166,8 +166,8 @@
                             </div>
                         </div>
                         <ul>
-                            <li>장례비(봉안시설비 제외) : 5백만원 미만시 최소 5백만원 공제. 1천만원 초과시 1천만원까지만 공제.<</li>
-                            <li>봉안시설, 자연장지에 사용된 금액 : 별도로 5백만원을 한도로 공제./li>
+                            <li>장례비(봉안시설비 제외) : 5백만원 미만시 최소 5백만원 공제. 1천만원 초과시 1천만원까지만 공제.</li>
+                            <li>봉안시설, 자연장지에 사용된 금액 : 별도로 5백만원을 한도로 공제.</li>
                             <li> 합계 1천5백만원까지 한도  </li>
                         </ul>
                     </div>
@@ -176,10 +176,10 @@
                     <div id="step8" style="display: none;">
                         <h2>사전증여재산</h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;"></div>
-                        <input type="text" id="giftFromMother" inputmode="numeric" oninput="formatNumber(this)" placeholder="10년내 배우자 증여 금액">
-                        <input type="text" id="giftToChildren" inputmode="numeric" oninput="formatNumber(this)" placeholder="10년 자녀 증여 증여 금액">
-                        <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)" placeholder="5년내 상속인 외 증여 금액 예) 손자 손녀">
-                        <input type="text" id="giftTaxDeduction" inputmode="numeric" oninput="formatNumber(this)" placeholder="위 증여시 산출된 증여세 합계">
+                        <input type="text" id="giftFromMother" inputmode="numeric" oninput="formatNumber(this)" placeholder="10년내 배우자 증여 금액"> <br>
+                        <input type="text" id="giftToChildren" inputmode="numeric" oninput="formatNumber(this)" placeholder="10년 자녀 증여 증여 금액"><br>
+                        <input type="text" id="giftToOthers" inputmode="numeric" oninput="formatNumber(this)" placeholder="5년내 상속인 외 증여 금액 예) 손자 손녀"><br>
+                        <input type="text" id="giftTaxDeduction" inputmode="numeric" oninput="formatNumber(this)" placeholder="위 증여시 산출된 증여세 합계"><br>
     
     
                         <div style="display: flex; justify-content:left ; gap: 20px;"></div>
@@ -314,10 +314,10 @@
 
 
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(10)">뒤로가기</button>
-                                <button onclick="nextStep(12);"> 반드시 알아야 할 세금 줄이기 </button>
+                                <button onclick="nextStep(12);"> 반드시 알아야 할 세금 줄이기 !</button>
                             </div>   
                         </div>        
                               
@@ -328,34 +328,38 @@
     
                     <div id="step12" style="display: none;">
 
-                        <h2> 상속세 신고시 반드시 알아야 할  절세 방법 </h2>
-                        <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;">
-                            <h4>"상속세 ! 확실히 줄일 수 있습니다." 중요 !</h4>
-                          </div>
+                        <h2> 상속세 신고시 반드시 알아야 할  절세   목록 </h2>
+                        <div class="clickable" style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;cursor: pointer;" data-target="step13">
+                            <h4>상속세 ! 확실히 줄일 수 있습니다. </h4>
+                        </div>
+                          
+                        <div class="clickable" style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;cursor: pointer;" data-target="step14">
+                            <h4>취득세! 75% 까지 줄일 수 있습니다. </h4>
+                        </div>                           
+                       
+                          
                         
-                          <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;">
-                            <h4>"취득세 ! 75% 적게 낼수 있습니다." 이것도 중요 !</h4>
-                          </div>
+                        <div class="clickable" style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;cursor: pointer;" data-target="step15"> 
+                            <h4>종부세 ! 피할수 있습니다. </h4>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;cursor: pointer;" data-target="step16">
+
+                            <h4>상속 받은 주택과 농지, 임야 매도할때 ! 세금 " 0 " 만들수 있습니다. </h4>
+                        </div>
+
                         
-                          <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;">
-                            <h4>"종부세 ! 피할수 있습니다." 꼭 알아야 합니다.</h4>
-                          </div>
+                        <div  class="clickable" style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;cursor: pointer;" data-target="step17">
+                            <h4> 상속 받은 주택 외 가지고 있던 주택 양도시 ! 1세대 1주택 비과세 만들수 있습니다. </h4>
+                        </div>
                         
-                          <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;">
-                            <h4>"상속 받은 주택과 농지, 임야 매도할때 ! 세금 " 0 " 만들수 있습니다." 매우 중요 !!</h4>
-                          </div>
+                        <div class="clickable" style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;cursor: pointer;" data-target="step18">
+                            <h4>주택 상속으로 2주택인 경우, 청약기회 사라진 건 아닐까요 ? </h4>
+                        </div>
                         
-                          <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;">
-                            <h4>"상속 받은 주택 외 가지고 있던 주택 양도시 ! 1세대 1주택 비과세 만들수 있습니다. " 한순간의 선택이 ?!</h4>
-                          </div>
-                        
-                          <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;">
-                            <h4>"주택 상속으로 2주택인 경우 ? 자녀들의 청약기회 ! 살릴수 있습니다.!"</h4>
-                          </div>
-                        
-                          <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;">
-                            <h4>"부모님 노인기초연금 받게 할 순 없을까요 ? "</h4>
-                          </div>
+                        <div class="clickable" style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;cursor: pointer;" data-target="step19">
+                            <h4>부모님 기초연금 받게 할 순 없을까요 ? </h4>
+                        </div>
                         
 
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
@@ -467,9 +471,8 @@
                         <label for="inheritanceDeduction1">상속공제가 10억일 경우( 기본공제 5억 + 배우자공제 5억)</label><br>
                         <input type="number" id="inheritanceDeduction1" name="상속공제" value="1000000000" readonly ><br>
                         
-                        <label for="inheritanceDeduction2">상속공제 모두 받을경우 상속공제 합계액:</label><br>
-                        <input type="number" id="inheritanceDeduction2" name="inheritanceDeduction2" placeholder="기본공제 5억+배우자공제+금융공제+동거상속공제+기타공제 "><br>
-                        
+                        <label for="inheritanceDeduction2">상속공제 모두 받을경우 상속공제 합계액:</label><br>                        
+                        <input type="text" id="inheritanceDeduction2" name="inheritanceDeduction2" inputmode="numeric" oninput="formatNumber(this)" placeholder="기본공제 5억+배우자공제+금융공제+동거상속공제+기타공제"> <br>
                         <button onclick="performDeductionComparison()">계산</button>
                     
                             <div id="result"></div>
@@ -514,27 +517,28 @@
                     
                                
 
-                                <h4>주택</h4>
-                                <label for="houseValueAc">주택 공시가격(원):</label>
-                                <input type="number" id="houseValue1" min="0" step="1" value="0" required>
                                 
-                                <label for="houseType">주택 규모:</label>
-                                <select id="houseType">
+                                <label for="houseValueAc">주택 공시가격(원):</label> <br>                               
+                                <input type="text" id="houseValue1" inputmode="numeric" oninput="formatNumber(this)"><br>
+                                
+                                <label for="houseType">주택 규모:</label><br>                                
+                                <select id="houseType" style="font-size: 12px; padding: 8px; width: 400px;">
                                   <option value="small">국민주택규모 이하</option>
                                   <option value="big">국민주택규모 초과</option>
-                                </select>
+                                </select><br><br>
                                 
-                                <h4>건물</h4>
-                                <label for="buildingValue1">건물 공시가격(원):</label>
-                                <input type="number" id="buildingValue1" min="0" step="1" value="0" required>
+                               
+                                <label for="buildingValue1">건물 공시가격(원):</label><br>
+                                <input type="text" id="buildingValue1" inputmode="numeric" oninput="formatNumber(this)"><br>
+                               
                                 
-                                <h4>임야</h4>
-                                <label for="landValue">임야 공시가격(원):</label>
-                                <input type="number" id="landValue" min="0" step="1" value="0" required>
+                               
+                                <label for="landValue">임야 공시가격(원):</label><br>                               
+                                <input type="text" id="landValue" inputmode="numeric" oninput="formatNumber(this)"><br>
                                 
-                                <h4>농지</h4>
-                                <label for="farmlandValue">농지 공시가격(원):</label>
-                                <input type="number" id="farmlandValue" min="0" step="1" value="0" required><br>
+                              
+                                <label for="farmlandValue">농지 공시가격(원):</label><br>
+                                <input type="text" id="farmlandValue" inputmode="numeric" oninput="formatNumber(this)"><br>
                                 
                                 <button onclick="calculateInheritAcquisionTax()">취득세 계산</button>
                                 
@@ -585,14 +589,14 @@
                                 </table>
                                 
                                     
-                        <h2>◈ 취득세 절세 방법이 있을까요 ?</h2>
+                        <h2>◈ 주택관련 취득세 절세 방법이 있습니다.</h2>
                           <h4>1) 상속세 특례세율을 이용합니다. </h4>
                            <ul>
                                 <li>상속으로 주택 취득한 경우 취득세, 농특세, 지방교육세 합하여 3.16% 입니다.</li>
                                 <li>무주택 세대주가 상속으로 인하여 1세대 1주택이 된 경우 취득세는 0.8% 입니다.</li>
                                 <li>1주택을 공동으로 상속받는 경우 지분이 가장 큰 사람의 소유로 보고, 
-                                    지분이 동일한 경우 연장자의 소유로 보고 감면합니다. 
-                                    예) 상속전 무주택자인 어머니와 자녀가 아버지의 상속주택 1개를 어머니가 50%, 세대분리된 아들이 50% 상속받음. 
+                                    지분이 동일한 경우 연장자의 소유로 보고 감면합니다. </li>
+                                <li> 예) 상속전 무주택자인 어머니와 자녀가 아버지의 상속주택 1개를 어머니가 50%, 세대분리된 아들이 50% 상속받음. 
                                         이 경우 어머니 50%에 대하여만  0.8%의 특례세율 적용 받음.</li>
                             </ul>
                     
@@ -600,17 +604,16 @@
                     
                         <h4>2) 사망일전에 세대분리를 분리하여 무주택세대를 만듭니다. </h4>
                             <ul>
-                                <li>상속받을 세대는 무주택세대가 받는 것이 좋습니다. </li>
+                                <li>상속받을 세대는 무주택세대가 받아야 특례를 받을수 있습니다. </li>
                                 <li>어머니가 상속받는 경우, 주택이 있는 자녀가 주민등록표상에 같이 있다면 세대분리를 하는 것이 좋습니다.</li>
                                 <li>무주택 자녀가 상속받는 경우, 같이 사는 30세 이상인 세대원이 주택을 소유하고 있다면 
-                                    그 세대원을 세대분리 하는 것이 좋습니다. </li>
+                                    그 세대원을 세대분리 해야 합니다. </li>
                                 <li>즉, 주택상속받을 사람을 사망일 전에 무주택자로 만드는 것입니다. </li>
                             </ul>
                             
                 
-                            <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;"> 
-                                
-                                <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">                                 
+                               
                                 <div style="display: flex; justify-content:left ; gap: 20px;">
                                     <button onclick="previousStep(13); ">뒤로가기</button>
                                     <button onclick="nextStep(15); "> 종부세 줄이러 가기 </button>
@@ -653,18 +656,18 @@
                             
                             
                                 <h4>▶ 상속 후 재산세 비교</h4>
-                                <label for="owned_houses">상속 전 나의 소유주택 수:</label>
-                                <input type="text" id="owned_houses" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속 전 주택수">
+                                <label for="owned_houses">상속 전 나의 소유주택 수:</label><br>
+                                <input type="text" id="owned_houses" inputmode="numeric" oninput="formatNumber(this)" placeholder=" ">
                                   
                                 <br>
-                                <label for="gongsi_1">상속전 나의 주택공시가 합 :</label>
-                                <input type="text" id="gongsi_1" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속 전 주택 공시가 합">
+                                <label for="gongsi_1">상속전 나의 주택공시가 합 :</label><br>
+                                <input type="text" id="gongsi_1" inputmode="numeric" oninput="formatNumber(this)" placeholder=" ">
                                 <br>
-                                <label for="ownedHousesAfter">상속 후 나의 소유주택 수:</label>
+                                <label for="ownedHousesAfter">상속 후 나의 소유주택 수:</label><br>
                                 <input type="text" id="ownedHousesAfter" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 지분으로 소유하고 있는 주택 포함">
                                 <br>
-                                <label for="gongsi_2">상속주택분 공시가격:</label>
-                                <input type="text" id="gongsi_2" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속받은 주택분 공시가">
+                                <label for="gongsi_2">상속주택분 공시가격:</label><br>
+                                <input type="text" id="gongsi_2" inputmode="numeric" oninput="formatNumber(this)" placeholder=" ">
                                   <br>
                                   <button onclick="comparePropertyTax()">재산세 비교 계산하기</button>
                                   <table id="resultTableProperty" style="display: none;">
@@ -703,10 +706,10 @@
                                   <h4>▶ 상속후 종부세비교하기</h4>
                                   
                                 
-                                  <label for="age">상속받는 나의 연령(만):</label>
+                                  <label for="age">상속받는 나의 연령(만):</label><br>
                                   <input type="text" id="age" inputmode="numeric" placeholder="상속받는 나의 연령(만)">
                                   <br>
-                                  <label for="period">상속전 나의 주택 보유기간(년):</label>
+                                  <label for="period">상속전 나의 주택 보유기간(년):</label><br>
                                   <input type="text" id="period" inputmode="numeric" placeholder="상속전 내가 보유한 주택의 보유기간(만)">
                                  
                                   <br>
@@ -714,7 +717,7 @@
                                   
                                   <div id="resultComprehensiveTax"></div>
 
-                                  <p>이  계산은 상속전 1주택일 경우 상속주택은 상속주택  위의 특례를 적용받은 것을 가정해 계산했습니다. </p>
+                                  
                                 
                 
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
@@ -1019,12 +1022,12 @@
                                 <li><p>상속받은 주택외에 상속받기 전부터 가지고 있던 일반주택을  양도하는 경우입니다.이 일반주택이 양도당시에  1세대1주택 비과세 요건을 만족한다면, 
                                     상속주택을 가지고 있다고 하더라도 비과세에 해당합니다 </p></li>            
                                 <li><p>상속일 이후에 취득한 일반주택은 이러한 비과세를 받을 수 없습니다. </p></li>
-                                <li><p>1주택을 여러 사람이 공동으로 소유한 경우 주택 수를 계산할 때 공동 소유자 각자가 그 주택을 소유한 것으로 봅니다.(소령154조의2)
-                                    그러나 아버지의 1주택을 공동으로 상속받았다면, 이 공동상속주택은 일반주택 양도시 주택으로 보지 않습니다. 
+                                <li><p>1주택을 여러 사람이 공동으로 소유한 경우 주택 수를 계산할 때 공동 소유자 각자가 그 주택을 소유한 것으로 봅니다.(소령154조의2)</p>
+                                    <p>그러나 상속으로 인해 1주택을 공동으로 상속받았다면, 이 공동상속주택은 일반주택 양도시 주택으로 보지 않습니다. 
                                     다만, 다음의 경우 해당하는 사람은 공동상속 주택이라도 주택이라고 보고, 일반주택 양도시 과세 됩니다.</p></li>
                             
                                  <p>1.지분이 가장 많은 사람</p>  
-                                 <p>2. 지분이 모두 동일하다면 다음순서</p>  
+                                 <p>2.지분이 모두 동일하다면 다음순서</p>  
                                  <ul>
                                     <li> 가. 상속주택에 거주하고 있는 사람</li>
                                     <li> 나. 상속인 중 최연장자</li>
@@ -1036,7 +1039,7 @@
                             
                             </ul>
                             
-                            <h3>▶ 어머니의 경우</h3>
+                            <h3>▶ 남은 배우자(어머니 혹은 아버지) 경우</h3>
                             <table>
                                 <tr>
                                     
@@ -1079,17 +1082,17 @@
                                     
                                 </tr>
                             </table>
-                            <p>참고1. 상속받은 주택외에 다른 주택이 없기 때문에 해당사항이 없습니다. 그런데 만일 어머니가 상속주택을 양도하는 경우는 어떨까요? <br>
+                            <p><strong>참고1.</strong><br> 상속받은 주택외에 다른 주택이 없기 때문에 해당사항이 없습니다. 그런데 만일 어머니가 상속주택을 양도하는 경우는 어떨까요? <br>
                                 이 경우는 어머니는 사망일 전부터 아버지와 1세대 1주택을 소유하고 있는
                                 것으로 보아 사망일 전에 아버지가  2년이상 거주 및 보유 했다면 상속주택도 1세대 1주택 비과세에 해당합니다.</p>
                             
-                            <p>참고2.  아버지가 1주택 소유하고 있고, 어머니가 또 1주택을 소유한 상태에서 아버지가 사망한 경우입니다.
+                            <p><strong>참고2.</strong> <br> 아버지가 1주택 소유하고 있고, 어머니가 또 1주택을 소유한 상태에서 아버지가 사망한 경우입니다.
                                  상속전 어머니와 아버지는 동일세대이고,  2주택을 소유한 것이 됩니다. 
                                이 특례는 아버지가 사망으로 인하여 부득이하게 주택을 소유한 경우로서 일반주택을 양도 할 때 비과세를 인정하는 것이지, 
                                동일 세대원인 어머니가 상속받는 경우, 상속받은 주택으로 볼수 없어 과세합니다. [대법2009두9772]
                                 </p>
                             
-                            <h3>▶ 자녀1,2,3의 경우</h3>
+                            <h3>▶ 자녀의 경우</h3>
                             <table>
                                 <tr>
                                     
@@ -1132,19 +1135,22 @@
                                    
                                 </tr>
                             </table>
-                            <p>참고1. 아버지 1주택을 공동으로 상속받았다면, 이 공동상속주택은 일반주택 양도시 주택으로 보지 않습니다. 
+                            <p><strong>참고1.</strong><br> 1주택을 공동으로 상속받았다면, 이 공동상속주택은 일반주택 양도시 주택으로 보지 않습니다. 
                                 다만, 다음의 경우 해당하는 사람은 공동상속 주택이라도 주택이라고 보고, 일반주택 양도시 과세 됩니다.</p>
                             
                              <p>1.지분이 가장 많은 사람</p>  
-                             <p>2. 지분이 모두 동일하다면 다음순서</p>       
-                             <p>1) 상속주택에 거주하고 있는 사람 </p>        
-                             <p>2) 상속인중 최연장자 </p>      
+                             <p>2. 지분이 모두 동일하다면 다음순서</p>   
+                             <ul>
+                                <li> 가. 상속주택에 거주하고 있는 사람</li>
+                                <li> 나. 상속인 중 최연장자</li>
+                             </ul>    
+                                  
                 
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(16); ">뒤로가기</button>
-                                <button onclick="nextStep(18); "> 그래도! 주택청약 받으러 가기  </button>
+                                <button onclick="nextStep(18); "> 상속주택 때문에 주택청약 이상 없을까 ?  </button>
                                 
                             </div>   
                         </div>    
@@ -1155,23 +1161,23 @@
                         <h2>◈ 상속주택때문에 아파트 청약을 받을수 없나요 ? </h2>
    
                         
-                            <p><strong>주택청약시 주택소유 여부를 판단할때,  주택을 단독 또는 공유지분으로 소유하고 있는 경우도 주택을 소유하고 있는 것으로 봅니다. 
-                                <br>그러나 다음의 상속주택은 없는 것으로 봅니다.</strong></p>
+                            <p>주택청약시 주택소유 여부를 판단할때,  주택을 단독 또는 공유지분으로 소유하고 있는 경우도 주택을 소유하고 있는 것으로 봅니다. 
+                                <br>그러나 다음의 상속주택은 없는 것으로 봅니다.</p>
                             
+                            <ol>
+                                <li>상속으로 주택의 공유지분을 취득한 사실이 판명되어 사업주체로부터 부적격자로 통보받은날부터 <strong> 3개월 이내에 그 지분을 처분한 경우. </strong>
+                                (공급규칙 53조1호)</li> 
                             
-                                <p><strong>1.상속으로 주택의 공유지분을 취득한 사실이 판명되어 사업주체로부터 부적격자로 통보받은날부터 3개월 이내에 그 지분을 처분한 경우 
-                                (공급규칙 53조1호) </strong></p>
-                            
-                                <p><strong>2.도시지역이 아닌지역 또는 면의 행정구역(수도권은 제외)에 에 건축되어 있는 주택으로서 
-                                다음 각목의 어느 하나에 해당하는 주택의 소유자가 해당 주택건설지역에 거주( 상속으로 주택을 취득한 경우에는 피상속인이 거주한 것을 
-                                상속인이 거주한 것으로 본다) 하다가 다른 주택건설지역으로 이주한 경우 (공급규칙 53조2호)
-                                </strong></p>
-                            
-                                <strong><p>가. 사용승인 후 20년 이상 경과된 단독주택</p>
-                                    <p>나. 85제곱미터 이하의 단독주택 </p>
-                                    <p>다. 소유자의 「가족관계의 등록등에 관한 법률」에 따른 최초 등록기준지에 건축되어 있는 주택으로서 직계존속 또는 배우자로부터 상속등에 의하여 이전받은 단독주택  </p>
-                                    </strong></p>
-                            
+                                <li>도시지역이 아닌지역 또는 면의 행정구역(수도권은 제외)에 에 건축되어 있는 주택으로서  다음 각목의 어느 하나에 해당하는 주택의 소유자가 해당 주택건설지역에 거주<strong>(상속으로 주택을 취득한 경우에는 피상속인이 거주한 것을                                     
+                                        상속인이 거주한 것으로 본다) 하다가 다른 주택건설지역으로 이주한 경우 (공급규칙 53조2호) </strong><br><br>                               
+                                    <ul>
+                                        <li>가. 사용승인 후 20년 이상 경과된 단독주택</li>
+                                        <li>나. 85제곱미터 이하의 단독주택 </li>
+                                        <li>다. 소유자의 「가족관계의 등록등에 관한 법률」에 따른 최초 등록기준지에 건축되어 있는 주택으로서 직계존속 또는 배우자로부터 상속등에 의하여 이전받은 단독주택</li>
+                                    </ul>  
+                                </li>  
+                            </ol>
+                          
                             <h4>▶ 위 내용을 구체적으로 살펴볼까요 ?</h4>
                             
                             <p>Q : 단독으로 주택의 공유지분을 상속받은 경우도 가능한가요  ?  </p>
@@ -1209,11 +1215,10 @@
                             <p>Q : 53조2호의 다항의 상속등에 증여도 포함되는지 ? </p>
                             <p>A : 상속등에 의하여 이전받은 단독주택은 상속의 경우에만 인정되고 있으며 증여는 포함되지 않습니다. </p>    
                 
-                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-                            <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">                           
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(17); ">뒤로가기</button>
-                                <button onclick="nextStep(19); "> 부모님 노인기초연금 받으러 가기  </button>
+                                <button onclick="nextStep(19); "> 부모님 기초연금 받으려면 ?  </button>
                                 
                             </div>   
                         </div>    
@@ -1553,7 +1558,7 @@
         // 상속공제에 따른 상속세 비교
         function performDeductionComparison() {
             let inheritanceDeduction1 = parseFloat(document.getElementById('inheritanceDeduction1').value) || 0;
-            let inheritanceDeduction2 = parseFloat(document.getElementById('inheritanceDeduction2').value) || 0;
+            let inheritanceDeduction2 = parseFloat(document.getElementById('inheritanceDeduction2').value.replace(/,/g, '')) || 0; 
 
             let taxForDeduction1 = calculateInheritanceTax(inheritanceDeduction1);
             let taxForDeduction2 = calculateInheritanceTax(inheritanceDeduction2);
@@ -1587,13 +1592,14 @@
             </table>
         `;
          }
+
 // 상속취득세 계산 , 중복방지위해  houseValue buildingValue 대신  houseValue1, buildingValue1
-         function calculateInheritAcquisionTax() {
-      const houseValue1 = parseInt(document.getElementById('houseValue1').value);
-      const houseType = document.getElementById('houseType').value;
-      const buildingValue1 = parseInt(document.getElementById('buildingValue1').value);
-      const landValue = parseInt(document.getElementById('landValue').value);
-      const farmlandValue = parseInt(document.getElementById('farmlandValue').value);
+    function calculateInheritAcquisionTax() {
+      const houseValue1 = parseInt(document.getElementById('houseValue1').value.replace(/,/g, '')) || 0;                                                                                 
+      const houseType = document.getElementById('houseType').value.replace(/,/g, '') || 0;
+      const buildingValue1 = parseInt(document.getElementById('buildingValue1').value.replace(/,/g, '')) || 0;
+      const landValue = parseInt(document.getElementById('landValue').value.replace(/,/g, '')) || 0;
+      const farmlandValue = parseInt(document.getElementById('farmlandValue').value.replace(/,/g, '')) || 0;
 
       const houseTax = InheritAcTaxDetail(houseValue1, 2.8, houseType === 'small' ? 0 : 0.2, 0.16);
       const buildingTax = InheritAcTaxDetail(buildingValue1, 2.8, 0.2, 0.16);
@@ -2133,7 +2139,31 @@ function calculateTaxes1() {
       resultElement.style.display = 'block';
     }
     
-    </script>    
+    // 해당자리로 이동하는 함수 
+   
+    function scrollToTarget(event) {
+        var target = event.currentTarget.getAttribute("data-target");
+        var targetElement = document.getElementById(target);
+
+        // 모든 step 요소 숨기기
+        var stepElements = document.querySelectorAll("[id^='step']");
+        stepElements.forEach(function (step) {
+        step.style.display = "none";
+        });
+
+        // 대상 요소 보이기
+        targetElement.style.display = "block";
+        targetElement.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // 클릭 가능한 요소에 이벤트 리스너 추가
+    var clickableElements = document.querySelectorAll(".clickable");
+    clickableElements.forEach(function (element) {
+        element.addEventListener("click", scrollToTarget);
+    });
+
+
+</script>    
      
-    </body>
+</body>
 </html>
