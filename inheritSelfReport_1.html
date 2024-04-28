@@ -22,6 +22,7 @@
                                     <li>부모님중 한분이 먼저 돌아가신 경우.</li>
                                     <li>피상속인(돌아가신분)이 1주택과 그외 자산을 소유.</li>
                                     <li>자산과 부채는 사망일 당시금액. 사망신고일이 아님 유의.</li>
+                                    
                                 </ol>
                             </td>
                         </table>    
@@ -47,18 +48,18 @@
                             <input type="number" id="childrensNumber" placeholder="자녀  명 ">
                             <input type="text" id="houseValue" inputmode="numeric" oninput="formatNumber(this)"placeholder="주택가격 ">
                             
+                            <ul>
+                                <li>시가평가 원칙.</li>
+                                <li>시가는 이 주택의 감정평가액 또는 매매사례가액.</li>
+                                <li>시가가 없는 경우 기준시가 평가.</li>                             
+                            </ul>
                             <button onclick="nextStep(2)">다음</button>
                         </div>
     
     
     
     
-                        <ul>
-                            <li>시가평가 원칙.</li>
-                            <li>시가는 이 주택의 감정평가액 또는 매매사례가액.</li>
-                            <li>시가가 없는 경우 기준시가 평가.</li>
-                         
-                        </ul>
+                       
                     </div>
     
     
@@ -66,22 +67,22 @@
                         <h2>건물(대지 포함) </h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             <input type="text" id="buildingValue" inputmode="numeric" oninput="formatNumber(this)">
-    
-    
+                            <ul>
+                                <li>시가로 평가.</li>
+                                <li>감정평가가액이 있는 경우 감정가액.</li>
+                                <li>시가가 없는 경우 기준시가로 평가.</li>
+                                <li>고가의 건물의 경우, 2020년부터 기준시가로 과세하는 것에 대한 과세 형평성 문제가 제기되었습니다.</li>
+                                <li>국세청은 자체 감정평가예산을 배정하여 예상감정가와 시가의 차액이 10억을 넘거나 ,
+                                    10%이상 차이가 나는 경우 감정평가를 하여 과세하고 있습니다.
+                                    [국세청 훈령 제2580호 상속세 및 증여세 사무처리 규정]</li>
+                            </ul>
+                            
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(1)">뒤로가기</button>
                                 <button onclick="nextStep(3)">다음</button>
                             </div>
                         </div>
-                        <ul>
-                            <li>시가로 평가.</li>
-                            <li>감정평가가액이 있는 경우 감정가액.</li>
-                            <li>시가가 없는 경우 기준시가로 평가.</li>
-                            <li>고가의 건물의 경우, 2020년부터 기준시가로 과세하는 것에 대한 과세 형평성 문제가 제기되었습니다.</li>
-                            <li>국세청은 자체 감정평가예산을 배정하여 예상감정가와 시가의 차액이 10억을 넘거나 ,
-                                10%이상 차이가 나는 경우 감정평가를 하여 과세하고 있습니다.
-                                [국세청 훈령 제2580호 상속세 및 증여세 사무처리 규정]</li>
-                        </ul>
+                       
                     </div>
     
     
@@ -89,22 +90,19 @@
                         <h2> 농지 </h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             <input type="text" id="agriculturalLandValue" inputmode="numeric" oninput="formatNumber(this)">
-    
+                            <ul>
+                                <li>시가로 평가.</li>
+                                <li>시가는 감정평가액이 될수 있음.</li>
+                                <li>시가가 없는 경우 기준시가로 평가.</li>
+                            </ul>
     
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(2)">뒤로가기</button>
                                 <button onclick="nextStep(4)">다음</button>
                             </div>
-                        </div>
+                        </div> 
     
-    
-    
-    
-                        <ul>
-                            <li>시가로 평가.</li>
-                            <li>시가는 감정평가액이 될수 있음.</li>
-                            <li>시가가 없는 경우 기준시가로 평가.</li>
-                        </ul>
+                               
                     </div>
     
     
@@ -112,23 +110,18 @@
                         <h2>임야(산) </h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             <input type="text" id="forestLandValue" inputmode="numeric" oninput="formatNumber(this)">
-    
-    
+                               
+                        <ul>
+                            <li>시가로 평가.</li>
+                            <li>시가는 감정평가액이 될수 있음.</li>
+                            <li>시가가 없는 경우 기준시가로 평가.</li>
+                        </ul>
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(3)">뒤로가기</button>
                                 <button onclick="nextStep(5)">다음</button>
                             </div>
                         </div>
     
-    
-    
-    
-    
-    
-                        <ul>
-                            <li>시가로 평가.</li>
-                            <li>시가는 감정평가액이 될수 있음.</li>
-                            <li>시가가 없는 경우 기준시가로 평가.</li>
                     </div>
     
     
@@ -160,16 +153,17 @@
                         <h2>장례비용</h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             <input type="text" id="funeralExpense" inputmode="numeric" oninput="formatNumber(this)" placeholder="5백이하시 5,000,000을 쓰세요">
+                            <ul>
+                                <li>장례비(봉안시설비 제외) : 5백만원 미만시 최소 5백만원 공제. 1천만원 초과시 1천만원까지만 공제.</li>
+                                <li>봉안시설, 자연장지에 사용된 금액 : 별도로 5백만원을 한도로 공제.</li>
+                                <li> 합계 1천5백만원까지 한도  </li>
+                            </ul>
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(6)">뒤로가기</button>
                                 <button onclick="nextStep(8)">다음</button>
                             </div>
                         </div>
-                        <ul>
-                            <li>장례비(봉안시설비 제외) : 5백만원 미만시 최소 5백만원 공제. 1천만원 초과시 1천만원까지만 공제.</li>
-                            <li>봉안시설, 자연장지에 사용된 금액 : 별도로 5백만원을 한도로 공제.</li>
-                            <li> 합계 1천5백만원까지 한도  </li>
-                        </ul>
+                        
                     </div>
     
     
@@ -192,18 +186,18 @@
                         <h2>상속공제</h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             <input type="number" id="inheritanceDeduction" name="상속공제" value="1000000000" readonly>
+                            <ul>
+                                <li>배우자가 생존해 있는 경우 최소 10억원.</li>
+                                <li>사전증여가 많은 경우 10억이 안될수 있음.</li>
+                                <li>그외 금융상속공제, 동거주택상속공제 등이 있음.</li>  
+        
+                            </ul>
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(8)">뒤로가기</button>
                                 <button onclick="nextStep(10)">다음</button>
                             </div>
                         </div>
-                        <ul>
-                            <li>배우자가 생존해 있는 경우 최소 10억원.</li>
-                            <li>사전증여가 많은 경우 10억이 안될수 있음.</li>
-                            <li>그외 금융상속공제, 동거주택상속공제 등이 있음.</li>
-    
-    
-                        </ul>
+                        
     
     
                     </div>
@@ -213,28 +207,21 @@
                         <h2>감정평가수수료</h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             <input type="text" id="appraisalFee" inputmode="numeric" oninput="formatNumber(this)">
+                            <ul>
+                                <li>5백만원 한도</li>    
+                            </ul>
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(9)">뒤로가기</button>
                                 <button onclick="nextStep(11); calculateInheritanceTax(parseInt(document.getElementById('inheritanceDeduction').value));">상속세계산</button>
                             </div>   
-                        </div>    
-    
-                        <ul>
-                            <li>5백만원 한도</li>    
-                        </ul>
-    
-    
+                        </div>       
+                                
                     </div>
     
     
                     <div id="step11"  style="display: none;">
     
-                        <style>
-                            #totalPropertyValue:hover {
-                                cursor: pointer; /* 커서를 포인터(손 모양)로 변경 */
-                                background-color: #f0f0f0; /* 배경색을 밝은 회색으로 변경 */
-                            }
-                        </style>
+                        
 
                         <h2>계산 결과</h2>
                         <table border="1" id="resultTable">
@@ -359,7 +346,54 @@
                         
                         <div class="clickable" style="border: 1px solid #000; padding: 10px; margin-bottom: 20px; background-color: #e6f2ff;cursor: pointer;" data-target="step19">
                             <h4>부모님 기초연금 받게 할 순 없을까요 ? </h4>
+                        </div> <br>
+
+                        <hr>
+                        <h4> 뒤로 가기 </h4>
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step1">
+                            <h5>자녀수와 주택가격 </h5>
                         </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step2">
+                            <h5>건물(대지 포함) </h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step3">
+                            <h5>농지 </h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step4">
+                            <h5>임야(산)</h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step5">
+                            <h5>금융자산 등 그외상속재산 </h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step6">
+                            <h5>채무 및 공과금 </h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step7">
+                            <h5>장례비용</h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step8">
+                            <h5>사전증여재산</h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step9">
+                            <h5>상속공제</h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step10">
+                            <h5>감정평가수수료 </h5>
+                        </div>
+
+                        <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step11">
+                            <h5>계산 결과 </h5>
+                        </div>
+
                         
 
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
@@ -498,6 +532,7 @@
                            
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(12); ">뒤로가기</button>
+                                <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>
                                 <button onclick="nextStep(14); "> 취득세 줄이러 가기</button>
                                 
                             </div>   
@@ -616,6 +651,7 @@
                                
                                 <div style="display: flex; justify-content:left ; gap: 20px;">
                                     <button onclick="previousStep(13); ">뒤로가기</button>
+                                    <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>
                                     <button onclick="nextStep(15); "> 종부세 줄이러 가기 </button>
                                     
                                 </div>   
@@ -723,7 +759,8 @@
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                            
                             <div style="display: flex; justify-content:left ; gap: 20px;">
-                                <button onclick="previousStep(14); ">뒤로가기</button>
+                                <button onclick="previousStep(14); ">뒤로가기</button> 
+                                <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>                              
                                 <button onclick="nextStep(16); "> 상속부동산 양도세 줄이러 가기</button>
                                 
                             </div>   
@@ -1007,6 +1044,7 @@
                            
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(15); ">뒤로가기</button>
+                                <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>
                                 <button onclick="nextStep(17); "> 일반주택 양도시 1세대 1주택 만들기 </button>
                                 
                             </div>   
@@ -1150,6 +1188,7 @@
                             
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(16); ">뒤로가기</button>
+                                <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>
                                 <button onclick="nextStep(18); "> 상속주택 때문에 주택청약 이상 없을까 ?  </button>
                                 
                             </div>   
@@ -1218,6 +1257,7 @@
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">                           
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(17); ">뒤로가기</button>
+                                <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>
                                 <button onclick="nextStep(19); "> 부모님 기초연금 받으려면 ?  </button>
                                 
                             </div>   
@@ -1376,6 +1416,7 @@
                            
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(18); ">뒤로가기</button>
+                                <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>
                                 <button onclick="nextStep(20); "> 주의사항 ! </button>
                                 
                             </div>   
