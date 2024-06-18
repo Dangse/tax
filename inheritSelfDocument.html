@@ -1,0 +1,255 @@
+인쇄 버튼을 추가하고 A4 용지 한 장에 인쇄되도록 조정하기 위해 다음과 같이 코드를 수정할 수 있습니다:
+htmlCopy<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상속세 과세과액명세서</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 5px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-right: 10px;
+    }
+    @media print {
+      body {
+        padding: 0;
+      }
+      button {
+        display: none;
+      }
+      table {
+        page-break-inside: avoid;
+      }
+    }
+
+ </style>
+</head>
+<body>
+ <h1>■ 상속세 및 증여세법 시행규칙[별지 제9호서식 부표 1]</h1>
+ <p>※ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.</p>
+ 
+ <h2>가. 상속받은 총재산명세</h2>
+ <table>
+   <tr>
+     <th>① 재산구분<br>코드</th>
+     <th>② 재산종류<br>코드</th>
+     <th>③ 소재지ㆍ법인명 등</th>
+     <th>④ 사업자등록번호<br>(계좌번호, 지분)</th>
+     <th>⑤ 수량<br>(면적)</th>
+     <th>⑥ 단가</th>
+     <th>⑦ 평가가액</th>
+     <th>⑧ 평가<br>기준<br>코드</th>
+     <th>국외자산<br>여부</th>
+     <th>국외재산<br>국가명</th>
+   </tr>
+   <tr>
+     <td><input type="text"></td>
+     <td><input type="text"></td>
+     <td><input type="text" placeholder="[여부 ]"></td>
+     <td><input type="text"></td>
+     <td><input type="number"></td>
+     <td><input type="number"></td>
+     <td><input type="number"></td>
+     <td><input type="text"></td>
+     <td><input type="checkbox"></td>
+     <td><input type="text"></td>
+   </tr>
+   <!-- 추가 행을 위한 템플릿 -->
+   <tr>
+     <td><input type="text"></td>
+     <td><input type="text"></td>
+     <td><input type="text" placeholder="[여부 ]"></td>
+     <td><input type="text"></td>
+     <td><input type="number"></td>
+     <td><input type="number"></td>
+     <td><input type="number"></td>
+     <td><input type="text"></td>
+     <td><input type="checkbox"></td>
+     <td><input type="text"></td>
+   </tr>
+   <!-- 합계 행 -->
+   <tr>
+     <td colspan="6">⑨ 계</td>
+     <td><span id="total"></span></td>
+     <td colspan="3"></td>
+   </tr>
+ </table>
+
+ <h2>나. 상속세 과세가액 계산</h2>
+ <table>
+   <tr>
+     <th>총상속재산<br>가액</th>
+     <td>󰊉󰊒 상속재산가액</td>
+     <td><input type="number" id="inheritage_property_value"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊉󰊓 상속개시 전 처분재산등 산입액<br>(「상속세 및 증여세법」 제15조)</td>
+     <td><input type="number" id="pre_inheritage_disposed_property_value"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊉󰊔 합계</td>
+     <td><span id="total_inheritage_property_value"></span></td>
+   </tr>
+   <tr>
+     <th>비과세<br>재산가액<br>(「상속세 및 증여세법」 제12조)</th>
+     <td>󰊉󰊕 계</td>
+     <td><input type="number" id="tax_free_property_value_total"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊉󰊖 금양임야(禁養) 등 가액<br>(「민법」 제1008조의3)</td>
+     <td><input type="number" id="forbidden_forest_value"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊉󰊗 공공단체 유증재산가액</td>
+     <td><input type="number" id="public_bequest_property_value"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊉󰊘 기타</td>
+     <td><input type="number" id="tax_free_property_value_etc"></td>
+   </tr>
+   <tr>
+     <th>과세가액<br>불산입액</th>
+     <td>󰊉󰊙 계</td>
+     <td><span id="non_taxable_property_value_total"></span></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊉󰊚 공익법인 출연재산가액<br>(「상속세 및 증여세법」 제16조)</td>
+     <td><input type="number" id="public_interest_corporation_property_value"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊉󰊛 공익신탁재산가액<br>(「상속세 및 증여세법」 제17조)</td>
+     <td><input type="number" id="public_trust_property_value"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊊󰊒 기타</td>
+     <td><input type="number" id="non_taxable_property_value_etc"></td>
+   </tr>
+   <tr>
+     <th>공제금액<br>(「상속세 및 증여세법」 제14조)</th>
+     <td>󰊊󰊓 계</td>
+     <td><span id="deduction_amount_total"></span></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊊󰊔 공과금</td>
+     <td><input type="number" id="public_imposts"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊊󰊕 장례비용</td>
+     <td><input type="number" id="funeral_expenses"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊊󰊖 채무</td>
+     <td><input type="number" id="debts"></td>
+   </tr>
+   <tr>
+     <th>가산하는<br>증여재산가액</th>
+     <td>󰊊󰊗 계<br>(󰊊󰊘 + 󰊊󰊙 또는 󰊊󰊘 + 󰊊󰊚)</td>
+     <td><span id="added_donated_property_value"></span></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊊󰊘 「상속세 및 증여세법」 제13조</td>
+     <td><input type="number" id="inheritance_and_gift_tax_law_article_13"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊊󰊙 「조세특례제한법」 제30조의5</td>
+     <td><input type="number" id="restriction_of_special_taxation_act_article_30_5"></td>
+   </tr>
+   <tr>
+     <th></th>
+     <td>󰊊󰊚 「조세특례제한법」 제30조의6</td>
+     <td><input type="number" id="restriction_of_special_taxation_act_article_30_6"></td>
+   </tr>
+   <tr>
+     <th>󰊊󰊛 상속세 과세가액<br>[󰊉󰊔 - (󰊉󰊕 + 󰊉󰊙 + 󰊊󰊓) + 󰊊󰊗]</th>
+     <td colspan="2"><span id="inheritance_tax_assessment_value"></span></td>
+   </tr>
+ </table>
+
+  <button type="button" onclick="calculateInheritanceTax()">신고하기</button> 
+  <button type="button" onclick="window.print()">인쇄하기</button>
+
+ <script>
+   function calculateInheritanceTax() {
+     // 상속받은 총재산명세 합계 계산
+     const totalValue = document.getElementById('total');
+     const evaluationValues = document.querySelectorAll('input[type="number"][placeholder="[평가가액]"]');
+     let sum = 0;
+     evaluationValues.forEach(value => {
+       sum += parseFloat(value.value) || 0;
+     });
+     totalValue.textContent = sum;
+
+     // 상속세 과세가액 계산
+     const inheritagePropertyValue = parseFloat(document.getElementById('inheritage_property_value').value) || 0;
+     const preInheritageDisposedPropertyValue = parseFloat(document.getElementById('pre_inheritage_disposed_property_value').value) || 0;
+     const totalInheritagePropertyValue = inheritagePropertyValue + preInheritageDisposedPropertyValue;
+     document.getElementById('total_inheritage_property_value').textContent = totalInheritagePropertyValue;
+
+     const taxFreePropertyValueTotal = parseFloat(document.getElementById('tax_free_property_value_total').value) || 0;
+     const forbiddenForestValue = parseFloat(document.getElementById('forbidden_forest_value').value) || 0;
+     const publicBequestPropertyValue = parseFloat(document.getElementById('public_bequest_property_value').value) || 0;
+     const taxFreePropertyValueEtc = parseFloat(document.getElementById('tax_free_property_value_etc').value) || 0;
+     const nonTaxablePropertyValueTotal = forbiddenForestValue + publicBequestPropertyValue + taxFreePropertyValueEtc;
+     document.getElementById('non_taxable_property_value_total').textContent = nonTaxablePropertyValueTotal;
+
+     const publicInterestCorporationPropertyValue = parseFloat(document.getElementById('public_interest_corporation_property_value').value) || 0;
+     const publicTrustPropertyValue = parseFloat(document.getElementById('public_trust_property_value').value) || 0;
+     const nonTaxablePropertyValueEtc = parseFloat(document.getElementById('non_taxable_property_value_etc').value) || 0;
+
+     const publicImposts = parseFloat(document.getElementById('public_imposts').value) || 0;
+     const funeralExpenses = parseFloat(document.getElementById('funeral_expenses').value) || 0;
+     const debts = parseFloat(document.getElementById('debts').value) || 0;
+     const deductionAmountTotal = publicImposts + funeralExpenses + debts;
+     document.getElementById('deduction_amount_total').textContent = deductionAmountTotal;
+
+     const inheritanceAndGiftTaxLawArticle13 = parseFloat(document.getElementById('inheritance_and_gift_tax_law_article_13').value) || 0;
+     const restrictionOfSpecialTaxationActArticle305 = parseFloat(document.getElementById('restriction_of_special_taxation_act_article_30_5').value) || 0;
+     const restrictionOfSpecialTaxationActArticle306 = parseFloat(document.getElementById('restriction_of_special_taxation_act_article_30_6').value) || 0;
+     const addedDonatedPropertyValue = inheritanceAndGiftTaxLawArticle13 + restrictionOfSpecialTaxationActArticle305 + restrictionOfSpecialTaxationActArticle306;
+     document.getElementById('added_donated_property_value').textContent = addedDonatedPropertyValue;
+
+     const inheritanceTaxAssessmentValue = totalInheritagePropertyValue - (taxFreePropertyValueTotal + nonTaxablePropertyValueTotal + deductionAmountTotal) + addedDonatedPropertyValue;
+     document.getElementById('inheritance_tax_assessment_value').textContent = inheritanceTaxAssessmentValue;
+
+     // 입력된 값을 기반으로 서버로 전송하거나 PDF로 출력하는 등의 추가 작업 수행
+     // ...
+   }
+ </script>
+</body>
+</html>
