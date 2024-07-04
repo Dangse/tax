@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <title>상속세셀프계산기</title>
+   
+</head>
+<body>
+    <h1>상속으로 인한 양도세 시뮬레이션</h1>
+
+    <div id="calculator-1" class="calculator-section">
+        <h2>1) 6개월 이내 양도시</h2>
+        <p>※ 양도가액과 취득가액이 동일하여 양도차익이 없습니다. 감정을 받을 필요없습니다.</p>
+        <label for="transferPrice1">양도가액:</label>
+        <input type="text" id="transferPrice1" inputmode="numeric" oninput="formatNumber(this)"><br>
+        <label for="acquisitionPrice1">취득가액 (양도가액과 동일):</label>
+        <input type="text" id="acquisitionPrice1" readonly><br>
+    </div>
+
+    <div id="calculator-2" class="calculator-section">
+        <h2>2) 시가 신고후 미래 양도시</h2>
+        <p>※ 상속세 신고후 몇년이 지난후를 예상한 경우입니다.</p>
+        <label for="transferPrice2">양도가액:</label>
+        <input type="text" id="transferPrice2" inputmode="numeric" oninput="formatNumber(this); syncTransferPrice();"><br>
+        <label for="acquisitionPrice2">취득가액: 상속시 시가로 신고한 경우 그 시가</label>
+        <input type="text" id="acquisitionPrice2" inputmode="numeric" oninput="formatNumber(this)"><br>
+        <label for="holdingPeriod2">보유기간(년): 사망일로부터 양도일까지</label>
+        <input type="number" id="holdingPeriod2" step="0.1" min="0" oninput="syncHoldingPeriod();"><br>
+        <label for="nonBusinessUse2">비사업용 여부:</label>
+        <input type="checkbox" id="nonBusinessUse2" onchange="syncNonBusinessUse();"><br>
+    </div>
+
+    <div id="calculator-3" class="calculator-section">
+        <h2>3) 기준시가 신고후 미래 양도시</h2>
+        <p>※ 기준시가로 신고하거나 무신고한 경우로서 5년이내 양도한 경우입니다.</p>
+        <p>5년이후 양도하는 경우 세율이 10% 추가 됩니다.</p>
+        <label for="transferPrice3">양도가액:</label>
+        <input type="text" id="transferPrice3" inputmode="numeric" readonly><br>
+        <label for="acquisitionPrice3">취득가액: 상속시 기준시가로 신고 혹은 무신고한 경우 기준시가</label>
+        <input type="text" id="acquisitionPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
+        <label for="holdingPeriod3">보유기간(년): 사망일로부터 양도일까지</label>
+        <input type="number" id="holdingPeriod3" step="0.1" min="0" readonly><br>
+        <label for="nonBusinessUse3">비사업용 여부:</label>
+        <input type="checkbox" id="nonBusinessUse3" disabled><br>
+    </div>
+
+    <button onclick="calculateAllTaxes()">모두 계산하기</button>
+
+    <div id="resultTable" style="display:none;"></div>
+
+    <script>
+    let results = {};
+
+    function formatNumber(input) {
+        let numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
+        input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function syncTransferPrice() {
+        document.getElementById('transferPrice3').value = document.getElementById('transferPrice2').value;
+    }
+
+    function syncHoldingPeriod() {
+        document.getElementById('holdingPeriod3').value = document.getElementById('holdingPeriod2').value;
+    }
+
+    function syncNonBusinessUse() {
+        document.getElementById('nonBusinessUse3').checked = document.getElementById('nonBusinessUse2').checked;
+    }
+
+    function calculateAllTaxes() {
+        calculateTaxes('1');
+        calculateTaxes('2');
+        calculateTaxes('3');
+        updateResultTable();
+    }
+
+    function calculateTaxes(section) {
+        let transferPrice = parseFloat(document.getElementById('transferPrice' + section).value.replace(/,/g, ''));
+        let acquisitionPrice = parseFloat(document.getElementById('acquisitionPrice' + section).value.replace(/,/g, ''));
+        let holdingPeriod = section === '1' ? 0.5 : parseFloat(document.getElementById('holdingPeriod' + section).value);
+        let isNonBusinessUse = section !== '1' && document.getElementById('nonBusinessUse' + section).checked;
+
+        if (section === '1') {
+            document.getElementById('acquisitionPrice1').value = transferPrice.toLocaleString();
+            acquisitionPrice = transferPrice;
+        }
+
+        let capitalGain = transferPrice - acquisitionPrice;
+        let longTermDeduction = calculateLongTermDeduction(capitalGain, holdingPeriod);
+        let taxableIncome = capitalGain - longTermDeduction;
+        let taxBase = Math.max(0, taxableIncome - (section === '1' ? 0 : 2500000));
+        let transferTax = calculateTransferTax(taxBase, holdingPeriod >= 5 && isNonBusinessUse);
+        let localIncomeTax = transferTax * 0.1;
+        let totalTax = transferTax + localIncomeTax;
+
+        results[section] = {
+            transferPrice, acquisitionPrice, capitalGain, longTermDeduction,
+            taxableIncome, taxBase, transferTax, localIncomeTax, totalTax
+        };
+    }
+
+    function calculateLongTermDeduction(capitalGain, holdingPeriod) {
+        let deductionRate = 0;
+        if (holdingPeriod >= 3 && holdingPeriod < 4) {
+            deductionRate = 0.06;
+        } else if (holdingPeriod >= 4 && holdingPeriod < 5) {
+            deductionRate = 0.08;
+        } else if (holdingPeriod >= 5) {
+            deductionRate = Math.min(0.3, 0.02 * holdingPeriod);
+        }
+        return capitalGain * deductionRate;
+    }
+
+    function calculateTransferTax(taxBase, isNonBusinessLongTerm) {
+        let additionalRate = isNonBusinessLongTerm ? 0.1 : 0;
+        if (taxBase <= 14000000) {
+            return taxBase * (0.06 + additionalRate);
+        } else if (taxBase <= 50000000) {
+            return taxBase * (0.15 + additionalRate) - 1260000;
+        } else if (taxBase <= 88000000) {
+            return taxBase * (0.24 + additionalRate) - 5760000;
+        } else if (taxBase <= 150000000) {
+            return taxBase * (0.35 + additionalRate) - 15440000;
+        } else if (taxBase <= 300000000) {
+            return taxBase * (0.38 + additionalRate) - 19940000;
+        } else if (taxBase <= 500000000) {
+            return taxBase * (0.40 + additionalRate) - 25940000;
+        } else if (taxBase <= 1000000000) {
+            return taxBase * (0.42 + additionalRate) - 35940000;
+        } else {
+            return taxBase * (0.45 + additionalRate) - 65940000;
+        }
+    }
+
+    function updateResultTable() {
+        let tableHtml = `
+            <h2>계산 결과</h2>
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>1) 6개월 이내 양도</th>
+                    <th>2) 시가 신고후 양도</th>
+                    <th>3) 기준시가 신고후 양도</th>
+                    <th>비고</th>
+                </tr>
+        `;
+
+        const rows = [
+            { key: 'transferPrice', label: '양도가액', note: '' },
+            { key: 'acquisitionPrice', label: '취득가액', note: '' },
+            { key: 'capitalGain', label: '양도차익', note: '양도가액 - 취득가액' },
+            { key: 'longTermDeduction', label: '장기보유특별공제', note: '' },
+            { key: 'taxableIncome', label: '양도소득금액', note: '양도차익 - 장기보유특별공제' },
+            { key: 'taxBase', label: '과세표준', note: '' },
+            { key: 'transferTax', label: '양도세', note: '' },
+            { key: 'localIncomeTax', label: '지방소득세', note: '양도세 * 10%' },
+            { key: 'totalTax', label: '세액합계', note: '양도세 + 지방소득세' }
+        ];
+
+        rows.forEach(row => {
+            tableHtml += `
+                <tr>
+                    <td>${row.label}</td>
+                    <td>${results['1'] ? results['1'][row.key].toLocaleString() : '-'}</td>
+                    <td>${results['2'] ? results['2'][row.key].toLocaleString() : '-'}</td>
+                    <td>${results['3'] ? results['3'][row.key].toLocaleString() : '-'}</td>
+                    <td>${row.note}</td>
+                </tr>
+            `;
+        });
+
+        tableHtml += '</table>';
+        document.getElementById('resultTable').innerHTML = tableHtml;
+        document.getElementById('resultTable').style.display = 'block';
+    }
+    </script>
+</body>
+</html>

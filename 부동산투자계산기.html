@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부동산 투자 계산기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3fe;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>부동산 투자 계산기</h1>
+        <div class="form-group">
+            <label for="purchasePrice">구입가격 (원)</label>
+            <input type="text" id="purchasePrice" placeholder="500,000,000">
+        </div>
+        <div class="form-group">
+            <label for="loanAmount">대출금액 (원)</label>
+            <input type="text" id="loanAmount" placeholder="300,000,000">
+        </div>
+        <div class="form-group">
+            <label for="interestRate">대출 이자율 (%)</label>
+            <input type="text" id="interestRate" placeholder="3.5">
+        </div>
+        <div class="form-group">
+            <label for="expectedSalePrice">5년 후 예상 판매가격 (원)</label>
+            <input type="text" id="expectedSalePrice" placeholder="600,000,000">
+        </div>
+        <div class="form-group">
+            <label for="annualRentalIncome">연간 임대수입 (원)</label>
+            <input type="text" id="annualRentalIncome" placeholder="24,000,000">
+        </div>
+        <div class="form-group">
+            <label for="annualExpenses">연간 소요경비 (원)</label>
+            <input type="text" id="annualExpenses" placeholder="2,000,000">
+        </div>
+        <div class="form-group">
+            <label for="annualLaborCost">연간 소요인건비 (원)</label>
+            <input type="text" id="annualLaborCost" placeholder="1,000,000">
+        </div>
+        <button onclick="calculateInvestment()">계산하기</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 천 단위 구분 기능을 추가하는 함수
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // 천 단위 구분된 문자열을 숫자로 변환하는 함수
+        function parseFormattedNumber(str) {
+            return parseFloat(str.replace(/,/g, ''));
+        }
+
+        // 입력 필드에 이벤트 리스너 추가
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/,/g, '');
+                if (e.target.id === 'interestRate') {
+                    // 이자율의 경우 소수점 한 자리까지만 허용
+                    value = value.replace(/[^\d.]/g, '');
+                    const parts = value.split('.');
+                    if (parts.length > 1) {
+                        parts[1] = parts[1].slice(0, 1);
+                        value = parts.join('.');
+                    }
+                } else {
+                    value = value.replace(/\D/g, '');
+                }
+                e.target.value = formatNumber(value);
+            });
+        });
+
+        function calculateInvestment() {
+            const purchasePrice = parseFormattedNumber(document.getElementById('purchasePrice').value);
+            const loanAmount = parseFormattedNumber(document.getElementById('loanAmount').value);
+            const interestRate = parseFormattedNumber(document.getElementById('interestRate').value) / 100;
+            const expectedSalePrice = parseFormattedNumber(document.getElementById('expectedSalePrice').value);
+            const annualRentalIncome = parseFormattedNumber(document.getElementById('annualRentalIncome').value);
+            const annualExpenses = parseFormattedNumber(document.getElementById('annualExpenses').value);
+            const annualLaborCost = parseFormattedNumber(document.getElementById('annualLaborCost').value);
+
+            const equity = purchasePrice - loanAmount;
+            const annualInterest = loanAmount * interestRate;
+            const annualManagementFee = purchasePrice * 0.01; // 1% of purchase price
+
+            let totalRentalIncome = 0;
+            let totalExpenses = 0;
+            for (let i = 0; i < 5; i++) {
+                totalRentalIncome += annualRentalIncome;
+                totalExpenses += annualExpenses + annualLaborCost + annualInterest + annualManagementFee;
+            }
+
+            const netProfit = expectedSalePrice - purchasePrice + totalRentalIncome - totalExpenses;
+            const roi = (netProfit / equity) * 100;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h3>투자 결과 (5년 후)</h3>
+                <p><strong>순수 투자 수익:</strong> ${formatNumber(Math.round(netProfit))} 원</p>
+                <p><strong>투자 수익률:</strong> ${roi.toFixed(2)}%</p>
+            `;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

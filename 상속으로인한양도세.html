@@ -7,15 +7,20 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2>6개월 이내 양도시</h2>
+    <h1> 상속으로 인한 양도세 시물레이션 </h1>
+    <h2>1) 6개월 이내 양도시</h2>
+    <p>※ 양도가액과 취득가액이 동일하여 양도차익이 없습니다. 감정을 받을 필요없습니다.</p><br><br>
     <label for="transferPrice1">양도가액:</label>
     <input type="text" id="transferPrice1" inputmode="numeric" oninput="formatNumber(this)"><br>
     <label for="acquisitionPrice1">취득가액 (양도가액과 동일):</label>
     <input type="text" id="acquisitionPrice1" readonly><br>
     <label for="holdingPeriod1">보유기간(년): 6개월 이내</label>
     <input type="number" id="holdingPeriod1" value="0.5" readonly><br><br>
+    
+  
     <button onclick="calculateTaxes1()">계산하기</button>
     <div id="resultTable1" style="display:none;">
+
         <h3>계산 결과</h3>
         <table border="1">
             <tr>
@@ -81,10 +86,12 @@
         </table>
     </div>
 
-    <h2>시가 신고후 미래 양도시</h2>
-    <label for="transferPrice2">양도가액:</label>
+    <h2>2) 시가 신고후 미래 양도시</h2>
+    <p>※ 상속세 신고후 몇년이 지난후를 예상한 경우입니다.  </p><br><br>    
+    
+<label for="transferPrice2">양도가액:</label>
 <input type="text" id="transferPrice2" inputmode="numeric" oninput="formatNumber(this)"><br>
-<label for="acquisitionPrice2">취득가액:</label>
+<label for="acquisitionPrice2">취득가액: 상속시 시가로 신고한 경우 그 시가 </label>
 <input type="text" id="acquisitionPrice2" inputmode="numeric" oninput="formatNumber(this)"><br>
 <label for="holdingPeriod2">보유기간(년): 사망일로부터 양도일까지</label>
 <input type="number" id="holdingPeriod2"><br><br>
@@ -157,11 +164,12 @@
         
     </div>
 
-    <h2>기준시가 신고후 미래 양도시</h2>
-    
+    <h2>3) 기준시가 신고후 미래 양도시</h2>
+    <p>※  기준시가로 신고하거나 무신고한 경우로서 5년이내 양도한 경우입니다.  </p>
+    <p> 5년이후 양도하는 경우 세율이 10% 추가 됩니다. </p><br><br>
     <label for="transferPrice3">양도가액:</label>
     <input type="text" id="transferPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
-    <label for="acquisitionPrice3">취득가액:</label>
+    <label for="acquisitionPrice3">취득가액: 상속시 기준시가로 신고 혹은 무신고한 경우 기준시가 </label>
     <input type="text" id="acquisitionPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
     <label for="holdingPeriod3">보유기간(년): 사망일로부터 양도일까지</label>
     <input type="number" id="holdingPeriod3"><br><br><!-- 동일한 구조의 입력 필드 및 버튼 -->

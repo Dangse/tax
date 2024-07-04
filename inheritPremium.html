@@ -62,7 +62,7 @@
                                
                                 <li><a href="https://www.hometax.go.kr/" target="_blank">🏠 홈텍스 실거래가</a></li>
                                 <li><a href="https://rt.molit.go.kr/" target="_blank">🏢 국토교통부 실거래가</a></li>
-                                <li><a href="https://www.realtyprice.kr/" target="_blank">📈 국토교통부 기준시가</a></li>
+                                <li><a href="https://www.realtyprice.kr/" target="_blank">📈 국토교통부 공시가격</a></li>
                             </ul>
 
                             <button onclick="nextStep(2)">다음</button>
@@ -76,7 +76,7 @@
 
 
                     <div id="step2" style="display: none;">
-                        <h2>건물(대지 포함) </h2>
+                        <h2>비주거용건물(대지 포함) </h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             <input type="text" id="buildingValue" inputmode="numeric" oninput="formatNumber(this)">
                             <ul>
@@ -86,13 +86,13 @@
                                 <li>고가의 건물의 경우, 2020년부터 기준시가로 과세하는 것에 대한 과세 형평성 문제가 제기되었습니다.</li>
                                 <li>국세청은 자체 감정평가예산을 배정하여 예상감정가와 시가의 차액이 10억을 넘거나 ,
                                     10%이상 차이가 나는 경우 감정평가를 하여 과세하고 있습니다.
-                                    [국세청 훈령 제2580호 상속세 및 증여세 사무처리 규정]</li>
+                                    </li>
                             </ul>
 
-                            <strong><a href="https://tuzaga.com/%ec%83%81%ec%86%8d%ec%8b%9c-%ec%95%84%ed%8c%8c%ed%8a%b8-%ed%8f%89%ea%b0%80/" target="_blank" style="color: #e74c3c;">⚠️ 꼬마빌딩 상속교실  바로가기  꼭 ~~ 클릭 !!! ⚠️</a></strong>
+                            <strong><a href="https://tuzaga.com/%ea%b1%b4%eb%ac%bc%ec%9d%98-%ea%b0%90%ec%a0%95%ed%8f%89%ea%b0%80%ec%99%80-%eb%b3%b4%ec%b6%a9%ec%a0%81-%ed%8f%89%ea%b0%80%eb%b0%a9%eb%b2%95/" target="_blank" style="color: #e74c3c;">⚠️상속 건물평가 교실 꼭 ~~ 클릭 !!! ⚠️</a></strong>
 
                             <ul>                                
-                                <li><a href="https://www.hometax.go.kr/"> 홈텍스 실거래가  </a> </li>                                
+                                <li><a href="https://www.hometax.go.kr/"target="_blank">🏢 건물평가하러 가기 :홈텍스 </a> </li>                                
                             </ul>
 
                             <div style="display: flex; justify-content:left ; gap: 20px;">
@@ -113,7 +113,11 @@
                                 <li>시가는 감정평가액이 될수 있음.</li>
                                 <li>시가가 없는 경우 기준시가로 평가.</li>
                             </ul>
+                            <strong><a href="https://tuzaga.com/%ec%83%81%ec%86%8d%eb%86%8d%ec%a7%80-%ed%8f%89%ea%b0%80/" target="_blank" style="color: #e74c3c;">⚠️상속 건물평가 교실 꼭 ~~ 클릭 !!! ⚠️</a></strong>
 
+                            <ul>                                
+                                <li><a href="https://www.realtyprice.kr/" target="_blank"> 🏢 상속농지 평가하러 가기 : 국토교통부 공시가격 </a> </li>                                
+                            </ul>
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(2)">뒤로가기</button>
                                 <button onclick="nextStep(4)">다음</button>
@@ -373,7 +377,7 @@
                         </div>
 
                         <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step2">
-                            <h5>건물(대지 포함) </h5>
+                            <h5>비주거용건물(대지 포함) </h5>
                         </div>
 
                         <div class="clickable" style="border: 1px solid #000; padding: 5px; margin-bottom: 10px; background-color: #e6f2ff;cursor: pointer;" data-target="step3">
