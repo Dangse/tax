@@ -8,7 +8,7 @@
    
 </head>
 <body>
-    <h1>상속으로 인한 양도세 시뮬레이션</h1>
+    <h2>상속으로 인한 양도세 시뮬레이션</h2>
     <p> 상속인이 농사짓지 않는 "비사업용 토지"는 사망일로부터 5년 이후 양도하는 경우 기본세율에  10% 추가합니다.</p>
     <p>※ 보유기간 : 사망일 ~ 양도일 (만, 년)</p>
     
@@ -52,7 +52,7 @@
 
     <button onclick="calculateAllTaxes()">모두 계산하기</button>
 
-    <div id="resultTable" style="display:none;"></div>
+    <div id="resultTableTrance" style="display:none;"></div>
 
     <script>
     let results = {};
@@ -75,9 +75,9 @@
     }
 
     function calculateAllTaxes() {
-        calculateTaxes('1');
-        calculateTaxes('2');
-        calculateTaxes('3');
+       calculateTaxes('1');
+       calculateTaxes('2');
+       calculateTaxes('3');
         updateResultTable();
     }
 
@@ -177,8 +177,8 @@
         });
 
         tableHtml += '</table>';
-        document.getElementById('resultTable').innerHTML = tableHtml;
-        document.getElementById('resultTable').style.display = 'block';
+        document.getElementById('resultTableTrance').innerHTML = tableHtml;
+        document.getElementById('resultTableTrance').style.display = 'block';
     }
     </script>
 </body>

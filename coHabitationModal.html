@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동거상속공제 계산기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        #resultSection {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>동거상속공제 계산기</h1>
+        <label for="houseValue">주택 가격:</label>
+        <input type="text" id="houseValue" oninput="formatNumber(this)" placeholder="주택 가격을 입력하세요">
+        <button onclick="openCohabitationModal()">동거상속공제 계산</button>
+
+        <div id="cohabitationModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeCohabitationModal()">&times;</span>
+                <h2>동거상속공제 계산</h2>
+                <p>주택 가격: <span id="modalHouseValueCell"></span></p>
+                <label for="houseDebt">주택이 담보하는 채무가액:</label>
+                <input type="text" id="houseDebt" oninput="formatNumber(this)" placeholder="채무가액을 입력하세요">
+                <button onclick="calculateCohabitationDeduction()">계산</button>
+                <p>동거상속공제액: <span id="cohabitationDeduction"></span></p>
+                <button onclick="applyCohabitationDeduction()">적용</button>
+            </div>
+        </div>
+
+        <div id="resultSection">
+            <h2>계산 결과</h2>
+            <p>동거상속공제액: <span id="cohabitationDeductionAmount">0</span></p>
+        </div>
+    </div>
+
+    <script>
+        function formatNumber(input) {
+            let value = input.value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            input.value = value;
+            return value;
+        }
+
+        function openCohabitationModal() {
+            let modal = document.getElementById('cohabitationModal');
+            let houseValue = document.getElementById('houseValue').value;
+            document.getElementById('modalHouseValueCell').textContent = houseValue;
+            modal.style.display = "block";
+        }
+
+        function closeCohabitationModal() {
+            document.getElementById('cohabitationModal').style.display = "none";
+        }
+
+        function calculateCohabitationDeduction() {
+            let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+            let houseDebt = parseFloat(document.getElementById('houseDebt').value.replace(/,/g, '')) || 0;
+            let deduction = Math.max(houseValue - houseDebt, 0);
+            deduction = Math.min(deduction, 600000000); // 6억 한도
+            document.getElementById('cohabitationDeduction').textContent = formatNumber({value: deduction.toString()});
+        }
+
+        function applyCohabitationDeduction() {
+            let deduction = document.getElementById('cohabitationDeduction').textContent;
+            document.getElementById('cohabitationDeductionAmount').textContent = deduction;
+            closeCohabitationModal();
+        }
+
+        window.onclick = function(event) {
+            let modal = document.getElementById('cohabitationModal');
+            if (event.target == modal) {
+                closeCohabitationModal();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -248,7 +248,7 @@
         input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    function calculateTaxes1() {
+    functioncalculateTaxes1() {
         let transferPrice = parseFloat(document.getElementById('transferPrice1').value.replace(/,/g, ''));
         let acquisitionPrice = transferPrice;
         let holdingPeriod = 0.5;
@@ -276,7 +276,7 @@
         document.getElementById('resultTable1').style.display = 'block';
     }
 
-    function calculateTaxes2() {
+    functioncalculateTaxes2() {
         let transferPrice = parseFloat(document.getElementById('transferPrice2').value.replace(/,/g, ''));
         let acquisitionPrice = parseFloat(document.getElementById('acquisitionPrice2').value.replace(/,/g, ''));
         let holdingPeriod = parseFloat(document.getElementById('holdingPeriod2').value);
@@ -302,7 +302,7 @@
         document.getElementById('resultTable2').style.display = 'block';
     }
 
-    function calculateTaxes3() {
+    functioncalculateTaxes3() {
         let transferPrice = parseFloat(document.getElementById('transferPrice3').value.replace(/,/g, ''));
         let acquisitionPrice = parseFloat(document.getElementById('acquisitionPrice3').value.replace(/,/g, ''));
         let holdingPeriod = parseFloat(document.getElementById('holdingPeriod3').value);

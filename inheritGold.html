@@ -108,7 +108,7 @@
                             <input type="text" id="agriculturalLandValue" inputmode="numeric" oninput="formatNumber(this)">
                             <ul>
                                 <li>시가로 평가.</li>
-                                <li>시가는 감정평가액이 될수 있음.</li>
+                                <li>감정평가로 평가 할수 있음</li>
                                 <li>시가가 없는 경우 기준시가로 평가.</li>
                             </ul>
                             <form>
@@ -135,7 +135,7 @@
 
                             <ul>
                                 <li>시가로 평가.</li>
-                                <li>시가는 감정평가액이 될수 있음.</li>
+                                <li>감정평가로 평가 할수 있음</li>
                                 <li>시가가 없는 경우 기준시가로 평가.</li>
                             </ul>
                             <form>
@@ -487,7 +487,7 @@
 
                         <h2> 상속세 절세 방법 </h2>
 
-                        <h4>▶ 배우자상속공제를 최대로 받기 위해 배우자 한도를 최대한 이용해요!</h4>
+                        <h2>▶ 배우자상속공제를 최대로 받기 위해 배우자 한도를 최대한 이용해요!</h2>
 
 
                         <ul>
@@ -552,7 +552,7 @@
                         </ul>
 
 
-                        <h4>▶ 만약! 부모님과 같이 살았다면 동거주택상속공제를 받아요!  </h4>
+                        <h2>▶ 만약! 부모님과 같이 살았다면 동거주택상속공제를 받아요!  </h2>
 
                         동거주택가격의 100%를 공제합니다 , 다만 6억 한도을 한도로 하며, 다음 요건을 모두 충족해야 합니다.
                         <ul>
@@ -563,7 +563,7 @@
 
 
 
-                        <h4> ▶ 금융자산상속공제를 받아요!  </h4>
+                        <h2> ▶ 금융자산상속공제를 받아요!  </h2>
 
                         금융재산에서 금융채무를 제외한 순금융재금액이 상속세과세가액에서 다음과 같이 공제 됩니다.
                         <ul>
@@ -587,7 +587,7 @@
                         <div id="result"></div>
 
 
-                        <h4>▶  감정평가를 이용해 향후 양도세를 줄여요 !</h4>
+                        <h2>▶  감정평가를 이용해 향후 양도세를 줄여요 !</h2>
 
                         <ul>
                             <li>주택, 빌딩, 그 외 자산의 가치가 10억원 미만인 경우, 상속 주택을 가능한 한 높게 평가하여 상속세 신고를 하는 것이
@@ -1687,7 +1687,10 @@
         spouseInheritanceDeduction = Math.floor(spouseInheritanceDeduction); //소수점 이하를 절사하여 할당
 
         document.getElementById('spouseInheritanceDeductionCell').innerText = spouseInheritanceDeduction.toLocaleString(); // 배우자 상속공제 한도 결과를 표시할 셀에 값을 설정
-
+        
+        //각 공제 계산 함수의 마지막에 updateTotalDeduction() 함수 호출 추가:
+        document.getElementById('spouseInheritanceDeductionCell').innerText = spouseInheritanceDeduction.toLocaleString();
+        updateTotalDeduction();
     }
 
 
