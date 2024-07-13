@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상속세 공제 계산기</title>
+    <title>상속세 인적공제 계산기</title>
     <style>
         body {
             font-family: 'Malgun Gothic', sans-serif;
@@ -79,13 +79,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>상속세 공제 계산기</h1>
-        <button onclick="openInheritanceModal()">상속세 공제 계산</button>
+        <h1>상속세 인적공제 계산기</h1>
+        <button onclick="openInheritanceModal()">인적공제 계산</button>
 
         <div id="inheritanceModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeInheritanceModal()">&times;</span>
-                <h2>상속세 공제 계산</h2>
+                <h2>기초+인적공제 계산</h2>
                 <form id="deductionForm">
                     <label for="children">자녀 수:</label>
                     <input type="number" id="children" min="0" required>
@@ -101,19 +101,20 @@
                     
                     <button type="submit">계산하기</button>
                 </form>
-                <div id="result"></div>
-                <button id="applyButton" onclick="applyDeduction()">적용</button>
+                <div id="deductionResult"></div>    
+                <button id="applyButton" onclick="applyDeduction()">적용</button>            
             </div>
+            
         </div>
 
         <div id="resultSection">
             <h2>계산 결과</h2>
-            <p>최종 일괄공제 금액: <span id="finalDeductionAmount">0</span>원</p>
+            <p>max (기초 + 인적공제 , 일괄공제 ) 금액 : <span id="finalDeductionAmount">0</span>원</p>
         </div>
     </div>
 
     <script>
-        let calculatedDeduction = 0;
+                let calculatedDeduction = 0;
 
         function openInheritanceModal() {
             document.getElementById('inheritanceModal').style.display = "block";
@@ -122,7 +123,7 @@
         function closeInheritanceModal() {
             document.getElementById('inheritanceModal').style.display = "none";
             document.getElementById('applyButton').style.display = "none";
-            document.getElementById('result').innerHTML = "";
+            document.getElementById('deductionResult').innerHTML = "";
         }
 
         document.getElementById('deductionForm').addEventListener('submit', function(e) {
@@ -143,7 +144,7 @@
             calculatedDeduction = Math.max(basicDeduction + personalDeduction, 500000000);
 
             // 결과 표시
-            const resultDiv = document.getElementById('result');
+            const resultDiv = document.getElementById('deductionResult');
             resultDiv.innerHTML = `
                 <h2>공제 결과</h2>
                 <p>자녀 공제: ${childDeduction.toLocaleString()}원</p>
