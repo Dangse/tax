@@ -540,13 +540,13 @@
                                             <label for="children">자녀 수:</label>
                                             <input type="number" id="children" min="0" required>
                                             
-                                            <label for="minors">미성년 상속인 및 동거가족 수:</label>
+                                            <label for="minors">상속인 및 동거가족 중 미성년자 명:</label>
                                             <input type="number" id="minors" min="0" required>
                                             
-                                            <label for="minorYears">미성년자의 19세까지 남은 연 수 (모든 미성년자의 합):</label>
+                                            <label for="minorYears">미성년자의 19세까지 남은 연 수를 (모든 미성년자의 합):</label>
                                             <input type="number" id="minorYears" min="0" required>
                                             
-                                            <label for="seniors">65세 이상 상속인 및 동거가족 수:</label>
+                                            <label for="seniors">상속인 및 동거가족 중 65세 이상자 명 :</label>
                                             <input type="number" id="seniors" min="0" required>
                                             
                                             <button type="submit">계산하기</button>
@@ -571,14 +571,14 @@
                       <h2>▶ 상속공제에 따른 비교 </h2>
 
 
-
                         <label for="inheritanceDeduction1">상속공제가 10억일 경우( 일괄공제 5억 + 배우자공제 5억)</label><br>
                         <input type="number" id="inheritanceDeduction1" name="상속공제" value="1000000000" readonly=""><br><br>
 
                         
 
-                        <label for="inheritanceDeduction2">상속공제 모두 받을경우 상속공제 합계액:</label><br>
-                        <input type="text" id="inheritanceDeduction2" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 위 상속공제 합계 ">
+                        <label for="inheritanceDeduction2">상속공제 모두 받을경우 상속공제 합계액:</label><br>                       
+                        <input type="text" id="inheritanceDeduction2" readonly>
+
                         <br>
 
                         <button onclick="performDeductionComparison()">계산</button>
@@ -1195,13 +1195,15 @@
                     <div id="step19" style="display: none;"> <!--노인연금     --------------------------------------------->
                         <h2>◈ 홀로 남은 배우자가 기초연금을 받기 위해서 재산과 소득이 얼마 이하여야 하나요 ?</h2>
 
-
-                        <h4> ▶ 대상자</h4>
-                        <p>기초연금은 만 65세 이상이고 대한민국 국적을 가지고 국내에 거주하는 어르신을 위한 연금입니다.</p>
+                        <details>
+                            <summary>기초연금 대상자</summary>
+                            <h4> ▶ 대상자</h4>
+                        <p>기초연금은 만 65세 이상이고, 대한민국 국적을 가지고 국내에 거주하며, 소득인정액일 일정한 금액 이하여야 합니다.</p>
 
 
                         <h4>▶ 소득인정액계산</h4>
-                        <p> 매월 벌어들이는 소득과 소유하고 있는 재산을 소득으로 환산. 즉 소득평가액 + 재산의 소득환산액으로 계산합니다.</p>
+                        <p> 매월 벌어들이는 소득과 소유하고 있는 재산을 소득으로 환산. <br>
+                            즉, 소득평가액 + 재산의 소득환산액으로 계산합니다.</p>
 
                         <h4>▶ 소득평가액</h4>
                         <p>소득평가액 = {0.7 x (월근로수입 - 108만원)}(A) + 기타소득(B)</p>
@@ -1236,7 +1238,10 @@
                             </tbody>
                         </table>   <br>
 
-                        <h3>소득인정액 계산해 보기 </h3>
+                        </details>
+                        
+                       
+                        <h2>소득인정액 계산해 보기 </h2>
 
                         <h4>▶ 소득평가액</h4>
 
@@ -1667,10 +1672,20 @@ document.getElementById('deductionForm').addEventListener('submit', function(e) 
 
     let totalDeduction = spouseDeduction + cohabitationDeduction + financialDeduction + basicDeduction;
     
-    // 상속공제 합계금액을 굵은 천단위 구분표로 HTML에 표시
-    document.getElementById('totalDeductionResult').innerHTML = `<strong>${totalDeduction.toLocaleString()}</strong>`;
+    document.getElementById('totalDeductionResult').textContent = totalDeduction.toLocaleString();
+    
+    let inheritanceDeduction2Input = document.getElementById('inheritanceDeduction2');
+    if (inheritanceDeduction2Input) {
+        inheritanceDeduction2Input.value = totalDeduction.toLocaleString();
+    } else {
+        console.error('inheritanceDeduction2 element not found');
     }
+}
 
+document.addEventListener('DOMContentLoaded', function() {
+    updateTotalDeduction();
+    // 이 코드는 DOM이 로드된 후 실행되며, inheritanceDeduction2 요소가 존재하는지 확인합니다. 요소가 없으면 콘솔에 오류 메시지를 출력합니다. 이 방법으로 문제를 더 쉽게 진단할 수 있을 것입니다.
+});
 
 
    // 상속공제에 따른 상속세 비교
