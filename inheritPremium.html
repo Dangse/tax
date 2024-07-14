@@ -46,6 +46,9 @@
 
 
                     <div id="step1" style="display: block;">
+
+                        <button onclick="loadAllData()">입력 데이터 불러오기</button> <br><br>
+
                         <h2>상속인이 되는 자녀수와 주택가격</h2>
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
                             <input type="number" id="childrensNumber" placeholder="자녀  명 ">
@@ -1370,12 +1373,20 @@
                                     </ul>
                                 </td>
 
-                            </tr></tbody></table>
+                            </tr></tbody></table><br><br>
+
+
+                            <button onclick="saveAllData()">입력 데이터 저장</button> <br>  
+                            <p>
+                                ፠ 입력한 데이터는 사용자의 컴퓨터 웹브라우저에서만 저장됩니다. 
+                                <a href="https://tuzaga.com/%eb%a1%9c%ec%bb%ac-%ec%8a%a4%ed%86%a0%eb%a6%ac%ec%a7%80-%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80%ec%97%90-%ec%a0%80%ec%9e%a5%ed%95%9c%eb%8b%a4%eb%8a%94-%ea%b2%83%ec%9d%98-%ec%9d%98%eb%af%b8/" target="_blank" rel="noopener noreferrer">자세히 알아보기</a>
+                            </p> <br><br>
 
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
 
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(19); ">뒤로가기</button>
+                                <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>
 
                             </div>
                         </div>
@@ -2280,6 +2291,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const recognizedIncome = calculateRecognizedIncome(incomeEvaluation, propertyIncomeConversion);
 
         const resultElement = document.getElementById('resultPention');
+
         resultElement.innerHTML = `
         <h3>상세 계산 내역</h3>
         <p class="resultPention"><strong>소득평가액: ${incomeEvaluation.toLocaleString()}원</strong></p>
@@ -2302,8 +2314,8 @@ document.addEventListener('DOMContentLoaded', function() {
             </ul>
         </p>
 
-        <p class="resultPention"><strong>소득인정액: ${recognizedIncome.toLocaleString()}원<strong></p>
-
+        <h2 class="resultPention"><strong>소득인정액: ${recognizedIncome.toLocaleString()}원<strong></h2>
+        
         <p>
             <ul>
                 <li>소득인정액 = 소득평가액 + 재산소득환산액</li>
@@ -2339,6 +2351,47 @@ document.addEventListener('DOMContentLoaded', function() {
         element.addEventListener("click", scrollToTarget);
     });
 
+
+    // 입력데이터만 로컬스토리지 브라우저에 저장하는 함수
+
+    function saveAllData() {
+            const data = {};
+            
+            // 모든 입력 필드의 값을 수집
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                data[input.id] = input.value;
+            });
+            
+            
+            
+            // 데이터를 로컬 스토리지에 저장
+            localStorage.setItem('inheritanceTaxData', JSON.stringify(data));
+            alert('모든 데이터가 저장되었습니다!');
+        }
+        
+        function loadAllData() {
+            const savedData = localStorage.getItem('inheritanceTaxData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // 모든 입력 필드에 저장된 값을 설정
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.tagName === 'INPUT' || element.tagName === 'SELECT' || element.tagName === 'TEXTAREA') {
+                            element.value = data[key];
+                        } else {
+                            element.textContent = data[key];
+                        }
+                    }
+                });
+                
+                alert('저장된 데이터를 불러왔습니다!');
+            } else {
+                alert('저장된 데이터가 없습니다.');
+            }
+        }
 
 </script>
 

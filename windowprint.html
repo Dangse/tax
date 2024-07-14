@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프린트 예제</title>
+    <style>
+        .printable {
+            /* 프린트할 영역 스타일 */
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .printable, .printable * {
+                visibility: visible;
+            }
+            .printable {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>전체 페이지 내용</h1>
+    <p>이 부분은 프린트되지 않습니다.</p>
+    
+    <div class="printable">
+        <h2>프린트될 영역</h2>
+        <p>이 영역만 프린트됩니다.</p>
+    </div>
+    
+    <button onclick="window.print()">프린트</button>
+</body>
+</html>
