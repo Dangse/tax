@@ -295,3 +295,190 @@ details > div {
   padding: 20px;
   background-color: white;
 }
+
+
+@media print {
+  /* 프린트 시 숨길 요소들 */
+  .no-print,
+  button,
+  .navigation,
+  [id^="calculator-"],
+  .modal,
+  .close {
+    display: none !important;
+  }
+
+  /* 프린트 시 표시할 요소들 */
+  body,
+  .content,
+  [id^="step"],
+  .modal-content,
+  .result-area {
+    display: block !important;
+  }
+
+  /* 전체 레이아웃 설정 */
+  body {
+    font-size: 9pt;
+    line-height: 1.3;
+    margin: 0;
+    padding: 10mm;
+    color: #000;
+    background-color: #fff;
+  }
+
+  .content {
+    width: 100% !important;
+    max-width: none;
+  }
+
+  /* 페이지 나눔 설정 */
+  h1, h2, h3 {
+    page-break-after: avoid;
+    break-after: avoid-page;
+    margin-top: 0.5em;
+    margin-bottom: 0.3em;
+  }
+
+  p, li, .tip, table, figure {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* 기본사항 스타일 */
+  .basic-info {
+    border: 1px solid #000;
+    padding: 3px;
+    margin-bottom: 8px;
+    font-size: 8pt;
+  }
+
+  /* 표 스타일 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    font-size: 8pt;
+  }
+
+  th, td {
+    border: 0.5pt solid #000;
+    padding: 2px;
+    text-align: left;
+  }
+
+  /* 페이지 번호 */
+  @page {
+    margin: 10mm;
+    @bottom-right {
+      content: "페이지 " counter(page) " / " counter(pages);
+      font-size: 8pt;
+    }
+  }
+
+  /* 각 섹션 스타일 */
+  [id^="step"] {
+    margin-bottom: 10px;
+    border-bottom: 0.5pt solid #ccc;
+    padding-bottom: 5px;
+  }
+
+  /* 목차 스타일 */
+  .tax-tips {
+    column-count: 2;
+    column-gap: 10px;
+    font-size: 8pt;
+  }
+
+  .tax-tips .tip {
+    margin-bottom: 5px;
+    break-inside: avoid;
+  }
+
+  /* 입력 필드와 결과 영역 스타일 */
+  input, select, .result-area {
+    border: none;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 9pt;
+  }
+
+  /* 모달 내용 표시 */
+  .modal-content {
+    position: static;
+    break-inside: avoid;
+    font-size: 9pt;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* 링크 스타일 */
+  
+  a, a:link, a:visited {
+    text-decoration: none !important;
+    color: #000 !important;
+  }
+
+  /* 링크 주소 출력 제거 */
+  a::after {
+    content: none !important;
+  }
+
+  /* 브라우저 기본 동작 재정의 */
+  a[href^="http"]::after,
+  a[href^="https"]::after,
+  a[href^="/"]::after {
+    content: "" !important;
+  }
+
+  /* 2단 레이아웃 적용 */
+  .two-column {
+    column-count: 2;
+    column-gap: 20px;
+}
+
+  .two-column > * {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+  /* 프린트할 영역 지정 */
+  .printable, .printable * {
+    visibility: visible;
+  }
+
+  .printable {
+    position: static;
+  }
+
+  /* 특정 ID를 가진 요소만 프린트 */
+  #print-section, #print-section * {
+    visibility: visible;
+  }
+
+  /* 페이지 나눔 제어 */
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* 이미지 최적화 */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* 배경색 및 그림자 제거 */
+  * {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
