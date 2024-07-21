@@ -81,8 +81,18 @@ function calculateInheritanceTax() {
     var giftFromMother = parseFloat(document.getElementById('giftFromMother').value.replace(/,/g, '')) || 0;
     var giftToChildren = parseFloat(document.getElementById('giftToChildren').value.replace(/,/g, '')) || 0;
     var giftToOthers = parseFloat(document.getElementById('giftToOthers').value.replace(/,/g, '')) || 0;
-    var inheritanceDeduction = parseFloat(document.getElementById('inheritanceDeduction').value.replace(/,/g, '')) || 1000000000; 
-    var appraisalFee = parseFloat(document.getElementById('appraisalFee').value.replace(/,/g, '')) || 5000000;
+
+    // 배우자 유무에 따른 상속공제 자동 설정
+    var hasSpouse = document.getElementById('hasSpouse').checked;
+    var inheritanceDeduction = hasSpouse ? 1000000000 : 500000000;
+    document.getElementById('inheritanceDeduction').value = inheritanceDeduction.toLocaleString();
+
+    var inputAppraisalFee = parseFloat(document.getElementById('appraisalFee').value.replace(/,/g, '')) || 0;
+
+    // 감정평가비는 최대 5,000,000원까지만 인정
+    var appraisalFee = Math.min(inputAppraisalFee, 5000000);
+    document.getElementById('appraisalFee').value = appraisalFee.toLocaleString();
+
     var giftTaxDeduction = parseFloat(document.getElementById('giftTaxDeduction').value.replace(/,/g, '')) || 0;
 
     var totalProperty = houseValue + buildingValue + agriculturalLandValue + forestLandValue + otherProperty;
@@ -104,7 +114,16 @@ function calculateInheritanceTax() {
     document.getElementById('calculatedTaxValueCell').innerText = calculatedTax.toLocaleString();
     document.getElementById('taxDeductionValueCell').innerText = taxDeduction.toLocaleString();
     document.getElementById('payableTaxValueCell').innerText = payableTax.toLocaleString();
+    
 }
+
+
+function updateInheritanceDeduction() {
+    var hasSpouse = document.getElementById('hasSpouse').checked;
+    var inheritanceDeduction = hasSpouse ? 1000000000 : 500000000;
+    document.getElementById('inheritanceDeduction').value = inheritanceDeduction.toLocaleString();
+}
+
 // 상속세율표
 
 function calculateInheritTariff(taxBase) {
@@ -183,4 +202,9 @@ function calculateInheritTariff(taxBase) {
         return [property_tax, dosi_tax, p_edu_tax];
     
         };
+
+        // 모든 연결은 상속세 절세보고서 프리미엄으로 이동
+        function goToPremiumPage() {
+            window.location.href = 'https://dangse.github.io/tax/inheritPremium.html';
+        }
 

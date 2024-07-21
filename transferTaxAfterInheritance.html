@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css\styles\layouts_simpleCalculator.css">
     
     <title>상속으로 인한 양도세 시뮬레이션</title>
    
@@ -53,6 +53,20 @@
     <button onclick="calculateAllTaxes()">모두 계산하기</button>
 
     <div id="resultTableTrance" style="display:none;"></div>
+
+    <div class="result">
+        <ul>
+            <li>상속세는 줄일수 있는 세금입니다.</li>
+            <li>상속으로 인한 취득세, 상속받은 물건을 팔때 양도세, 1세대 1주택 비과세 등 중요한 문제가 많습니다</li>
+            
+            <li>상속,취득,양도,종부세 한번에 줄이는 모든 방법이 [상속세 절세 보고서]에 담겨 있습니다.</li>
+
+        </ul>
+     <br>
+    
+
+   
+    <button class="premium-button" onclick="goToPremiumPage()">진짜! 상속,취득,양도,종부세 한번에 줄이기 ! [ 상속세 절세 보고서 ]</button>
 
     <script>
     let results = {};
@@ -180,6 +194,12 @@
         document.getElementById('resultTableTrance').innerHTML = tableHtml;
         document.getElementById('resultTableTrance').style.display = 'block';
     }
+
+    // 모든 연결은 상속세 절세보고서 프리미엄으로 이동
+    function goToPremiumPage() {
+            window.location.href = 'https://dangse.github.io/tax/inheritPremium.html';
+        }
+
     </script>
 </body>
 </html>

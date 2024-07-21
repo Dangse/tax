@@ -2,20 +2,19 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>상속주택 취득세 계산기</title>
+    <title>상속주택 취득세 계산</title>
     
         
        
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/styles.css">     
-        <script src="js/script.js"></script>
-
+        <link rel="stylesheet" href="css\styles\layouts_simpleCalculator.css"> 
+        
       
 
 </head>
 <body>
-    <h1>상속주택 취득세 계산기</h1>
+    <h2>상속주택 취득세 계산</h2>
     
     <label for="marketValue">시가표준액:</label>
     <input type="text" id="marketValue"  inputmode="numeric"  oninput="formatNumber(this)" placeholder="시가표준액 입력">
@@ -28,45 +27,39 @@
     <div>
         <input type="checkbox" id="firstTimeHomeBuyer">
         <label for="firstTimeHomeBuyer">무주택자 상속 여부</label>
-    </div>
+    </div> 
 
     <button onclick="calculateTax()">취득세 계산</button>
 
     <h3>계산 결과</h3>
-    <div id="result"></div>
+    <strong><div id="result" class="result"></div></strong><br>
 
-    <h3>세율표</h3>
-    <table id="taxTable">
-        <tr>
-            <th>구분</th>
-            <th>총세율</th>
-            <th>취득세</th>
-            <th>농특세</th>
-            <th>지방교육세</th>
-        </tr>
-        <tr>
-            <td>특례 〇</td>
-            <td>0.96%</td>
-            <td>0.8%</td>
-            <td>비과세</td>
-            <td>0.16%</td>
-        </tr>
-        <tr>
-            <td>특례X, 국민주택규모〇</td>
-            <td>2.96%</td>
-            <td>2.8%</td>
-            <td>비과세</td>
-            <td>0.16%</td>
-        </tr>
-        <tr>
-            <td>특례X, 국민주택규모X</td>
-            <td>3.16%</td>
-            <td>2.8%</td>
-            <td>0.2%</td>
-            <td>0.16%</td>
-        </tr>
-    </table>
-
+    <p style="text-align: center; font-weight: bold; margin: 20px 0;"><strong>이 보다 세금을 많이 냈어요?  지금 당장 문의하세요!</strong></p><br>
+    
+    <div class="contact-form">
+        <h2> 상담 문의하기</h2>
+        <form id="questionForm" onsubmit="return submitForm()">
+            <div class="form-group">
+                <label for="name">이름:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">전화번호:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="message">문의사항:</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">문의하기</button>
+        </form>
+    </div>
+    
+    
     <script>
         function formatNumber(el) {
             var value = el.value.replace(/[^0-9]/g, '');
@@ -87,7 +80,7 @@
             }
         
             var tax = marketValue * (taxRate / 100);
-            document.getElementById('result').innerText = `계산된 취득세: ${tax.toLocaleString()}원`;
+            document.getElementById('result').innerText = ` ${tax.toLocaleString()}원`;
             document.getElementById('result').style.display = 'block'; // Show the result
             document.getElementById('taxTable').style.display = 'table'; // Show the tax table
         }

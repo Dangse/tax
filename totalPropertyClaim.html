@@ -5,13 +5,15 @@
 <head>
   <title>종합부동산세 계산기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css\styles\layouts_simpleCalculator.css">
   
 </head>
 <body>
-  <h1>상속후 종합부동산세 너무 많다고요 ?</h1>
+  <h2>상속후 종합부동산세 너무 많다고요 ?</h2>
+
   <p>상속받은 주택이 추가되면서 세금이 얼마나 늘어날지 궁금하신가요? 상속 전후의 재산세와 종부세를 비교해보세요.</p>
-  <h4>▶ 상속 후 재산세 비교</h4>
+
+  <h3>▶ 상속 후 재산세 비교</h3>
 <label for="owned_houses">상속 전 나의 소유주택 수:</label>
 <input type="text" id="owned_houses" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속 전 주택수">
   
@@ -26,6 +28,7 @@
 <input type="text" id="gongsi_2" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속받은 주택분 공시가">
   
   <button onclick="comparePropertyTax()">계산하기</button>
+  <p><strong>계산결과 :</strong></p>
   <table id="resultTableProperty" style="display: none;">
     <thead>
       <tr>
@@ -59,7 +62,7 @@
   </table>
   <br>
 
-  <h4>▶ 상속후 종부세비교하기</h4>
+  <h3>▶ 상속후 종부세비교하기</h3>
   
 
   <label for="age">상속받는 나의 연령(만):</label>
@@ -69,31 +72,37 @@
   <input type="text" id="period" inputmode="numeric" placeholder="상속전 내가 보유한 주택의 보유기간(만)">
  
   <br>
-  <button onclick="compareComprehensiveTax()">계산</button>
-  
+  <button onclick="compareComprehensiveTax()">계산하기</button>
+  <p><strong>계산결과 :</strong></p>
   <div id="result"></div>
 
-  <p> 어떤가요?  여기서 계산한 것보다 세금이 더 많오나요  ? </p>
+  <p> 어떤가요?  여기서 계산한 것보다 세금이 더 많나요  ? </p>
 
-  <p> 그렇다면 상담 한번 하세요. 재산세와 종부세는 보유하고 있는 기간 동안 매년 나오는 세금입니다.  억울하게 그럴순 없잖아요!! </p>
+  <p> 그렇다면 상담 한번 하세요. 재산세와 종부세는 보유하고 있는 기간 동안 매년 나오는 세금입니다.  억울하게 이럴순 없잖아요! </p>
 
-  <h1>질문하기</h1>
+  <div class="contact-form">
+    <h2> 상담 문의하기</h2>
+    <form id="questionForm" onsubmit="return submitForm()">
+        <div class="form-group">
+            <label for="name">이름:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">이메일:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">전화번호:</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="message">문의사항:</label>
+            <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">문의하기</button>
+    </form>
+</div>
 
-  <form action="send_email.php" method="post">
-    <label for="name">이름:</label><br>
-    <input type="text" id="name" name="name" required><br>
-    
-    <label for="email">이메일:</label><br>
-    <input type="email" id="email" name="email" required><br>
-    
-    <label for="phone">전화번호:</label><br>
-    <input type="tel" id="phone" name="phone"><br>
-    
-    <label for="other_details">그 외 사항:</label><br>
-    <textarea id="other_details" name="other_details" rows="10" cols="100">상속받은 주택 주소와 종전부터 소유한 주택 주소 모두를 적어 주세요.(계산 시 필요) </textarea><br>
-    <br>
-    
-    <input type="submit" value="제출">
   <script>
   // 재산세 계산 함수
     function calc_property_tax(gongsiBefore, gongsiAfter, owned_houses, ownedHousesAfter) {

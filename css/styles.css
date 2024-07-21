@@ -482,3 +482,72 @@ details > div {
     box-shadow: none !important;
   }
 }
+
+.premium-cta-section {
+  background-color: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 30px;
+  margin: 40px 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+ /* 보고서 유도 디자인 */
+.premium-cta-section h3 {
+  color: #2c3e50;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.benefits-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.benefits-list li {
+  margin-bottom: 15px;
+  padding-left: 30px;
+  position: relative;
+  color: #34495e;
+  font-size: 16px;
+}
+
+.benefits-list li i {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  color: #27ae60;
+}
+
+.cta-button-container {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.premium-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premium-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.button-text {
+  margin-right: 10px;
+}
+
+.button-icon {
+  font-size: 24px;
+}
