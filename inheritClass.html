@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>당신의 세무사! 상속세 셀프신고 교실</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap');
+
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            padding: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            border-left: 6px solid var(--accent-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 15px 15px 0;
+            font-weight: 400;
+            position: relative;
+        }
+
+        .highlight h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+
+        .highlight ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .highlight li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .highlight li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .highlight-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .prep-item {
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .prep-item a {
+            display: flex;
+            padding: 1.2rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            flex-grow: 1;
+        }
+
+        .prep-item:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .prep-item:hover a {
+            color: var(--primary-color);
+            padding-left: 1.8rem;
+        }
+
+        .prep-item::after {
+            content: '→';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .prep-item:hover::after {
+            opacity: 1;
+            right: 15px;
+        }
+
+        .prep-item-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 25%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://tuzaga.com/wp-content/uploads/%EC%BA%A1%EC%B2%98-14.png" alt="상속세 셀프신고 배경" class="header-image">
+        <h1>당신의 세무사! 상속세 셀프신고 교실</h1>
+    </header>
+    
+    <div class="container">
+        <section class="section fade-in">
+            <h2>상속세 절세 보고서 ! 상속세 셀프 신고!!</h2>
+            <p>상속세는 최대 50%의 세율이 적용되기 때문에 세법 절세방법을 잘 활용하여 세금을 절약하는 것이 중요합니다.</p>
+            
+            <div class="highlight">
+                <img src="https://tuzaga.com/wp-content/uploads/%EB%8F%88%EC%9C%BC%EB%A1%9C-%EB%A7%8C%EB%93%A0-%ED%86%A0%EB%81%BC-1.jpg" alt="상속세 절세 아이콘" class="highlight-image">
+                <h3>상속세 절세 보고서 ! 상속세 셀프 신고 !</h3>
+                <ul>
+                    <li><strong>확인해보셨나요?</strong> 당신만을 위한 맞춤형 절세 전략!</li>
+                    <li><strong>순서에 따라 진행하면,</strong> 어느새 납부해야 할 상속세가 반토막!</li>
+                    <li><strong>따라가다 보면 어느새,</strong> 상속세 신고서 완성!</li>
+                    <li><strong>궁금한 점이 있다면,</strong> 당신의 세무사가 직접 오프라인에서 상담!!</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="section fade-in delay-1">
+            <h2>상속세 신고를 위한 간단 준비목록</h2>
+            <div class="prep-item fade-in delay-2">
+                <img src="https://tuzaga.com/wp-content/uploads/%EC%BA%A1%EC%B2%98-14.png" alt="안심톡 아이콘" class="prep-item-image">
+                <a href="#">안심톡원스톱서비스/상속재산목록 파악</a>
+            </div>
+            <div class="prep-item fade-in delay-2">
+                <img src="https://tuzaga.com/wp-content/uploads/%EB%8F%88%EC%9C%BC%EB%A1%9C-%EB%A7%8C%EB%93%A0-%ED%86%A0%EB%81%BC-1.jpg" alt="📌" class="prep-item-image">
+                <a href="#">사전증여재산의 파악 ➜ 국세청홈텍스조회/세무서방문조회</a>
+            </div>
+            <div class="prep-item fade-in delay-3">
+                <img src="https://tuzaga.com/wp-content/uploads/jess-bailey-l3N9Q27zULw.jpg" alt="절세 솔루션 아이콘" class="prep-item-image">
+                <a href="https://dangse.github.io/tax/inheritPremium.html">자! 이제 절세 솔루션으로 고!</a>
+            </div>
+            <div class="prep-item fade-in delay-3">
+                <img src="https://tuzaga.com/wp-content/uploads/mikhail-pavstyuk-EKy2OTRPXdw.jpg" alt="상속세 신고 아이콘" class="prep-item-image">
+                <a href="#">오! 내친김에 상속세 신고로 고고!</a>
+            </div>
+            <div class="prep-item fade-in delay-3">
+                <img src="https://tuzaga.com/wp-content/uploads/career-g73c2dd2d1_1280.jpg" alt="증여 아이콘" class="prep-item-image">
+                <a href="https://tuzaga.com/circumstance-calc/">미리 증여해서 절세하고 싶어요!</a>
+            </div>
+            <div class="prep-item fade-in delay-2">
+                <img src="https://tuzaga.com/wp-content/uploads/21.png" alt="한정승인 아이콘" class="prep-item-image">
+                <a href="#">한정승인/상속포기를 생각해 봐야 할 상황인가요?</a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

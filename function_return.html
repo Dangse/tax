@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript return 문 예제</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+        }
+        #output {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript return 문의 기능과 반환 형태</h1>
+    
+    <h2>1. return의 기본 기능</h2>
+    <p>return 문은 함수의 실행을 종료하고, 지정된 값을 함수의 호출 지점으로 반환합니다.</p>
+    <pre>
+function greet(name) {
+    return "안녕하세요, " + name + "님!";
+}
+    </pre>
+    <button onclick="showResult(greet('홍길동'))">실행</button>
+
+    <h2>2. 다양한 반환 형태</h2>
+    
+    <h3>2.1 문자열 반환</h3>
+    <pre>
+function returnString() {
+    return "이것은 문자열입니다.";
+}
+    </pre>
+    <button onclick="showResult(returnString())">실행</button>
+
+    <h3>2.2 숫자 반환</h3>
+    <pre>
+function returnNumber() {
+    return 42;
+}
+    </pre>
+    <button onclick="showResult(returnNumber())">실행</button>
+
+    <h3>2.3 불리언 반환</h3>
+    <pre>
+function returnBoolean(value) {
+    return value > 10;
+}
+    </pre>
+    <button onclick="showResult(returnBoolean(15))">실행 (15)</button>
+    <button onclick="showResult(returnBoolean(5))">실행 (5)</button>
+
+    <h3>2.4 객체 반환</h3>
+    <pre>
+function returnObject() {
+    return { name: "홍길동", age: 30 };
+}
+    </pre>
+    <button onclick="showResult(returnObject())">실행</button>
+
+    <h3>2.5 배열 반환</h3>
+    <pre>
+function returnArray() {
+    return [1, 2, 3, 4, 5];
+}
+    </pre>
+    <button onclick="showResult(returnArray())">실행</button>
+
+    <h3>2.6 함수 반환 (고차 함수)</h3>
+    <pre>
+function returnFunction() {
+    return function(x) { return x * x; };
+}
+    </pre>
+    <button onclick="showResult(returnFunction()(4))">실행 (4의 제곱)</button>
+
+    <h3>2.7 undefined 반환</h3>
+    <pre>
+function returnUndefined() {
+    return;
+}
+    </pre>
+    <button onclick="showResult(returnUndefined())">실행</button>
+
+    <div id="output"></div>
+
+    <script>
+        function greet(name) {
+            return "안녕하세요, " + name + "님!";
+        }
+
+        function returnString() {
+            return "이것은 문자열입니다.";
+        }
+
+        function returnNumber() {
+            return 42;
+        }
+
+        function returnBoolean(value) {
+            return value > 10;
+        }
+
+        function returnObject() {
+            return { name: "홍길동", age: 30 };
+        }
+
+        function returnArray() {
+            return [1, 2, 3, 4, 5];
+        }
+
+        function returnFunction() {
+            return function(x) { return x * x; };
+        }
+
+        function returnUndefined() {
+            return;
+        }
+
+        function showResult(result) {
+            document.getElementById('output').innerHTML = 
+                '결과: ' + JSON.stringify(result) + 
+                '<br>타입: ' + typeof result;
+        }
+    </script>
+</body>
+</html>
