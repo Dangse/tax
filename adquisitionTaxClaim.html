@@ -2,8 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>상속주택 취득세 계산</title>
-    
+    <title>상속주택 취득세 계산</title>  
         
        
         
@@ -15,7 +14,7 @@
 </head>
 <body>
     <h2>상속주택 취득세 계산</h2>
-    
+    <button onclick="loadContent()">저장내용 불러오기</button><br><br>
     <label for="marketValue">시가표준액:</label>
     <input type="text" id="marketValue"  inputmode="numeric"  oninput="formatNumber(this)" placeholder="시가표준액 입력">
     
@@ -34,7 +33,7 @@
     <h3>계산 결과</h3>
     <strong><div id="result" class="result"></div></strong><br>
 
-    <p style="text-align: center; font-weight: bold; margin: 20px 0;"><strong>이 보다 세금을 많이 냈어요?  지금 당장 문의하세요!</strong></p><br>
+    <p style="text-align: center; font-weight: bold; margin: 20px 0;"><strong>이 보다 세금을 많이 냈셨나요?  지금 문의 주세요!</strong></p><br>
     
     <div class="contact-form">
         <h2> 상담 문의하기</h2>
@@ -55,9 +54,21 @@
                 <label for="message">문의사항:</label>
                 <textarea id="message" name="message" required></textarea>
             </div>
-            <button type="submit" class="submit-btn">문의하기</button>
+            
         </form>
     </div>
+    
+    <button onclick="saveContent()">저장하기</button>
+    
+    <button id="printButton" onclick="printContent()">인쇄하기</button>
+   
+    <p style="font-weight: bold; text-align: center;">* 문의하기는 PDF 인쇄 후 tax@taxdh.net 로 보내주세요.</p>
+
+
+
+
+
+
     
     
     <script>
@@ -83,7 +94,57 @@
             document.getElementById('result').innerText = ` ${tax.toLocaleString()}원`;
             document.getElementById('result').style.display = 'block'; // Show the result
             document.getElementById('taxTable').style.display = 'table'; // Show the tax table
+
+            var result = "계산된 취득세: ..."; // 실제 계산 결과로 대체하세요
+            document.getElementById('result').innerText = result;
+            }
+
+        
+    function saveContent() {
+    var data = {
+        marketValue: document.getElementById('marketValue').value,
+        nationalHousing: document.querySelector('input[name="nationalHousing"]:checked')?.value,
+        firstTimeHomeBuyer: document.querySelector('input[name="firstTimeHomeBuyer"]:checked')?.value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        message: document.getElementById('message').value
+    };
+
+    localStorage.setItem('taxCalculationData', JSON.stringify(data));
+    alert('데이터가 저장되었습니다.');
+   }
+
+   
+    function loadContent() {
+        const savedData = localStorage.getItem('taxCalculationData');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            
+            document.getElementById('marketValue').value = data.marketValue || '';
+            
+            if (data.nationalHousing) {
+                document.querySelector(`input[name="nationalHousing"][value="${data.nationalHousing}"]`).checked = true;
+            }
+            
+            if (data.firstTimeHomeBuyer) {
+                document.querySelector(`input[name="firstTimeHomeBuyer"][value="${data.firstTimeHomeBuyer}"]`).checked = true;
+            }
+            
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('phone').value = data.phone || '';
+            document.getElementById('message').value = data.message || '';
+            
+            alert('저장된 데이터를 불러왔습니다.');
+        } else {
+            alert('저장된 데이터가 없습니다.');
         }
+    }
+
+        function printContent() {
+        window.print();
+    }
     </script>
 </body>
 </html>

@@ -5,13 +5,14 @@
 <head>
   <title>종합부동산세 계산기</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css\styles\layouts_simpleCalculator.css">
-  
+  <link rel="stylesheet" href="css\styles\layouts_simpleCalculator.css"> 
+
 </head>
 <body>
   <h2>상속후 종합부동산세 너무 많다고요 ?</h2>
 
   <p>상속받은 주택이 추가되면서 세금이 얼마나 늘어날지 궁금하신가요? 상속 전후의 재산세와 종부세를 비교해보세요.</p>
+  <button id="loadFormData" type="button">불러오기</button>
 
   <h3>▶ 상속 후 재산세 비교</h3>
 <label for="owned_houses">상속 전 나의 소유주택 수:</label>
@@ -78,7 +79,7 @@
 
   <p> 어떤가요?  여기서 계산한 것보다 세금이 더 많나요  ? </p>
 
-  <p> 그렇다면 상담 한번 하세요. 재산세와 종부세는 보유하고 있는 기간 동안 매년 나오는 세금입니다.  억울하게 이럴순 없잖아요! </p>
+  <p>  재산세와 종부세는 보유하고 있는 기간 동안 매년 나오는 세금입니다. 지금 상담 하세요. </p>
 
   <div class="contact-form">
     <h2> 상담 문의하기</h2>
@@ -99,11 +100,24 @@
             <label for="message">문의사항:</label>
             <textarea id="message" name="message" required></textarea>
         </div>
-        <button type="submit" class="submit-btn">문의하기</button>
+       
     </form>
 </div>
+<button id="saveFormData" type="button">저장</button>
+<button id="printButton" onclick="printContent()">인쇄하기</button>
+   
+    <p style="font-weight: bold; text-align: center;">* 문의하기는 PDF 인쇄 후 tax@taxdh.net 로 보내주세요.</p>
 
   <script>
+
+  // 숫자 입력시 콤마 추가 함수
+  function formatNumber(input) {
+          // Remove commas and non-numeric characters
+          let numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
+          // Format with commas and update the input value
+          input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
   // 재산세 계산 함수
     function calc_property_tax(gongsiBefore, gongsiAfter, owned_houses, ownedHousesAfter) {
   // 1세대 1주택 여부에 따른 과세표준 비율 결정
@@ -407,12 +421,67 @@ let period = parseInt(document.getElementById('period').value) || 0;
   document.getElementById('result').innerHTML = table;
 }
 
-function formatNumber(input) {
-            // Remove commas and non-numeric characters
-            let numericValue = input.value.replace(/,/g, '').replace(/\D/g, '');
-            // Format with commas and update the input value
-            input.value = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }    
+// 폼 데이터를 저장하는 함수
+function saveFormData() {
+    const formData = {
+        // 상속 후 재산세 비교
+        owned_houses: document.getElementById('owned_houses').value,
+        gongsi_1: document.getElementById('gongsi_1').value,
+        ownedHousesAfter: document.getElementById('ownedHousesAfter').value,
+        gongsi_2: document.getElementById('gongsi_2').value,
+        
+        // 상속후 종부세 비교
+        age: document.getElementById('age').value,
+        period: document.getElementById('period').value,
+        
+        // 상담 문의하기
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        message: document.getElementById('message').value
+    };
+    
+    localStorage.setItem('propertyTaxFormData', JSON.stringify(formData));
+    alert('데이터가 저장되었습니다.');
+}
+
+// 저장된 폼 데이터를 불러오는 함수
+function loadFormData() {
+    const savedData = localStorage.getItem('propertyTaxFormData');
+    if (savedData) {
+        const formData = JSON.parse(savedData);
+        
+        // 상속 후 재산세 비교
+        document.getElementById('owned_houses').value = formData.owned_houses || '';
+        document.getElementById('gongsi_1').value = formData.gongsi_1 || '';
+        document.getElementById('ownedHousesAfter').value = formData.ownedHousesAfter || '';
+        document.getElementById('gongsi_2').value = formData.gongsi_2 || '';
+        
+        // 상속후 종부세 비교
+        document.getElementById('age').value = formData.age || '';
+        document.getElementById('period').value = formData.period || '';
+        
+        // 상담 문의하기
+        document.getElementById('name').value = formData.name || '';
+        document.getElementById('email').value = formData.email || '';
+        document.getElementById('phone').value = formData.phone || '';
+        document.getElementById('message').value = formData.message || '';
+
+        alert('저장된 데이터를 불러왔습니다.');
+    } else {
+        alert('저장된 데이터가 없습니다.');
+    }
+}
+
+// 이벤트 리스너 설정
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('saveFormData').addEventListener('click', saveFormData);
+    document.getElementById('loadFormData').addEventListener('click', loadFormData);
+});
+
+function printContent() {
+        window.print();
+    }
   </script>
 </body>
 </html>

@@ -3,35 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프린트 예제</title>
+    <title>개선된 선택적 프린트 예제</title>
     <style>
-        .printable {
-            /* 프린트할 영역 스타일 */
+        /* 기존 스타일 유지 및 수정 */
+        .print-section {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        .print-checkbox {
+            margin-right: 10px;
         }
         @media print {
-            body * {
-                visibility: hidden;
+            .no-print {
+                display: none !important;
             }
-            .printable, .printable * {
-                visibility: visible;
+            .print-section {
+                display: none;
             }
-            .printable {
-                position: absolute;
-                left: 0;
-                top: 0;
+            .print-section.print-this {
+                display: block !important;
             }
         }
     </style>
 </head>
 <body>
-    <h1>전체 페이지 내용</h1>
-    <p>이 부분은 프린트되지 않습니다.</p>
-    
-    <div class="printable">
-        <h2>프린트될 영역</h2>
-        <p>이 영역만 프린트됩니다.</p>
+    <div class="no-print">
+        <h1>개선된 선택적 프린트 예제</h1>
+        <button onclick="preparePrint()">프린트 미리보기</button>
     </div>
-    
-    <button onclick="window.print()">프린트</button>
+
+    <div class="print-section" id="section1">
+        <label class="no-print">
+            <input type="checkbox" class="print-checkbox" checked onchange="updatePrintClass(this)"> 이 섹션 프린트하기
+        </label>
+        <h2>섹션 1</h2>
+        <p>이것은 섹션 1의 내용입니다.</p>
+    </div>
+
+    <div class="print-section" id="section2">
+        <label class="no-print">
+            <input type="checkbox" class="print-checkbox" checked onchange="updatePrintClass(this)"> 이 섹션 프린트하기
+        </label>
+        <h2>섹션 2</h2>
+        <p>이것은 섹션 2의 내용입니다.</p>
+    </div>
+
+    <div class="print-section" id="section3">
+        <label class="no-print">
+            <input type="checkbox" class="print-checkbox" checked onchange="updatePrintClass(this)"> 이 섹션 프린트하기
+        </label>
+        <h2>섹션 3</h2>
+        <p>이것은 섹션 3의 내용입니다.</p>
+    </div>
+
+    <script>
+        // 페이지 로드 시 모든 섹션에 print-this 클래스 추가
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.print-section');
+            sections.forEach(section => {
+                section.classList.add('print-this');
+            });
+        });
+
+        // 체크박스 상태 변경 시 즉시 print-this 클래스 업데이트
+        function updatePrintClass(checkbox) {
+            const section = checkbox.closest('.print-section');
+            if (checkbox.checked) {
+                section.classList.add('print-this');
+            } else {
+                section.classList.remove('print-this');
+            }
+        }
+
+        // 프린트 미리보기 함수
+        function preparePrint() {
+            window.print();
+        }
+    </script>
 </body>
 </html>

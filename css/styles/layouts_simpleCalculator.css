@@ -1,180 +1,152 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+    color: #2c3e50;
     max-width: 900px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 30px 20px;
     background-color: #f0f4f8;
 }
+
 h2 {
     color: #2c3e50;
     border-bottom: 3px solid #3498db;
     padding-bottom: 10px;
     text-align: center;
-    font-size: 2.5em;
+    font-size: 2.2em;
     margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
+
 form {
     background-color: #fff;
     padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
+
 label {
     display: inline-block;
     width: 220px;
     margin-bottom: 15px;
     color: #34495e;
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 1em;
 }
+
 input[type="text"], input[type="number"] {
     width: 220px;
     padding: 10px;
     margin-bottom: 15px;
     border: 2px solid #bdc3c7;
-    border-radius: 6px;
     transition: border-color 0.3s ease;
+    font-size: 0.95em;
 }
+
 input[type="text"]:focus, input[type="number"]:focus {
     border-color: #3498db;
     outline: none;
 }
-input[type="checkbox"] {
-    margin-right: 10px;
-    transform: scale(1.5);
-}
+
 button {
     background-color: #2ecc71;
     color: #fff;
-    width: 300px;  /* 버튼의 너비를 고정 */
-    height: 50px;  /* 버튼의 높이를 고정 */
+    width: 300px;
+    height: 50px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 1.1em;
+    font-weight: bold;
     transition: background-color 0.3s ease;
     display: block;
-    margin: 20px auto 0;
-    white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
-    overflow: hidden;  /* 내용이 넘칠 경우 숨김 */
-    text-overflow: ellipsis;  /* 넘친 텍스트를 ...으로 표시 */
+    margin: 25px auto 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* 호버 효과 (선택사항) */
 button:hover {
     background-color: #27ae60;
 }
-}
+
 table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
     margin-top: 30px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+
 th, td {
     padding: 15px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
 }
+
 th {
     background-color: #3498db;
     color: #fff;
     font-weight: bold;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
+
 tr:nth-child(even) {
     background-color: #f8f9fa;
 }
+
 tr:hover {
     background-color: #e8f4f8;
 }
 
-
 .result {
-margin-top: 30px;
-background: linear-gradient(135deg, #f6f9fc 0%, #e9f2f9 100%);
-padding: 25px;
-border-radius: 15px;
-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-border-left: 8px solid #3498db;
-position: relative;
-overflow: hidden;
-}
-
-.result::before {
-content: '';
-position: absolute;
-top: -10px;
-left: -10px;
-right: -10px;
-bottom: -10px;
-background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0) 100%);
-z-index: -1;
-transform: skew(-5deg);
+    margin-top: 30px;
+    background: linear-gradient(135deg, #f6f9fc 0%, #e9f2f9 100%);
+    padding: 25px;
+    border-left: 8px solid #3498db;
+    position: relative;
+    overflow: hidden;
 }
 
 .result ul {
-list-style-type: none;
-padding: 0;
-margin: 0;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
 .result li {
-font-size: 1.1em;
-color: #2c3e50;
-margin-bottom: 15px;
-padding-left: 30px;
-position: relative;
-line-height: 1.6;
-transition: all 0.3s ease;
+    font-size: 1.1em;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-left: 30px;
+    position: relative;
+    line-height: 1.6;
+    transition: color 0.3s ease;
 }
 
 .result li::before {
-content: '•';
-color: #3498db;
-font-size: 1.5em;
-position: absolute;
-left: 0;
-top: 50%;
-transform: translateY(-50%);
+    content: '•';
+    color: #3498db;
+    font-size: 1.5em;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .result li:hover {
-transform: translateX(5px);
-color: #2980b9;
+    color: #2980b9;
 }
 
 .result li:last-child {
-font-weight: bold;
-color: #e74c3c;
-border-top: 2px dashed #3498db;
-margin-top: 20px;
-padding-top: 15px;
+    font-weight: bold;
+    color: #e74c3c;
+    border-top: 2px dashed #3498db;
+    margin-top: 20px;
+    padding-top: 15px;
+    font-size: 1.2em;
 }
-
-@keyframes highlight {
-0% {
-background-position: -200% center;
-}
-100% {
-background-position: 200% center;
-}
-}
-
-.result li:last-child {
-background: linear-gradient(to right, #e74c3c 0%, #e74c3c 50%, #c0392b 100%);
-background-size: 200% auto;
-color: white;
--webkit-background-clip: text;
-background-clip: text;
--webkit-text-fill-color: transparent;
-animation: highlight 3s linear infinite;
-}
-
 
 .tooltip {
     position: relative;
@@ -182,13 +154,13 @@ animation: highlight 3s linear infinite;
     cursor: help;
     margin-left: 8px;
 }
+
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 220px;
     background-color: #34495e;
     color: #fff;
     text-align: center;
-    border-radius: 6px;
     padding: 10px;
     position: absolute;
     z-index: 1;
@@ -200,10 +172,12 @@ animation: highlight 3s linear infinite;
     font-size: 0.9em;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
+
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
 }
+
 .tooltip:after {
     content: '?';
     display: inline-block;
@@ -217,67 +191,158 @@ animation: highlight 3s linear infinite;
     line-height: 18px;
 }
 
-/* 새 버튼을 위한 스타일 추가 */
 .premium-button {
     background-color: #e74c3c;
     color: white;
     padding: 12px 24px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 1em;
     transition: background-color 0.3s ease;
     display: block;
     margin: 20px auto;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
+
 .premium-button:hover {
     background-color: #c0392b;
 }
 
-/* 컨택트 폼 디자인 */
 .contact-form {
     max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 40px auto;
+    padding: 25px;
+    background-color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
+
 .contact-form h2 {
-    color: #333;
+    color: #2c3e50;
     text-align: center;
+    margin-bottom: 25px;
+    font-size: 2em;
+}
+
+.form-group {
     margin-bottom: 20px;
 }
-.form-group {
-    margin-bottom: 15px;
-}
+
 .form-group label {
     display: block;
-    margin-bottom: 5px;
-    color: #666;
+    margin-bottom: 6px;
+    color: #34495e;
+    font-weight: 500;
 }
+
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 10px;
+    border: 2px solid #bdc3c7;
     box-sizing: border-box;
+    font-size: 1.2em;
+    transition: border-color 0.3s ease;
 }
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
 .form-group textarea {
-    height: 100px;
+    height: 120px;
+    resize: vertical;
 }
+
 .submit-btn {
     width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
+    padding: 12px;
+    background-color: #3498db;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
+
 .submit-btn:hover {
-    background-color: #45a049;
+    background-color: #2980b9;
+}
+
+.load-button, .save-button, .print-button {
+    background-color: #2ecc71;
+    color: #fff;
+    width: 300px;
+    height: 50px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin: 10px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.load-button:hover, .save-button:hover, .print-button:hover {
+    background-color: #27ae60;
+}
+
+.section-title {
+    font-size: 1.5em;
+    color: #2c3e50;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+.info-box {
+    background-color: #e8f6fd;
+    border-left: 4px solid #3498db;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.info-box p {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.highlight {
+    background-color: #fffde7;
+    padding: 2px 5px;
+}
+
+.note {
+    font-style: italic;
+    color: #7f8c8d;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 20px 10px;
+    }
+    
+    input[type="text"], input[type="number"] {
+        width: 100%;
+    }
+    
+    button, .load-button, .save-button, .print-button {
+        width: 100%;
+        margin: 10px 0;
+    }
 }
