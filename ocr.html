@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개선된 OCR 및 PDF 생성 예제</title>
+    <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js"></script>
+</head>
+<body>
+    <input type="file" id="imageInput" accept="image/*">
+    <button onclick="processImage()">이미지 처리 및 OCR 수행</button>
+    <canvas id="imageCanvas"></canvas>
+    <div>
+        <h3>OCR 결과:</h3>
+        <textarea id="ocrResult" rows="10" cols="50"></textarea>
+    </div>
+    <button onclick="generatePDF()">PDF 생성</button>
+
+    <script>
+        async function processImage() {
+            const imageFile = document.getElementById('imageInput').files[0];
+            if (!imageFile) {
+                alert('이미지를 선택해주세요.');
+                return;
+            }
+
+            const canvas = document.getElementById('imageCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const img = new Image();
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+
+                Caman(canvas, function () {
+                    this.brightness(10);
+                    this.contrast(10);
+                    this.sharpen(20);
+                    this.render(async function() {
+                        await performOCR(canvas);
+                    });
+                });
+            };
+            img.src = URL.createObjectURL(imageFile);
+        }
+
+        async function performOCR(canvas) {
+            try {
+                const worker = Tesseract.createWorker();
+                await worker.load();
+                await worker.loadLanguage('kor+eng');
+                await worker.initialize('kor+eng');
+                const { data: { text } } = await worker.recognize(canvas);
+                await worker.terminate();
+
+                const processedText = postProcessText(text);
+                document.getElementById('ocrResult').value = processedText;
+            } catch (error) {
+                console.error('OCR 오류:', error);
+                alert('OCR 처리 중 오류가 발생했습니다.');
+            }
+        }
+
+        function postProcessText(text) {
+            // 간단한 후처리 예시 (실제 사용 시 더 복잡한 로직이 필요할 수 있습니다)
+            return text.replace(/\s+/g, ' ')  // 여러 공백을 하나로 줄임
+                       .replace(/[^\w\s.,?!]/g, '')  // 특수 문자 제거
+                       .trim();  // 앞뒤 공백 제거
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const text = document.getElementById('ocrResult').value;
+            
+            doc.setFont("helvetica");
+            doc.setFontSize(12);
+
+            const splitText = doc.splitTextToSize(text, 180);
+            doc.text(splitText, 10, 10);
+
+            doc.save("개선된_OCR_결과.pdf");
+        }
+    </script>
+</body>
+</html>

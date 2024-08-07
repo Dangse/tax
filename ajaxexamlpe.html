@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문서 관리 인터페이스</title>
+    <style>
+        .button-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: #ddd;
+        }
+        #progress {
+            width: 0%;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button id="print-btn" class="button">프린트</button>
+        <button id="save-btn" class="button">저장</button>
+        <button id="send-btn" class="button">보내기</button>
+    </div>
+    <div id="progress-bar">
+        <div id="progress"></div>
+    </div>
+    <div id="status"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#print-btn').click(function() {
+                window.print();
+            });
+
+            $('#save-btn').click(function() {
+                performAction('save', '저장 중...');
+            });
+
+            $('#send-btn').click(function() {
+                performAction('send', '전송 중...');
+            });
+
+            function performAction(action, message) {
+                updateStatus(message);
+                updateProgress(0);
+
+                $.ajax({
+                    url: '/api/' + action,
+                    method: 'POST',
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                updateProgress(percentComplete * 100);
+                            }
+                        }, false);
+                        return xhr;
+                    },
+                    success: function(response) {
+                        updateStatus(action + ' 완료!');
+                        updateProgress(100);
+                    },
+                    error: function(xhr, status, error) {
+                        updateStatus('오류 발생: ' + error);
+                        updateProgress(0);
+                    }
+                });
+            }
+
+            function updateStatus(message) {
+                $('#status').text(message);
+            }
+
+            function updateProgress(percentage) {
+                $('#progress').css('width', percentage + '%').text(percentage.toFixed(0) + '%');
+            }
+        });
+    </script>
+</body>
+</html>
