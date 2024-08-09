@@ -23,7 +23,7 @@ h1 {
 }
 
 h2 {
-    color: #3498db;
+    color: #9F244D;
     margin-top: 30px;
     margin-bottom: 20px;
     font-size: 1.8em;
@@ -61,7 +61,7 @@ select {
 
 /* 버튼 스타일 */
 button {
-    background-color: #3498db;
+    background-color: #9F244D;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -96,7 +96,7 @@ th {
 
 /* 링크 스타일 */
 a {
-    color: #3498db;
+    color: #9F244D;
     text-decoration: none;
     transition: color 0.3s ease;
 }

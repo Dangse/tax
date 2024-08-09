@@ -10,7 +10,7 @@ body {
 
 h2 {
     color: #2c3e50;
-    border-bottom: 3px solid #3498db;
+    border-bottom: 3px solid #9F244D;
     padding-bottom: 10px;
     text-align: center;
     font-size: 2.2em;
@@ -45,7 +45,7 @@ input[type="text"], input[type="number"] {
 }
 
 input[type="text"]:focus, input[type="number"]:focus {
-    border-color: #3498db;
+    border-color: #9F244D;
     outline: none;
 }
 
@@ -85,7 +85,7 @@ th, td {
 }
 
 th {
-    background-color: #3498db;
+    background-color: #9F244D;
     color: #fff;
     font-weight: bold;
     text-transform: uppercase;
@@ -104,7 +104,7 @@ tr:hover {
     margin-top: 30px;
     background: linear-gradient(135deg, #f6f9fc 0%, #e9f2f9 100%);
     padding: 25px;
-    border-left: 8px solid #3498db;
+    border-left: 8px solid #9F244D;
     position: relative;
     overflow: hidden;
 }
@@ -127,7 +127,7 @@ tr:hover {
 
 .result li::before {
     content: '•';
-    color: #3498db;
+    color: #9F244D;
     font-size: 1.5em;
     position: absolute;
     left: 0;
@@ -142,7 +142,7 @@ tr:hover {
 .result li:last-child {
     font-weight: bold;
     color: #e74c3c;
-    border-top: 2px dashed #3498db;
+    border-top: 2px dashed #9F244D;
     margin-top: 20px;
     padding-top: 15px;
     font-size: 1.2em;
@@ -183,7 +183,7 @@ tr:hover {
     display: inline-block;
     width: 18px;
     height: 18px;
-    background-color: #3498db;
+    background-color: #9F244D;
     color: #fff;
     border-radius: 50%;
     text-align: center;
@@ -249,7 +249,7 @@ tr:hover {
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: #3498db;
+    border-color: #9F244D;
     outline: none;
 }
 
@@ -261,7 +261,7 @@ tr:hover {
 .submit-btn {
     width: 100%;
     padding: 12px;
-    background-color: #3498db;
+    background-color: #9F244D;
     color: white;
     border: none;
     border-radius: 4px;
@@ -304,12 +304,12 @@ tr:hover {
     margin-top: 30px;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 2px solid #9F244D;
 }
 
 .info-box {
     background-color: #e8f6fd;
-    border-left: 4px solid #3498db;
+    border-left: 4px solid #9F244D;
     padding: 15px;
     margin-bottom: 20px;
 }
