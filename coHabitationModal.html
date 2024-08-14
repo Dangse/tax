@@ -51,13 +51,27 @@
             document.getElementById('cohabitationModal').style.display = "none";
         }
 
-        function calculateCohabitationDeduction() {
-            let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
-            let houseDebt = parseFloat(document.getElementById('houseDebt').value.replace(/,/g, '')) || 0;
-            let deduction = Math.max(houseValue - houseDebt, 0);
-            deduction = Math.min(deduction, 600000000); // 6억 한도
-            document.getElementById('cohabitationDeduction').textContent = formatNumber({value: deduction.toString()});
-        }
+       function calculateCohabitationDeduction() {
+    let notApplicable = document.getElementById('notApplicableCheckbox').checked;
+    
+    if (notApplicable) {
+        document.getElementById('cohabitationDeduction').textContent = '0';
+        document.getElementById('houseValue').disabled = true;
+        document.getElementById('houseDebt').disabled = true;
+    } else {
+        document.getElementById('houseValue').disabled = false;
+        document.getElementById('houseDebt').disabled = false;
+        
+        let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+        let houseDebt = parseFloat(document.getElementById('houseDebt').value.replace(/,/g, '')) || 0;
+        let deduction = Math.max(houseValue - houseDebt, 0);
+        deduction = Math.min(deduction, 600000000); // 6억 한도
+        document.getElementById('cohabitationDeduction').textContent = formatNumber({value: deduction.toString()});
+    }
+    
+    // 총 공제액 업데이트
+    updateTotalDeduction();
+}
 
         function applyCohabitationDeduction() {
             let deduction = document.getElementById('cohabitationDeduction').textContent;

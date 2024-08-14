@@ -3,246 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>다중 세금 신고 양식</title>
+    <title>상속세 과세가액 계산 양식</title>
     <style>
+        /* 공통 스타일 */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
         .form-container {
-            margin-bottom: 50px;
-            border: 1px solid #ccc;
-            padding: 20px;
-        }
-        .screen-only {
-            display: block;
-        }
-        .print-only {
-            display: none;
-        }
-        @media print {
-            .screen-only {
-                display: none;
-            }
-            .print-only {
-                display: block;
-            }
-            .form-container {
-                page-break-after: always;
-            }
+            margin-bottom: 30px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid #000;
-            padding: 5px;
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: left;
+            font-size: 10px;
         }
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 5px;
-            box-sizing: border-box;
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* 화면 전용 스타일 */
+        @media screen {
+            .print-only {
+                display: none;
+            }
+            body {
+                padding: 20px;
+            }
+        }
+
+        /* 인쇄 전용 스타일 */
+        @media print {
+            .screen-only {
+                display: none;
+            }
+            .form-container {
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+            body {
+                padding: 0;
+            }
+            h1 {
+                font-size: 18px;
+            }
+            h2 {
+                font-size: 14px;
+            }
+        }
+
+        /* 인쇄 방향 설정 */
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        @page landscape {
+            size: A4 landscape;
+        }
+        .print-landscape {
+            page: landscape;
+        }
+
+        /* 가로 인쇄 설정 */
+        @media print {
+            #printContentLandscape {
+                width: 297mm; /* A4 가로 길이 */
+                height: 210mm; /* A4 세로 길이 */
+            }
         }
     </style>
 </head>
 <body>
-    <h1> 상속세 신고서 자기작성 </h1>
-
-    <!-- 양식 1: 상속세 과세표준 신고서 -->
     <div id="form1" class="form-container">
-        <h2>상속세 총재산 목록 </h2>
         <div class="screen-only">
+            <h2>상속세 과세가액 계산 입력 양식</h2>
             <form>
-                <label for="form1-name">성명:</label>
-                <input type="text" id="form1-name" name="form1-name"><br><br>
-                <label for="form1-id">주민등록번호:</label>
-                <input type="text" id="form1-id" name="form1-id"><br><br>
-                <label for="form1-address">주소:</label>
-                <input type="text" id="form1-address" name="form1-address"><br><br>
-                <label for="form1-amount">상속세 과세가액:</label>
-                <input type="number" id="form1-amount" name="form1-amount">
+                <label for="name">성명:</label>
+                <input type="text" id="name" name="name"><br><br>
+                
+                <label for="id">주민등록번호:</label>
+                <input type="text" id="id" name="id"><br><br>
+                
+                <label for="address">주소:</label>
+                <input type="text" id="address" name="address"><br><br>
+                
+                <label for="taxAmount">상속세 과세가액:</label>
+                <input type="number" id="taxAmount" name="taxAmount"><br><br>
             </form>
         </div>
-        <div class="print-only">
+
+        
+        
+        <div id="printContentLandscape" class="print-only print-landscape">
+            ◼ 상속세 및 증여세법 시행규직 [별지 제9호서식 부표 1](2024.03.22 개정)
+            관리번호  - <h1>상속세과세가액계산명세서</h1>
+            ፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.               (앞쪽)
+            <hr>
+            ⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑲⑳㉑㉒㉓㉔㉕㉖㉗㉘
+
+            <h2>가. 상속받은 총재산명세</h2>
             <table>
                 <tr>
-                    <th>성명</th>
-                    <td id="print-form1-name"></td>
-                    <th>주민등록번호</th>
-                    <td id="print-form1-id"></td>
+                    <th rowspan="2">① 재산구분 코드</th>
+                    <th rowspan="2">② 재산종류 코드</th>
+                    <th colspan="3">③ 소재지ㆍ법인명 등</th>                    
+                    <th rowspan="2">④ 사업자등록번호 (계좌번호,지분)</th>
+                    <th rowspan="2">⑤ 수량 (면적)</th>
+                    <th rowspan="2">⑥ 단가</th>
+                    <th rowspan="2">⑦ 평가가액</th>
+                    <th rowspan="2">⑧ 평가기준 코드</th>                    
+                </tr>
+            
+                <tr>
+                    <th>국외자산 여부</th>
+                    <th>국외재산 국가명</th>
+                <tr>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>   
                 </tr>
                 <tr>
-                    <th>주소</th>
-                    <td colspan="3" id="print-form1-address"></td>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td> 
                 </tr>
                 <tr>
-                    <th>상속세 과세가액</th>
-                    <td colspan="3" id="print-form1-amount"></td>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td> 
                 </tr>
-                <!-- 추가 상세 정보 -->
+                <tr>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td> 
+                </tr>
             </table>
+
+            <h2>나. 상속세 과세가액 계산</h2>
+            <table>
+                
+                <tr>
+                    <td rowspan="3">총상속재산가액</td>
+                    <td>상 속 재 산 가 액 </td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td> 상속개시전 처분재산등 산입액 (「상속세 및 증여세법」 제15조)</td>
+                   <td></td>             
+                </tr>
+                
+                <tr>
+                    <td>합계</td>
+                    <td></td>
+                </tr>
+                   
+                <tr>
+                    <td rowspan="4"></td>
+                    <td> </td>
+                    <td></td>
+                </tr>
+                <tr>                
+                    <td> </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td rowspan="4"></td>
+                    <td> </td>
+                    <td></td>
+                </tr>
+                <tr>                
+                    <td> </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td rowspan="4"></td>
+                    <td> </td>
+                    <td></td>
+                </tr>
+                <tr>                
+                    <td> </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                
+
+                <tr>
+                    <td rowspan="4"></td>
+                    <td> </td>
+                    <td></td>
+                </tr>
+                <tr>                
+                    <td> </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <!-- 나머지 항목들... -->
+                <tr>
+                    <td colspan="2">상속세 과세가액</td>
+                    <td></td>
+                </tr>
+            </table>
+            <hr>
         </div>
     </div>
 
-    <!-- 양식 2: 증여세 신고서 -->
     <div id="form2" class="form-container">
-        <h2>채무 공과금 장례비용 및 상속공제 명세서 </h2>
         <div class="screen-only">
+            <h2>채무 공과금 장례비용 및 상속공제 입력 양식</h2>
             <form>
-                <label for="form2-donor">증여자:</label>
-                <input type="text" id="form2-donor" name="form2-donor"><br><br>
-                <label for="form2-recipient">수증자:</label>
-                <input type="text" id="form2-recipient" name="form2-recipient"><br><br>
-                <label for="form2-date">증여일자:</label>
-                <input type="date" id="form2-date" name="form2-date"><br><br>
-                <label for="form2-amount">증여재산가액:</label>
-                <input type="number" id="form2-amount" name="form2-amount">
+                <label for="donor">증여자:</label>
+                <input type="text" id="donor" name="donor"><br><br>
+                
+                <label for="recipient">수증자:</label>
+                <input type="text" id="recipient" name="recipient"><br><br>
+                
+                <label for="giftDate">증여일자:</label>
+                <input type="date" id="giftDate" name="giftDate"><br><br>
+                
+                <label for="giftAmount">증여재산가액:</label>
+                <input type="number" id="giftAmount" name="giftAmount"><br><br>
             </form>
         </div>
-        <div class="print-only">
+
+        <div id="printContentLandscape" class="print-only print-landscape">
+            <h2>채무 공과금 장례비용 및 상속공제 명세서</h2>
             <table>
                 <tr>
                     <th>증여자</th>
-                    <td id="print-form2-donor"></td>
+                    <td></td>
                     <th>수증자</th>
-                    <td id="print-form2-recipient"></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <th>증여일자</th>
-                    <td id="print-form2-date"></td>
+                    <td></td>
                     <th>증여재산가액</th>
-                    <td id="print-form2-amount"></td>
+                    <td></td>
                 </tr>
-                <!-- 추가 상세 정보 -->
             </table>
         </div>
     </div>
-
-    <!-- 양식 3: 종합소득세 신고서 -->
-    <div id="form3" class="form-container">
-        <h2>배우자 상속공제 명세서 </h2>
-        <div class="screen-only">
-            <form>
-                <label for="form3-name">성명:</label>
-                <input type="text" id="form3-name" name="form3-name"><br><br>
-                <label for="form3-id">주민등록번호:</label>
-                <input type="text" id="form3-id" name="form3-id"><br><br>
-                <label for="form3-income">종합소득금액:</label>
-                <input type="number" id="form3-income" name="form3-income"><br><br>
-                <label for="form3-deduction">소득공제액:</label>
-                <input type="number" id="form3-deduction" name="form3-deduction">
-            </form>
-        </div>
-        <div class="print-only">
-            <table>
-                <tr>
-                    <th>성명</th>
-                    <td id="print-form3-name"></td>
-                    <th>주민등록번호</th>
-                    <td id="print-form3-id"></td>
-                </tr>
-                <tr>
-                    <th>종합소득금액</th>
-                    <td id="print-form3-income"></td>
-                    <th>소득공제액</th>
-                    <td id="print-form3-deduction"></td>
-                </tr>
-                <!-- 추가 상세 정보 -->
-            </table>
-        </div>
-        
-    </div>
-
-    <!-- 양식 3: 종합소득세 신고서 -->
-    <div id="form3" class="form-container">
-        <h2>배우자 상속공제 명세서 </h2>
-        <div class="screen-only">
-            <form>
-                <label for="form3-name">성명:</label>
-                <input type="text" id="form3-name" name="form3-name"><br><br>
-                <label for="form3-id">주민등록번호:</label>
-                <input type="text" id="form3-id" name="form3-id"><br><br>
-                <label for="form3-income">종합소득금액:</label>
-                <input type="number" id="form3-income" name="form3-income"><br><br>
-                <label for="form3-deduction">소득공제액:</label>
-                <input type="number" id="form3-deduction" name="form3-deduction">
-            </form>
-        </div>
-        <div class="print-only">
-            <table>
-                <tr>
-                    <th>성명</th>
-                    <td id="print-form3-name"></td>
-                    <th>주민등록번호</th>
-                    <td id="print-form3-id"></td>
-                </tr>
-                <tr>
-                    <th>종합소득금액</th>
-                    <td id="print-form3-income"></td>
-                    <th>소득공제액</th>
-                    <td id="print-form3-deduction"></td>
-                </tr>
-                <!-- 추가 상세 정보 -->
-            </table>
-    </div>
-    
 
     <div id="form3" class="form-container">
-        <h2>배우자 상속공제 명세서 </h2>
         <div class="screen-only">
+            <h2>상속세 과세가액 계산 입력 양식</h2>
             <form>
-                <label for="form3-name">성명:</label>
-                <input type="text" id="form3-name" name="form3-name"><br><br>
-                <label for="form3-id">주민등록번호:</label>
-                <input type="text" id="form3-id" name="form3-id"><br><br>
-                <label for="form3-income">종합소득금액:</label>
-                <input type="number" id="form3-income" name="form3-income"><br><br>
-                <label for="form3-deduction">소득공제액:</label>
-                <input type="number" id="form3-deduction" name="form3-deduction">
+                <label for="name">성명:</label>
+                <input type="text" id="name" name="name"><br><br>
+                
+                <label for="id">주민등록번호:</label>
+                <input type="text" id="id" name="id"><br><br>
+                
+                <label for="address">주소:</label>
+                <input type="text" id="address" name="address"><br><br>
+                
+                <label for="taxAmount">상속세 과세가액:</label>
+                <input type="number" id="taxAmount" name="taxAmount"><br><br>
             </form>
         </div>
-        <div class="print-only">
+        <hr>
+        <div id="printContentPortrait" class="print-only">
+            ◼ 상속세 및 증여세법 시행규직 [별지 제9호서식 부표 1](2024.03.22 개정)
+            관리번호  - <h1>상속세과세가액계산명세서</h1>
+            ፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.               (앞쪽)
+            <hr>
+
+
+            <h2>가. 상속받은 총재산명세</h2>
             <table>
                 <tr>
-                    <th>성명</th>
-                    <td id="print-form3-name"></td>
-                    <th>주민등록번호</th>
-                    <td id="print-form3-id"></td>
+                    <th>① 재산구분 코드</th>
+                    <th>② 재산종류 코드</th>
+                    <th>③ 소재지ㆍ법인명 등</th>
+                    <th>국외자산 여부</th>
+                    <th>국외재산 국가명</th>
+                    <th>④ 사업자등록번호 (계좌번호,지분)</th>
+                    <th>⑤ 수량 (면적)</th>
+                    <th>⑥ 단가</th>
+                    <th>⑦ 평가가액</th>
+                    <th>⑧ 평가기준 코드</th>
+                    
                 </tr>
                 <tr>
-                    <th>종합소득금액</th>
-                    <td id="print-form3-income"></td>
-                    <th>소득공제액</th>
-                    <td id="print-form3-deduction"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
                 </tr>
-                <!-- 추가 상세 정보 -->
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <h2>나. 상속세 과세가액 계산</h2>
+            <table>
+                <tr>
+                    <th>항목</th>
+                    <th>금액</th>
+                </tr>
+                <tr>
+                    <td>총상속재산가액</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>상속재산가액</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>상속개시 전 처분재산등 산입액 (「상속세 및 증여세법」 제15조)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>합계</td>
+                    <td></td>
+                </tr>
+                <!-- 나머지 항목들... -->
+                <tr>
+                    <td>상속세 과세가액</td>
+                    <td></td>
+                </tr>
             </table>
         </div>
-        
     </div>
 
-    <button onclick="printForms()">모든 양식 인쇄</button>
+
+    <button onclick="window.print()" class="screen-only">모든 양식 인쇄</button>
 
     <script>
-        function updatePrintForm(formId) {
-            const inputs = document.querySelectorAll(`#${formId} .screen-only input`);
-            inputs.forEach(input => {
-                const printElement = document.getElementById(`print-${input.id}`);
-                if (printElement) {
-                    printElement.textContent = input.value;
-                }
-            });
-        }
-
-        function printForms() {
-            updatePrintForm('form1');
-            updatePrintForm('form2');
-            updatePrintForm('form3');
-            window.print();
-        }
+        window.onbeforeprint = function() {
+            document.body.classList.add('printing');
+        };
+        window.onafterprint = function() {
+            document.body.classList.remove('printing');
+        };
     </script>
 </body>
 </html>

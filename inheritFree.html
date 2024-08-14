@@ -378,6 +378,11 @@
                                         <li>동거한 자녀가 상속받을 것</li>
                                         
                                     </ul>
+
+                                    <input type="checkbox" id="notApplicableCheckbox" onchange="calculateCohabitationDeduction()">
+                                    <label for="notApplicableCheckbox">해당없음</label>
+
+
                                     <p><strong>주택 가격: <span id="modalHouseValueCell"></span></strong></p>
                                     <label for="houseDebt">주택이 담보하는 채무가액:</label>
                                     <input type="text" id="houseDebt" oninput="formatNumber(this)" placeholder="채무가액을 입력하세요">
@@ -1042,11 +1047,25 @@
         }
 
         function calculateCohabitationDeduction() {
-            let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
-            let houseDebt = parseFloat(document.getElementById('houseDebt').value.replace(/,/g, '')) || 0;
-            let deduction = Math.max(houseValue - houseDebt, 0);
-            deduction = Math.min(deduction, 600000000); // 6억 한도
-            document.getElementById('cohabitationDeduction').textContent = formatNumber({value: deduction.toString()});
+            let notApplicable = document.getElementById('notApplicableCheckbox').checked;
+            
+            if (notApplicable) {
+                document.getElementById('cohabitationDeduction').textContent = '0';
+                document.getElementById('houseValue').disabled = true;
+                document.getElementById('houseDebt').disabled = true;
+            } else {
+                document.getElementById('houseValue').disabled = false;
+                document.getElementById('houseDebt').disabled = false;
+                
+                let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+                let houseDebt = parseFloat(document.getElementById('houseDebt').value.replace(/,/g, '')) || 0;
+                let deduction = Math.max(houseValue - houseDebt, 0);
+                deduction = Math.min(deduction, 600000000); // 6억 한도
+                document.getElementById('cohabitationDeduction').textContent = formatNumber({value: deduction.toString()});
+            }
+            
+            // 총 공제액 업데이트
+            updateTotalDeduction();
         }
 
         function applyCohabitationDeduction() {
@@ -1110,59 +1129,62 @@
     // 기초공제 + 인적공제와 일괄공제 비교 
     let calculatedDeduction = 0;
 
-function openInheritanceModal() {
-    document.getElementById('inheritanceModal').style.display = "block";
-}
+        function openInheritanceModal() {
+            document.getElementById('inheritanceModal').style.display = "block";
+        }
 
-function closeInheritanceModal() {
-    document.getElementById('inheritanceModal').style.display = "none";
-    document.getElementById('applyButton').style.display = "none";
-    document.getElementById('deductionResult').innerHTML = "";
-}
+        function closeInheritanceModal() {
+            document.getElementById('inheritanceModal').style.display = "none";
+            document.getElementById('applyButton').style.display = "none";
+            document.getElementById('deductionResult').innerHTML = "";
+        }
 
-document.getElementById('deductionForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const children = parseInt(document.getElementById('children').value);
-    const minors = parseInt(document.getElementById('minors').value);
-    const minorYears = parseInt(document.getElementById('minorYears').value);
-    const seniors = parseInt(document.getElementById('seniors').value);
+        document.getElementById('deductionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const children = parseInt(document.getElementById('children').value);
+            const minors = parseInt(document.getElementById('minors').value);
+            const minorYears = parseInt(document.getElementById('minorYears').value);
+            const seniors = parseInt(document.getElementById('seniors').value);
 
-    // 인적공제 계산
-    const childDeduction = children * 50000000;
-    const minorDeduction = minors * 10000000 * minorYears;
-    const seniorDeduction = seniors * 50000000;
-    const personalDeduction = childDeduction + minorDeduction + seniorDeduction;
+            // 인적공제 계산
+            const childDeduction = children * 50000000;
+            const minorDeduction = minors * 10000000 * minorYears;
+            const seniorDeduction = seniors * 50000000;
+            const personalDeduction = childDeduction + minorDeduction + seniorDeduction;
 
-    // 일괄공제 계산
-    const basicDeduction = 200000000;
-    calculatedDeduction = Math.max(basicDeduction + personalDeduction, 500000000);
+            // 일괄공제 계산
+            const basicDeduction = 200000000;
+            calculatedDeduction = Math.max(basicDeduction + personalDeduction, 500000000);
 
-    // 결과 표시
-    const resultDiv = document.getElementById('deductionResult');
-    resultDiv.innerHTML = `
-        <p>공제결과</p>
-        <p>자녀 공제: ${childDeduction.toLocaleString()}원</p>
-        <p>미성년자 공제: ${minorDeduction.toLocaleString()}원</p>
-        <p>65세 이상 공제: ${seniorDeduction.toLocaleString()}원</p>
-        <p>인적공제 합계: ${personalDeduction.toLocaleString()}원</p>
-        <p>기초공제: ${basicDeduction.toLocaleString()}원</p>
-        <p>최종 인적공제 금액: ${calculatedDeduction.toLocaleString()}원</p>
-    `;
+            // 결과 표시
+            const resultDiv = document.getElementById('deductionResult');
+            resultDiv.innerHTML = `
+                <p>공제결과</p>
+                <p>자녀 공제: ${childDeduction.toLocaleString()}원</p>
+                <p>미성년자 공제: ${minorDeduction.toLocaleString()}원</p>
+                <p>65세 이상 공제: ${seniorDeduction.toLocaleString()}원</p>
+                <p>인적공제 합계: ${personalDeduction.toLocaleString()}원</p>
+                <p>기초공제: ${basicDeduction.toLocaleString()}원</p>
+                <p>최종 인적공제 금액: ${calculatedDeduction.toLocaleString()}원</p>
+            `;
 
-    document.getElementById('applyButton').style.display = "block";
- });
+            document.getElementById('applyButton').style.display = "block";
+        });
 
- function applyDeduction() {
-    document.getElementById('finalDeductionAmount').textContent = calculatedDeduction.toLocaleString();
-    closeInheritanceModal();
- }
+        function applyDeduction() {
+            document.getElementById('finalDeductionAmount').textContent = calculatedDeduction.toLocaleString();
+            closeInheritanceModal();
 
-  window.onclick = function(event) {
-    let modal = document.getElementById('inheritanceModal');
-    if (event.target == modal) {
-        closeInheritanceModal();
-    }
-}
+            // 총 공제액 업데이트
+            updateTotalDeduction();
+        }
+
+        window.onclick = function(event) {
+            let modal = document.getElementById('inheritanceModal');
+            if (event.target == modal) {
+                closeInheritanceModal();
+            }
+        }
 
     // 공제액을 합계 내는 함수
 

@@ -484,7 +484,7 @@
                         <li><a href="https://tuzaga.com/%eb%8b%b9%ec%8b%a0%ec%9d%98-%ec%84%b8%eb%ac%b4%ec%82%ac-%eb%b8%94%eb%a1%9c%ea%b7%b8-%eb%8f%99%ea%b1%b0%ec%a3%bc%ed%83%9d%ec%83%81%ec%86%8d%ea%b3%b5%ec%a0%9c%ec%9d%98-%eb%aa%a8%eb%93%a0-%ea%b2%83/" target="_blank">동거주택상속공제 상세</a> </li>
 
                         <div class="container">                            
-                            
+                            s
                             <button onclick="openCohabitationModal()">동거상속공제 계산</button>
                             
                             <div id="cohabitationModal" class="modal">
@@ -497,6 +497,10 @@
                                         <li>동거한 자녀가 상속받을 것</li>
                                         
                                     </ul>
+
+                                    <input type="checkbox" id="notApplicableCheckbox" onchange="calculateCohabitationDeduction()">
+                                    <label for="notApplicableCheckbox">해당없음</label>
+
                                     <p><strong>주택 가격: <span id="modalHouseValueCell"></span></strong></p>
                                     <label for="houseDebt">주택이 담보하는 채무가액:</label>
                                     <input type="text" id="houseDebt" oninput="formatNumber(this)" placeholder="채무가액을 입력하세요">
@@ -1645,13 +1649,27 @@
             document.getElementById('cohabitationModal').style.display = "none";
         }
 
-        function calculateCohabitationDeduction() {
-            let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
-            let houseDebt = parseFloat(document.getElementById('houseDebt').value.replace(/,/g, '')) || 0;
-            let deduction = Math.max(houseValue - houseDebt, 0);
-            deduction = Math.min(deduction, 600000000); // 6억 한도
-            document.getElementById('cohabitationDeduction').textContent = formatNumber({value: deduction.toString()});
-        }
+       function calculateCohabitationDeduction() {
+    let notApplicable = document.getElementById('notApplicableCheckbox').checked;
+    
+    if (notApplicable) {
+        document.getElementById('cohabitationDeduction').textContent = '0';
+        document.getElementById('houseValue').disabled = true;
+        document.getElementById('houseDebt').disabled = true;
+    } else {
+        document.getElementById('houseValue').disabled = false;
+        document.getElementById('houseDebt').disabled = false;
+        
+        let houseValue = parseFloat(document.getElementById('houseValue').value.replace(/,/g, '')) || 0;
+        let houseDebt = parseFloat(document.getElementById('houseDebt').value.replace(/,/g, '')) || 0;
+        let deduction = Math.max(houseValue - houseDebt, 0);
+        deduction = Math.min(deduction, 600000000); // 6억 한도
+        document.getElementById('cohabitationDeduction').textContent = formatNumber({value: deduction.toString()});
+    }
+    
+    // 총 공제액 업데이트
+    updateTotalDeduction();
+}
 
         function applyCohabitationDeduction() {
             let deduction = document.getElementById('cohabitationDeduction').textContent;
@@ -1759,8 +1777,10 @@ document.getElementById('deductionForm').addEventListener('submit', function(e) 
  function applyDeduction() {
     document.getElementById('finalDeductionAmount').textContent = calculatedDeduction.toLocaleString();
     closeInheritanceModal();
+    updateTotalDeduction();
  }
 
+ 
   window.onclick = function(event) {
     let modal = document.getElementById('inheritanceModal');
     if (event.target == modal) {
