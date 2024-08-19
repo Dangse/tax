@@ -16,7 +16,7 @@
     <div class="container">
         
         <div style="text-align: right; padding: 10px;">
-        <button onclick="window.print()" class="no-print">프린트</button> 
+        <button onclick="window.print()" class="no-print">PDF저장</button> 
         </div>
         <div class="row">
             
@@ -25,7 +25,7 @@
                     <h1>상속세 절세 보고서(G) </h1>
 
                     <div style="text-align: right; padding: 10px;">
-                        <button onclick="saveAllData()">입력 데이터 저장</button> 
+                        <button onclick="saveAllData()">지금까지 데이터저장</button> 
                     </div>
 
                     <table border="1">
@@ -2249,7 +2249,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let taxableIncome = capitalGain - longTermDeduction;
         let taxBase = Math.max(0, taxableIncome - (section === '1' ? 0 : 2500000));
         let transferTax = calculateTransferTax(taxBase, holdingPeriod >= 5 && isNonBusinessUse);
+            transferTax = Math.floor(transferTax / 10) * 10;
         let localIncomeTax = transferTax * 0.1;
+            localIncomeTax = Math.floor(localIncomeTax / 10) * 10;
         let totalTax = transferTax + localIncomeTax;
 
         results[section] = {

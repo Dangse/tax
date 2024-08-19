@@ -12,11 +12,21 @@
 <body>
 
 <section class="section">
+    
     <div class="container">
+        
+        <div style="text-align: right; padding: 10px;">
+        <button onclick="window.print()" class="no-print">프린트</button> 
+        </div>
         <div class="row">
+            
             <div class="col-md-12">
                 <div class="text-wrapper">
                     <h1>상속세 절세 보고서(G) </h1>
+
+                    <div style="text-align: right; padding: 10px;">
+                        <button onclick="saveAllData()">입력 데이터 저장</button> 
+                    </div>
 
                     <table border="1">
                         <tbody>
@@ -1423,24 +1433,21 @@
                                                 <li>이 보고서와 아래의 내용은 고객님이 입력한 데이터에 추가로 질문한 내용을 반영한  “상황별 예상세금 모의계산 보고서” 입니다. </li>                                               
                                                 <li>고객님의 질문 외 "고객님의 개별적인 판단에 따른 의사결정에 대한 법적 책임은 없습니다. </li>
                                                 <li>따라서 중요한 실제 의사결정 및 관련 세무신고는 사전에 세무사와 반드시 대면 상담하기기 바랍니다.</li>
-                                                <li>"대면상담"은 여러세무사와 전문가가 심층적으로 대응합니다. 대면상담 바로가기 !</li>
+                                                <li>"대면상담"은 여러세무사와 전문가가 심층적으로 대응합니다.</li>
                                             </ul>
                                         </td>
 
                                     </tr> 
                                 </tbody>
-                            </table><br><br>
-
-
-                
+                            </table>               
 
          
 
                            
-                            <button onclick="saveAllData()">입력 데이터 저장</button> <br> <br> 
+                        
                            
 
-                            <button onclick="window.print()" class="no-print">프린트</button> <br><br>
+                        <button onclick="window.print()" class="no-print">프린트</button> <br><br>
                             
                         <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
 
@@ -1454,9 +1461,12 @@
                     </div>
 
 
-                </div><br><br> 
-                <div class="container">
-                    <button class="toggle-answer-btn no-print" onclick="toggleAnswerForm(this)">답변 달기</button>
+                </div><br><br>
+                <section class="section">
+                    <P>이름 이메일 전화번호 문의사항등을 입력해 주세요.</P>
+                    <P>이 보고서의 기본적인 내용들을 실행해 보시고, PDF 저장후 옆창에 올려주시면, 더욱 풍부한 상담이 됩니다.  담당자가 대면면담 일정을 잡기 위해 직접 연락드겠습니다.</P>
+                    <P>담당자가 대면면담 일정을 잡기 위해 직접 연락드겠습니다.</P>
+                    <button class="toggle-answer-btn no-print" onclick="toggleAnswerForm(this)">대면상담신청</button>
                     <div class="answer-form">
                         <div class="editor-container"></div><br>
                         <button onclick="saveAnswer(this)">저장</button>
@@ -2242,7 +2252,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let taxableIncome = capitalGain - longTermDeduction;
         let taxBase = Math.max(0, taxableIncome - (section === '1' ? 0 : 2500000));
         let transferTax = calculateTransferTax(taxBase, holdingPeriod >= 5 && isNonBusinessUse);
+            transferTax = Math.floor(transferTax / 10) * 10;
         let localIncomeTax = transferTax * 0.1;
+            localIncomeTax = Math.floor(localIncomeTax / 10) * 10;
         let totalTax = transferTax + localIncomeTax;
 
         results[section] = {
@@ -2445,72 +2457,86 @@ document.addEventListener('DOMContentLoaded', function() {
     // 입력데이터만 로컬스토리지 브라우저에 저장하는 함수
 
     function saveAllData() {
-            const data = {};
-            
-            // 모든 입력 필드의 값을 수집
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                data[input.id] = input.value;
-            });
-            
-            
-            
-            // 데이터를 로컬 스토리지에 저장
-            localStorage.setItem('inheritanceTaxData', JSON.stringify(data));
-            alert('모든 데이터가 저장되었습니다!');
-        }
-        
-        function loadAllData() {
-            const savedData = localStorage.getItem('inheritanceTaxData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                
-                // 모든 입력 필드에 저장된 값을 설정
-                Object.keys(data).forEach(key => {
-                    const element = document.getElementById(key);
-                    if (element) {
-                        if (element.tagName === 'INPUT' || element.tagName === 'SELECT' || element.tagName === 'TEXTAREA') {
-                            element.value = data[key];
-                        } else {
-                            element.textContent = data[key];
-                        }
-                    }
-                });
-                
-                alert('저장된 데이터를 불러왔습니다!');
-            } else {
-                alert('저장된 데이터가 없습니다.');
-            }
-        }
-    // 체크박스를 클릭하면 해당 섹션을 인쇄할지 여부를 설정하는 함수
-    function updatePrintClass(checkbox) {
-        const section = checkbox.closest('.print-section');
-        if (checkbox.checked) {
-            section.classList.add('print-this');
-        } else {
-            section.classList.remove('print-this');
-        }
-        }
+    const data = {};
+    
+    // 모든 입력 필드의 값을 수집 (체크박스 제외)
+    const inputs = document.querySelectorAll('input:not([type="checkbox"]), select, textarea');
+    inputs.forEach(input => {
+        data[input.id] = input.value;
+    });
+    
+    // 데이터를 로컬 스토리지에 저장
+    localStorage.setItem('inheritanceTaxData', JSON.stringify(data));
+    alert('모든 데이터가 저장되었습니다!');
+}
 
-        // 모든 체크박스에 이벤트 리스너 추가
-        document.querySelectorAll('.print-checkbox').forEach(checkbox => {
+function loadAllData() {
+    const savedData = localStorage.getItem('inheritanceTaxData');
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        
+        // 모든 입력 필드에 저장된 값을 설정 (체크박스 제외)
+        Object.keys(data).forEach(key => {
+            const element = document.getElementById(key);
+            if (element && element.type !== 'checkbox') {
+                if (element.tagName === 'INPUT' || element.tagName === 'SELECT' || element.tagName === 'TEXTAREA') {
+                    element.value = data[key];
+                } else {
+                    element.textContent = data[key];
+                }
+            }
+        });
+        
+        alert('저장된 데이터를 불러왔습니다!');
+    } else {
+        alert('저장된 데이터가 없습니다.');
+    }
+}
+
+    // 체크박스를 클릭하면 해당 섹션을 인쇄할지 여부를 설정하는 함수
+    // 체크박스 상태에 따라 인쇄 클래스를 업데이트하는 함수
+function updatePrintClass(checkbox) {
+    const section = checkbox.closest('.print-section');
+    if (checkbox.checked) {
+        section.classList.add('print-this');
+    } else {
+        section.classList.remove('print-this');
+    }
+}
+
+// 페이지 로드 시 실행되는 초기화 함수
+function initializePrintCheckboxes() {
+    document.querySelectorAll('.print-checkbox').forEach(checkbox => {
+        // 모든 체크박스를 체크 상태로 설정
+        checkbox.checked = true;
+        
+        // 해당 섹션에 'print-this' 클래스 추가
+        updatePrintClass(checkbox);
+        
+        // 변경 이벤트 리스너 추가
         checkbox.addEventListener('change', function() {
             updatePrintClass(this);
         });
-        });
+    });
+}
 
-        const quillInstances = {};
+// 페이지 로드 시 초기화 함수 실행
+document.addEventListener('DOMContentLoaded', initializePrintCheckboxes);
+
+// 질의 응답 편집 함수 (Quill.js 사용)
+
+const quillInstances = {};
 
 function toggleAnswerForm(btn) {
     const form = btn.nextElementSibling;
     const container = form.querySelector('.editor-container');
     if (form.style.display === 'none' || form.style.display === '') {
         form.style.display = 'block';
-        btn.textContent = '답변 닫기';
+        btn.textContent = '닫기';
         initializeQuill(container);
     } else {
         form.style.display = 'none';
-        btn.textContent = '답변 달기';
+        btn.textContent = '대면상담 내용 보기';
     }
 }
 
@@ -2545,7 +2571,7 @@ function loadAnswer(btn) {
         const content = form.nextElementSibling;
         content.innerHTML = savedAnswer;
     } else {
-        alert('저장된 답변이 없습니다.');
+        alert('저장된 내용이 없습니다.');
     }
 }
 
