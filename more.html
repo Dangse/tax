@@ -1,77 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Show More Content</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expandable Prep Item</title>
     <style>
-        .moreContent {display: none;}
+        .expandable-container {
+            position: relative;
+            width: 300px;
+        }
+        .prep-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .prep-item.additional {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            margin: 0;
+            transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out, margin 0.3s ease-in-out;
+        }
+        .prep-item.additional.visible {
+            opacity: 1;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .prep-item-image {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .prep-item a {
+            text-decoration: none;
+            color: #333;
+        }
     </style>
 </head>
 <body>
-
-<div>
-    <p>This is the visible content for section 1.</p>
-    <div class="moreContent">
-        <p>This is additional content for section 1 that was hidden but is now visible.</p>
+    <div id="expandableContainer" class="expandable-container">
+        <!-- 초기 아이템 -->
     </div>
-    <button onclick="showMoreContent(this)">Show More</button>
-</div>
 
+    <script>
+        const container = document.getElementById('expandableContainer');
+        const prepItem = {
+            imageUrl: "https://tuzaga.com/wp-content/uploads/%EB%8F%88%EC%9C%BC%EB%A1%9C-%EB%A7%8C%EB%93%A0-%ED%86%A0%EB%81%BC-1.jpg",
+            alt: "📌",
+            linkUrl: "https://tuzaga.com/%ec%83%81%ec%86%8d%ec%9e%ac%ec%82%b0%ea%b3%bc-%ec%82%ac%ec%a0%84%ec%a6%9d%ec%97%ac%ec%9e%ac%ec%82%b0-%ec%95%8c%ec%95%84%eb%b3%b4%ea%b8%b0/",
+            linkText: "사전증여재산 알아보기 : 국세청홈텍스조회/세무서방문조회"
+        };
 
-<hr>
-<div>
-    <p>This is the visible content for section 2.</p>
-    <div class="moreContent">
-        <p>This is additional content for section 2 that was hidden but is now visible.</p>
-    </div>
-    <button onclick="showMoreContent(this)">Show More</button>
-</div>
+        function createPrepItem(isAdditional = false) {
+            const div = document.createElement('div');
+            div.className = isAdditional ? 'prep-item additional' : 'prep-item';
+            div.innerHTML = `
+                <img src="${prepItem.imageUrl}" alt="${prepItem.alt}" class="prep-item-image">
+                <a href="${prepItem.linkUrl}" target="_blank">${prepItem.linkText}</a>
+            `;
+            return div;
+        }
 
-<hr>
-<div>
-    <p>This is the visible content for section 2.</p>
-    <div class="moreContent">
-        <p>This is additional content for section 2 that was hidden but is now visible.</p>
-    </div>
-    <button onclick="showMoreContent(this)">Show More</button>
-</div>
+        // 초기 아이템 추가
+        container.appendChild(createPrepItem());
 
+        // 추가 아이템들 미리 생성
+        for (let i = 0; i < 4; i++) {
+            container.appendChild(createPrepItem(true));
+        }
 
-<hr>
-<div>
-    <p>This is the visible content for section 2.</p>
-    <div class="moreContent">
-        <p>This is additional content for section 2 that was hidden but is now visible.</p>
-    </div>
-    <button onclick="showMoreContent(this)">Show More</button>
-</div>
+        container.addEventListener('mouseenter', () => {
+            const additionalItems = container.querySelectorAll('.prep-item.additional');
+            additionalItems.forEach((item, index) => {
+                setTimeout(() => item.classList.add('visible'), 100 * index);
+            });
+        });
 
-<hr>
-<div>
-    <p>This is the visible content for section 2.</p>
-    <div class="moreContent">
-        <p>This is additional content for section 2 that was hidden but is now visible.</p>
-    </div>
-    <button onclick="showMoreContent(this)">Show More</button>
-</div>
-
-
-
-<!-- Repeat the above block for as many sections as you need -->
-
-<script>
-function showMoreContent(button) {
-    var moreContent = button.previousElementSibling;
-
-    if (moreContent.style.display === 'none') {
-        moreContent.style.display = 'block';
-        button.textContent = 'Show Less';
-    } else {
-        moreContent.style.display = 'none';
-        button.textContent = 'Show More';
-    }
-}
-</script>
-
+        container.addEventListener('mouseleave', () => {
+            const additionalItems = container.querySelectorAll('.prep-item.additional');
+            additionalItems.forEach(item => item.classList.remove('visible'));
+        });
+    </script>
 </body>
 </html>

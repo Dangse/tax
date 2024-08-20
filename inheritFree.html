@@ -320,7 +320,7 @@
                                 <div class="tip" data-target="step17">상속 받은 주택 외 가지고 있던 주택 양도시 ! 1세대 1주택 비과세 만들수 있습니다.</div>
                                 <div class="tip" data-target="step18">주택 상속으로 2주택인 경우, 청약기회 사라진 건 아닐까요 ?</div>
                                 <div class="tip" data-target="step19">부모님 기초연금 받게 할 순 없을까요 ?</div>
-                                <div class="tip" data-target="step20">유의사항. 저장하기 . 인쇄하기</div>
+                                <div class="tip" data-target="step20">안내말씀</div>
                                 </div>
                             
                                 <h3>뒤로 가기</h3>
@@ -344,7 +344,7 @@
 
                             <div style="display: flex; justify-content:left ; gap: 20px;">
                                 <button onclick="previousStep(11);">뒤로가기</button>
-                                <button onclick="nextStep(13);">상속세 줄이러 가기</button>
+                                
 
                             </div>
                         </div>
@@ -1363,40 +1363,33 @@
                     </div>
 
                     <div id="step20" style="display: none;">  <!--질문하기 --------------------------------------------->
-                           <h3>유의사항</h3>
-                            <table border="1">
+                        <div style="text-align: center;">
+                            <h3>안내 말씀</h3>
+                            <p>상속세에 대한 궁금한 점이나, 상속세 계산에 대한 질문이 있으시면 아래의 버튼을 눌러주세요.</p>
+                        </div>
+                           <div class="containerFree">
+                            <a href="https://dangse.github.io/tax/inheritPremium.html" class="shortcut-button blue">
+                                <i>🔍</i>
+                                <span>셀프절세방법 (P)</span>
+                            </a>
+                            <a href="https://dangse.github.io/tax/inheritGold.html" class="shortcut-button green">
+                                <i>✉️</i>
+                                <span>서면상담 (G)</span>
+                            </a>
+                            <a href="https://dangse.github.io/tax/inheritRoyal.html" class="shortcut-button red">
+                                <i>👤</i>
+                                <span>대면상담 (R)</span>
+                            </a>
 
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <ul>
-                                                <li>이 보고서와 아래의 내용은 고객님이 입력한 데이터를 바탕으로 한  “상황별 예상세금 모의계산 보고서” 입니다. </li>                                               
-                                                <li>"고객님의 개별적인 판단에 따른 의사결정에 대한 법적 책임은 없습니다. </li>
-                                                <li>따라서 중요한 실제 의사결정 및 관련 세무신고는 사전에 세무사와 반드시 대면 상담하기기 바랍니다.</li>
-                                                <li>"대면상담"은 여러세무사와 전문가가 심층적으로 대응합니다.</li>
-                                            </ul>
-                                        </td>
+                            
+                        </div><br><br>
 
-                                    </tr> 
-                                </tbody>
-                            </table>               
-
-         
-
-                           
+                        <div class="containerFree">
+                            <div class="back-link" data-target="step1">처음으로 가기</div>
+                        </div>
                         
                            
 
-                        <button onclick="window.print()" class="no-print">프린트</button> <br><br>
-                            
-                        <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-
-                            <div style="display: flex; justify-content:left ; gap: 20px;">
-                                <button onclick="previousStep(19); ">뒤로가기</button>
-                                <button class="clickable" data-target="step12" style="padding: 5px 10px;">목록</button>
-
-                            </div>
-                        </div>
 
                     </div>
 
@@ -2517,6 +2510,27 @@ document.addEventListener("DOMContentLoaded", function() {
         initializeQuill(container);
     });
 });
+
+// 상속세 가이드 영역에 클릭하면 마지막으로 가는  이벤트 리스너 추가
+document.addEventListener('DOMContentLoaded', function() {
+  const guideSection = document.querySelector('.tax-tips');
+  const step20 = document.getElementById('step20');
+  
+  if (guideSection && step20) {
+    guideSection.addEventListener('click', function(event) {
+      // 모든 step 요소를 숨김
+      const allSteps = document.querySelectorAll('[id^="step"]');
+      allSteps.forEach(step => step.style.display = 'none');
+      
+      // step20만 표시
+      step20.style.display = 'block';
+      
+      // 페이지 스크롤을 step20으로 이동
+      step20.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+});
+
 
 </script>
 
