@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상속세 과세가액 명세서</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 3px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+            border: none;
+            text-align: center;
+        }
+        .checkbox-container {
+            display: flex;
+            justify-content: space-around;
+        }
+        .button-container {
+            margin-bottom: 10px;
+        }
+        button {
+            margin-right: 10px;
+            padding: 5px 10px;
+        }
+        /* 재산구분선택  */
+        .selector {
+            cursor: pointer;
+           
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #888;
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+            width: 500px;
+        }
+        .popup-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+            padding: 30px;
+        }
+        .popup-content button {
+            padding: 5px;
+            text-align: left;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #000;
+        }
+
+        /* 도움창 */
+
+        .help-button {
+            font-size: 10px;
+            margin-left: 5px;
+            padding: 2px 5px;
+            cursor: pointer;
+        }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            max-width: 400px;
+            width: 80%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .popup-content p {
+            margin-bottom: 10px;
+        }
+        .popup-close {
+            display: flex;
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+       
+        
+        .display-text {
+            cursor: pointer;
+        }
+
+/* 인쇄용 스타일 */
+@media print {
+        body {
+            padding: 0;
+        }
+        .step {
+            page-break-after: always;
+        }
+        button {
+            display: none;
+        }
+        .step-landscape {
+            transform: rotate(0deg); /* 회전 제거 */
+            width: 100%; /* 전체 너비 사용 */
+            height: auto; /* 높이 자동 조정 */
+            position: relative; /* absolute 대신 relative 사용 */
+            left: 0; /* 왼쪽 위치 조정 */
+            page-break-before: always; /* 새 페이지에서 시작 */
+            overflow: visible; /* 내용이 넘칠 경우 표시 */
+        }
+
+        @page {
+            size: landscape; /* 페이지 자체를 가로 방향으로 설정 */
+        }
+        /* 효율적인 단계별 인쇄 처리 */
+        .step {
+            display: none;
+        }
+        body[data-print-step] [id^="step"]:not([id="step" + attr(data-print-step)]) {
+            display: none;
+        }
+        body[data-print-step] [id="step" + attr(data-print-step)] {
+            display: block;
+        }
+        body[data-print-all] .step {
+            display: block;
+        }
+    }
+
+        
+    </style>
+</head>
+<body>
+    <div id="step1" style="display: block;" class="step step-landscape">
+        
+        <div class="print-area"></div>
+            
+        <h2 style="text-align: center; font-size: 24px; font-weight: bold; margin: 20px 0; letter-spacing: 5px;">상 속 세 과 세 가 액 명 세 서 ( 별지 )</h2>
+                <hr>
+                <h4>가. 상속받은 총재산명세</h4>
+                <table id="assetTable">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">
+                                ① 재산구분코드
+                                <button type="button" class="help-button no-print" onclick="showHelpPopup('helpPopup1')">?</button>
+                            </th>
+                            <th rowspan="2">② 재산종류코드
+                                <button type="button" class="help-button no-print" onclick="showHelpPopup('helpPopup2')">?</button>
+                            </th>
+                            <th colspan="3">③ 소재지ㆍ법인명 등</th>                    
+                            <th rowspan="2">④ 사업자등록번호<br> (계좌번호,지분)</th>
+                            <th rowspan="2">⑤ 수량 <br>(면적)</th>
+                            <th rowspan="2">⑥ 단가</th>
+                            <th rowspan="2">⑦ 평가가액</th>
+                            <th rowspan="2">⑧ 평가기준코드
+                                <button type="button" class="help-button no-print" onclick="showHelpPopup('helpPopup3')">?</button>
+                            </th>
+                            <th rowspan="2" class="no-print">삭제</th>
+                        </tr>
+                        <tr>
+                            <th>국외자산<br> 여부</th>
+                            <th>국외재산<br> 국가명</th>
+                            <th style="min-width: 300px;">소재지</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                    
+                        <tr>
+                            <td><span id="assetTypeSelector" class="selector">선택</span></td>                                                
+                            <td><span id="propertyTypeSelector" class="selector">선택</span></td>                        
+                            <td>
+                                <div class="checkbox-container">
+                                    <label><input type="radio" name="isForeign${index}" value="yes">여</label>
+                                    <label><input type="radio" name="isForeign${index}" value="no">부</label>
+                                </div>
+                            </td>
+                            <td><input type="text" name="foreignCountry"></td>
+                            <td><input type="text" name="location"></td>
+                            <td><input type="text" name="registrationNumber"></td>
+                            <td><input type="number" name="quantity" /></td>
+                            <td><input type="number" name="price" /></td>
+                            <td class="total">0</td>
+                            <td><span id="evaluationStandardSelector" class="selector">선택</span></td>                        
+                            <td class="no-print"><button onclick="deleteRow(this)">삭제</button></td>
+                        </tr>
+                        
+                    </tbody>
+                    <tfoot>
+                        <tr id="totalRow">
+                            <td colspan="6">계</td>
+                            <td></td>
+                            <td></td>
+                            <td id="grandTotal"></td>
+                            <td></td>
+                            <td class="no-print"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <button onclick="addRow()">행 추가</button>
+                
+                <button onclick="printStep(1)">1단계 인쇄</button>
+                
+                <hr>
+                <div class="data-management">
+                    
+                    <button id="saveButton" class="button">현재 데이터 저장</button>
+                    <button id="loadButton" class="button">저장된 데이터 불러오기</button>
+                    <button id="clearButton" class="button">저장된 데이터 삭제</button>
+                    <div id="message" class="message"></div>
+                </div>
+
+                <!-- 재산구분 , 종류, 평가기준에 따른 팝업창  -->
+                <div id="assetTypePopup" class="popup">
+                    <span class="close">&times;</span>
+                    <h2>자산 유형 선택</h2>
+                    <div id="assetTypeContent" class="popup-content"></div>
+                </div>
+            
+                <div id="propertyTypePopup" class="popup">
+                    <span class="close">&times;</span>
+                    <h2>재산 종류 선택</h2>
+                    <div id="propertyTypeContent" class="popup-content"></div>
+                </div>
+            
+                <div id="evaluationStandardPopup" class="popup">
+                    <span class="close">&times;</span>
+                    <h2>평가 기준 선택</h2>
+                    <div id="evaluationStandardContent" class="popup-content"></div>
+                </div>
+
+                <hr>           
+                <button class="no-print" onclick="nextStep(2)">다음</button> 
+                 
+        </div>
+
+            <!-- 팝업 오버레이 -->
+            <div id="helpPopup1" class="popup-overlay">
+                <div class="popup-content">
+                    <h3>재산구분 코드 설명</h3>
+                    <P> 상속인이 상속재산을 받은 경우 : A11</P>
+                    <P> 상속인이 아닌자. 자녀가 살아있는데 , 손자 손녀 똔느 사위 , 타인에게 유언으로 상속하는 경우 : A12</P>
+                    <p><strong>동영상보기 !! :</strong></p>
+                    
+                    <button class="popup-close" onclick="closeHelpPopup('helpPopup1')">닫기</button>
+                </div>
+            </div>
+
+            <!-- 팝업 오버레이 2 -->
+            <div id="helpPopup2" class="popup-overlay">
+                <div class="popup-content">
+                    <h3>재산 종류 코드 설명</h3>
+                    
+                    <p><strong>동영상보기!!! :</strong></p>
+                    
+                    <button class="popup-close" onclick="closeHelpPopup('helpPopup2')"> 닫기</button>
+                </div>
+            </div>
+
+            <!-- 팝업 오버레이 3 -->
+            <div id="helpPopup3" class="popup-overlay">
+                <div class="popup-content">
+                    <h3>평가기준코드</h3>
+                    
+                    
+                    <p><strong>동영상보기 !!! :</strong></p>
+                    
+                    <button class="popup-close" onclick="closeHelpPopup('helpPopup3')">닫기</button>
+                </div>
+            </div>
+                    
+    </div>
+
+    
+
+
+    
+    <div id="step2" style="display: none;" class="step step-landscape">
+        <div class="print-area">
+            
+            ◼ 상속세 및 증여세법 시행규직 [별지 제9호서식 부표 1](2024.03.22 개정)
+            관리번호  - <h1>상속세과세가액계산명세서</h1>
+            ፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.               (앞쪽)
+            <hr>
+           
+            
+            <h2>가. 상속받은 총재산명세</h2>
+            <div style="position: relative;">
+                <div style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background-color: #f5f5f5; border: 1px solid black; padding: 5px 10px; font-weight: bold; font-size: 1em;">
+                    별지 참조
+                </div>
+            <table>
+                <tr>
+                    <th rowspan="2">① 재산구분 코드</th>
+                    <th rowspan="2">② 재산종류 코드</th>
+                    <th colspan="3">③ 소재지ㆍ법인명 등</th>                    
+                    <th rowspan="2">④ 사업자등록번호 (계좌번호,지분)</th>
+                    <th rowspan="2">⑤ 수량 (면적)</th>
+                    <th rowspan="2">⑥ 단가</th>
+                    <th rowspan="2">⑦ 평가가액</th>
+                    <th rowspan="2">⑧ 평가기준 코드</th>                    
+                </tr>
+            
+                <tr>
+                    <th>국외자산 여부</th>
+                    <th>국외재산 국가명</th>
+                <tr>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>   
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td> 
+                </tr>
+                
+                <tr>
+                    <td></td>
+                    <td>[ ]여 [ ]부</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td> 
+                </tr>
+                
+                <tfoot>
+                    <tr id="totalRow">
+                        <td colspan="6">계</td>
+                        <td></td>
+                        <td></td>
+                        <td id="grandTotal"></td>
+                        <td></td>
+                        
+                    </tr>
+                </tfoot>
+
+
+            </table>
+        </div>
+            <h2>나. 상속세 과세가액 계산</h2>
+            <table>
+                
+                <tr>
+                    <td rowspan="3">총상속재산가액</td>
+                    <td>상 속 재 산 가 액 </td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td> 상속개시전 처분재산등 산입액 (「상속세 및 증여세법」 제15조)</td>
+                   <td></td>             
+                </tr>
+                
+                <tr>
+                    <td>합계</td>
+                    <td></td>
+                </tr>
+                   
+                <tr>
+                    <td rowspan="4">비과세 재산가액 (「상속세 및 증여세법」 제12조)</td>
+                    <td>계 </td>
+                    <td></td>
+                </tr>
+                <tr>                
+                    <td>금양임야등가액 (「민법 」 제1008조의 3)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>공공단체유증재산가액 </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td>기  타</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td rowspan="4">과세가액불산입</td>
+                    <td>계 </td>
+                    <td></td>
+                </tr>
+                <tr>                
+                    <td>공익법인 출연재산가액  (「상속세 및 증여세법」 제16조)  </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>공익신탁재산가액  (「상속세 및 증여세법」 제17조) </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td>기 타 </td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td rowspan="4">공제금액 (「상속세 및 증여세법」 제14조) </td>
+                    <td> 계</td>
+                    <td></td>
+                </tr>
+                <tr>                
+                    <td>공과금 </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>장례비용 </td>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <td>채무</td>
+                    <td></td>
+                </tr>
+                
+
+                <tr>
+                    <td rowspan="4">가산하는 증여재산가액</td>
+                    <td>계(㉖ + ㉗ 또는㉗ + ㉘) </td>
+                    <td></td>
+                </tr>
+                <tr>                
+                    <td>「상속세 및 증여세법」 제13조 </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>「조세특례제한법」 제30조의 5 </td>
+                    <td> </td>
+                    
+                </tr>
+                <tr>
+                    <td>「조세특례제한법」 제30조의 6</td>
+                    <td></td>
+                </tr>
+
+                
+                <tr>
+                    <td colspan="2">상속세 과세가액[ ⑫ - ( ⑬ + ⑰ + ㉑ ) + ㉕]</td>
+                    <td></td>
+                </tr>
+            </table>
+            <hr>
+        
+            
+        </div>
+            <button class="no-print" onclick="nextStep(3)">다음</button>
+            <button class="no-print" onclick="previousStep(1)">뒤로가기</button> 
+            <button onclick="printStep(2)">2단계 인쇄</button>
+    </div>
+
+    <div id="step3" style="display: none;" class="step">
+        <div class="print-area">
+            
+            <h2 style="text-align: center;">배우자 상속공제 명 세 서 </h2>
+            <hr>
+           
+
+            HTML은 기본 구조만 정의하고 있습니다.
+            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
+            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
+            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
+            
+            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
+             
+        </div>
+            <button class="no-print" onclick="nextStep(4)">다음</button>
+            <button class="no-print" onclick="previousStep(2)">뒤로가기</button>
+            <button onclick="printStep(3)">3단계 인쇄</button> 
+    </div>
+
+    <div id="step4" style="display: none;" class="step step-landscape">
+        <div class="print-area">
+            
+          
+            <h2 style="text-align: center;">금융재산 상속공제 신고서 </h2>
+                <hr>
+
+            HTML은 기본 구조만 정의하고 있습니다.
+            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
+            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
+            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
+            
+            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
+             
+        </div>
+            <button class="no-print" onclick="nextStep(5)">다음</button>
+            <button class="no-print" onclick="previousStep(3)">뒤로가기</button> 
+            <button onclick="printStep(4)">4단계 인쇄</button> 
+    </div>
+    
+    <div id="step5" style="display: none;" class="step step-landscape">
+        <div class="print-area">
+            
+          
+            <h2 style="text-align: center;">재해손실 공제신고서 </h2>
+                <hr>
+
+            HTML은 기본 구조만 정의하고 있습니다.
+            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
+            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
+            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
+            
+            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
+             
+        </div>
+            <button class="no-print" onclick="nextStep(6)">다음</button>
+            <button class="no-print" onclick="previousStep(4)">뒤로가기</button> 
+            <button onclick="printStep(5)">5단계 인쇄</button> 
+    </div>
+
+    <div id="step6" style="display: none;" class="step step-landscape">
+        <div class="print-area">
+            
+          
+            <h2 style="text-align: center;">동거주택상속공제신고서 </h2>
+                <hr>
+
+            HTML은 기본 구조만 정의하고 있습니다.
+            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
+            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
+            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
+            
+            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
+             
+        </div>
+            <button class="no-print" onclick="nextStep(7)">다음</button>
+            <button class="no-print" onclick="previousStep(5)">뒤로가기</button>
+            <button onclick="printStep(6)">6단계 인쇄</button>  
+    </div>
+
+    <div id="step7" style="display: none;" class="step step-landscape">
+        <div class="print-area">
+            
+          
+            <h2 style="text-align: center;">채무 공과금 장례비용 및 상속공제명세서 </h2>
+                <hr>
+
+            HTML은 기본 구조만 정의하고 있습니다.
+            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
+            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
+            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
+            
+            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
+             
+        </div>
+            <button class="no-print" onclick="nextStep(8)">다음</button>
+            <button class="no-print" onclick="previousStep(6)">뒤로가기</button> 
+            <button onclick="printStep(7)">7단계 인쇄</button>  
+    </div>
+
+    <div id="step8" style="display: none;" class="step step-landscape">
+        <div class="print-area">
+            
+          
+            <h2 style="text-align: center;">상속세과세표준신고서 및 자진납부계산서 </h2>
+                <hr>
+
+            HTML은 기본 구조만 정의하고 있습니다.
+            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
+            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
+            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
+            
+            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
+             
+        </div>
+            <button class="no-print" onclick="nextStep(9)">다음</button>
+            <button class="no-print" onclick="previousStep(7)">뒤로가기</button> 
+            <button onclick="printStep(8)">8단계 인쇄</button>  
+    </div>
+
+    <div id="step9" style="display: none;" class="step step-landscape">
+        <div class="print-area">
+            
+          
+            <h2 style="text-align: center;">납부서출력  </h2>
+                <hr>
+
+            HTML은 기본 구조만 정의하고 있습니다.
+            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
+            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
+            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
+            
+            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
+             
+        </div>
+            
+            <button class="no-print" onclick="previousStep(8)">뒤로가기</button> 
+            <button onclick="printStep(9)">9단계 인쇄</button>  
+    </div>
+
+
+<script>
+
+    // 다음 단계로 넘어가는 함수
+    function nextStep(stepNum) {
+        document.getElementById("step" + (stepNum - 1)).style.display = "none";
+        document.getElementById("step" + stepNum).style.display = "block";
+    }
+
+    function previousStep(stepNum) {
+        document.getElementById("step" + (stepNum + 1)).style.display = "none";
+        document.getElementById("step" + stepNum).style.display = "block";
+    }
+
+        // 도움말 팝업 표시 함수
+    function showHelpPopup(popupId) {
+        document.getElementById(popupId).style.display = 'flex';
+    }
+
+    // 도움말 팝업 닫기 함수
+    function closeHelpPopup(popupId) {
+        document.getElementById(popupId).style.display = 'none';
+    }
+
+        function formatNumber(num) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        }
+
+
+
+ // 자산구분, 종류, 평가기준에 따른 팝업창, 배열설정 
+    const assetTypes = [
+            { code: "A11", name: "상속재산 - 상속인" },
+            { code: "A12", name: "상속재산 - 상속인외" },
+            { code: "A13", name: "상속재산 - 상속개시전 처분재산" },
+            { code: "A21", name: "증여재산가산 - 상속인" },
+            { code: "A22", name: "증여재산가산 - 상속인외" },
+            { code: "A23", name: "증여재산가산 - 창업자금" },
+            { code: "A24", name: "증여재산가산 - 가업승계" },
+            { code: "B11", name: "비과세자산 - 금양임야" },
+            { code: "B12", name: "비과세자산 - 공공단체 유증" },
+            { code: "B13", name: "비과세자산 - 기타" },
+            { code: "B21", name: "과세가액불산입 - 공익법인출연재산" },
+            { code: "B22", name: "과세가액불산입 - 공익신탁재산" }
+        ];
+
+    const propertyTypes = [
+            { code: "01", name: "현금" },
+            { code: "02", name: "토지I (순수토지)" },
+            { code: "03", name: "토지II [일반건물(07)의 부속토지]" },
+            { code: "04", name: "개별주택 (주택부수토지 포함)" },
+            { code: "05", name: "공동주택 (부수토지 포함)" },
+            { code: "06", name: "오피스텔ㆍ상업용건물 (부수토지 포함)" },
+            { code: "07", name: "일반건물*(부수토지 제외)" },
+            { code: "08", name: "부동산을 취득할수 있는 권리" },
+            { code: "09", name: "유가증권(상장)" },
+            { code: "10", name: "유가증권(비상장)" },
+            { code: "11", name: "금융재산( 현금, 유가증권제외)" },
+            { code: "12", name: "기타재산" },
+            { code: "13", name: "가상재산" },
+            { code: "14", name: "서화골동품등" }
+        ];
+
+    const evaluationStandards = [
+            { code: "01", name: "해당 재산의 매매거래가액 (상증법 60조)" },
+            { code: "02", name: "해당 재산의 감정가액 (상증법 60조)" },
+            { code: "03", name: "해당 재산의 수용보상가액 (상증법 60조)" },
+            { code: "04", name: "해당 재산의 경매공매가액 (상증법 60조)" },
+            { code: "05", name: "유사재산의 매매사례가액 등" },
+            { code: "06", name: "현금등가액 (상증법 60조)" },
+            { code: "07", name: "저당권등평가특례가액 (상증법 60조)" },
+            { code: "08", name: "기준시가등 보충적평가가액 (상증법 61조부터 65조)" }
+        ];
+
+    function setupSelector(selectorId, popupId, contentId, data) {
+            const selector = document.getElementById(selectorId);
+            const popup = document.getElementById(popupId);
+            const content = document.getElementById(contentId);
+            const closeBtn = popup.querySelector('.close');
+
+            function createContent() {
+                content.innerHTML = '';
+                data.forEach(item => {
+                    const button = document.createElement('button');
+                    button.textContent = `${item.name} - ${item.code}`;
+                    button.onclick = function() {
+                        selector.textContent = item.code;
+                        popup.style.display = 'none';
+                    };
+                    content.appendChild(button);
+                });
+            }
+
+            selector.onclick = function(event) {
+                event.stopPropagation();
+                createContent();
+                popup.style.display = 'block';
+            }
+
+            closeBtn.onclick = function() {
+                popup.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target == popup) {
+                    popup.style.display = 'none';
+                }
+            }
+        }
+
+        setupSelector('assetTypeSelector', 'assetTypePopup', 'assetTypeContent', assetTypes);
+        setupSelector('propertyTypeSelector', 'propertyTypePopup', 'propertyTypeContent', propertyTypes);
+        setupSelector('evaluationStandardSelector', 'evaluationStandardPopup', 'evaluationStandardContent', evaluationStandards);
+
+ // 각 행의 총액을 계산하는 함수
+ function calculateTotal(row) {
+    const quantityInput = row.querySelector('input[name="quantity"]');
+    const priceInput = row.querySelector('input[name="price"]');
+    const totalCell = row.querySelector('.total');
+
+    if (quantityInput && priceInput && totalCell) {
+        const quantity = parseFloat(quantityInput.value) || 0;
+        const price = parseFloat(priceInput.value) || 0;
+        const total = quantity * price;
+        totalCell.textContent = total.toLocaleString('ko-KR'); // 한국 원화 형식으로 표시
+    }
+    updateGrandTotal();
+ }
+
+    // 전체 총액을 업데이트하는 함수
+    function updateGrandTotal() {
+        const totalCells = document.querySelectorAll('#assetTable tbody .total');
+    let grandTotal = 0;
+
+    totalCells.forEach(cell => {
+        grandTotal += parseFloat(cell.textContent.replace(/,/g, '')) || 0;
+    });
+
+    const grandTotalCell = document.getElementById('grandTotal');
+    if (grandTotalCell) {
+        grandTotalCell.textContent = grandTotal.toLocaleString('ko-KR'); // 한국 원화 형식으로 표시
+    }
+    return grandTotal; // 총액 반환
+ }
+
+    // 각 행에 이벤트 리스너를 추가하는 함수
+    function addRowListeners(row) {
+        const quantityInput = row.querySelector('input[name="quantity"]');
+        const priceInput = row.querySelector('input[name="price"]');
+    
+    if (quantityInput && priceInput) {
+        quantityInput.addEventListener('input', () => calculateTotal(row));
+        priceInput.addEventListener('input', () => calculateTotal(row));
+    }
+ }
+
+ // 새 행을 추가하는 함수
+ function addRow() {
+    const tbody = document.querySelector('#assetTable tbody');
+    const rowCount = tbody.rows.length;
+    const newRow = tbody.insertRow();
+    const index = rowCount + 1;
+
+    newRow.innerHTML = `
+        <td><span id="assetTypeSelector${index}" class="selector">선택</span></td>
+        <td><span id="propertyTypeSelector${index}" class="selector">선택</span></td>
+        <td>
+            <div class="checkbox-container">
+                <label><input type="radio" name="isForeign${index}" value="yes">여</label>
+                <label><input type="radio" name="isForeign${index}" value="no">부</label>
+            </div>
+        </td>
+        <td><input type="text" name="foreignCountry"></td>
+        <td><input type="text" name="location"></td>
+        <td><input type="text" name="registrationNumber"></td>
+        <td><input type="number" name="quantity" value="0" /></td>
+        <td><input type="number" name="price" value="0" /></td>
+        <td class="total">0</td>
+        <td><span id="evaluationStandardSelector${index}" class="selector">선택</span></td>
+        <td class="no-print"><button onclick="deleteRow(this)">삭제</button></td>
+    `;
+
+    // 새로운 선택기에 대한 이벤트 리스너 설정
+    setupSelector(`assetTypeSelector${index}`, 'assetTypePopup', 'assetTypeContent', assetTypes);
+    setupSelector(`propertyTypeSelector${index}`, 'propertyTypePopup', 'propertyTypeContent', propertyTypes);
+    setupSelector(`evaluationStandardSelector${index}`, 'evaluationStandardPopup', 'evaluationStandardContent', evaluationStandards);
+
+
+
+    addRowListeners(newRow);
+    calculateTotal(newRow);
+ }
+
+// 행을 삭제하는 함수
+function deleteRow(button) {
+    const row = button.closest('tr');
+    row.remove();
+    updateGrandTotal();
+    saveAssetData();
+}
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', () => {
+    const rows = document.querySelectorAll('#assetTable tbody tr');
+    rows.forEach(row => {
+        addRowListeners(row);
+        calculateTotal(row);
+    });
+    updateGrandTotal();
+
+    // '행 추가' 버튼에 이벤트 리스너 추가
+    const addButton = document.querySelector('.button-container button');
+    if (addButton) {
+        addButton.addEventListener('click', addRow);
+    }
+});
+
+
+
+
+    function formatInput(input) {
+        input.value = formatNumber(input.value.replace(/,/g, ''));
+    }
+
+    // 인쇄 관련 스크립트
+    function printStep(stepNum) {
+            document.body.setAttribute('data-print-step', stepNum);
+            window.print();
+            document.body.removeAttribute('data-print-step');
+        }
+
+        function printAll() {
+            document.body.setAttribute('data-print-all', 'true');
+            window.print();
+            document.body.removeAttribute('data-print-all');
+        }
+
+    //로컬스토리지에 저장과 불러오는 함수
+    document.addEventListener('DOMContentLoaded', function() {
+            const saveButton = document.getElementById('saveButton');
+            const loadButton = document.getElementById('loadButton');
+            const clearButton = document.getElementById('clearButton');
+            const messageDiv = document.getElementById('message');
+
+            function showMessage(text) {
+                messageDiv.textContent = text;
+            }
+
+            function saveData() {
+                const rows = document.querySelectorAll('#assetTable tbody tr:not(#totalRow)');
+                const data = Array.from(rows).map(row => ({
+                    assetType: row.cells[0].textContent,
+                    propertyType: row.cells[1].textContent,
+                    isOverseasAsset: row.cells[2].querySelector('input[type="radio"]:checked').value, // 선택된 라디오 버튼의 값을 가져옴
+                    overseasCountry: row.cells[3].querySelector('input[name="foreignCountry"]').value,
+                    location: row.cells[4].querySelector('input[name="location"]').value,
+                    registrationNumber: row.cells[5].querySelector('input[name="registrationNumber"]').value,
+                    quantity: row.cells[6].querySelector('input[name="quantity"]').value,
+                    unitPrice: row.cells[7].querySelector('input[name="price"]').value,
+                    evaluationAmount: row.cells[8].textContent,
+                    evaluationStandard: row.cells[9].textContent
+                }));
+
+                localStorage.setItem('step1Data', JSON.stringify(data));
+                showMessage('데이터가 성공적으로 저장되었습니다.');
+            }
+
+
+            function loadData() {
+                    const storedData = localStorage.getItem('step1Data');
+                    if (storedData) {
+                        const data = JSON.parse(storedData);
+                        const tbody = document.querySelector('#assetTable tbody');
+                        const rows = tbody.querySelectorAll('tr:not(#totalRow)');
+                        rows.forEach(row => row.remove());
+
+                        data.forEach((item, index) => {
+                            const newRow = document.createElement('tr');
+                            newRow.innerHTML = `
+                                <td>${item.assetType}</td>
+                                <td>${item.propertyType}</td>
+                                <td>
+                                    <div class="checkbox-container">
+                                        <label><input type="radio" name="isForeign${index + 1}" value="yes" ${item.isOverseasAsset === 'yes' ? 'checked' : ''}>여</label>
+                                        <label><input type="radio" name="isForeign${index + 1}" value="no" ${item.isOverseasAsset === 'no' ? 'checked' : ''}>부</label>
+                                    </div>
+                                </td>
+                                <td><input type="text" name="foreignCountry" value="${item.overseasCountry}"></td>
+                                <td><input type="text" name="location" value="${item.location}"></td>
+                                <td><input type="text" name="registrationNumber" value="${item.registrationNumber}"></td>
+                                <td><input type="number" name="quantity" value="${item.quantity}"></td>
+                                <td><input type="number" name="price" value="${item.unitPrice}"></td>
+                                <td class="total">${item.evaluationAmount}</td>
+                                <td>${item.evaluationStandard}</td>
+                                <td class="no-print"><button onclick="deleteRow(this)">삭제</button></td>
+                            `;
+                            tbody.insertBefore(newRow, document.getElementById('totalRow'));
+                        });
+
+                        showMessage('데이터가 성공적으로 불러와졌습니다.');
+                        updateGrandTotal(); // 총액 업데이트
+                    } else {
+                        showMessage('저장된 데이터가 없습니다.');
+                    }
+                }
+
+            
+            //각 버튼에 이벤트 리스너를 추가, 클릭시 이벤트가 발생하고 , 해당 함수 실행
+            saveButton.addEventListener('click', saveData);
+            loadButton.addEventListener('click', loadData);
+            clearButton.addEventListener('click', clearData);
+
+            // 페이지 로드 시 저장된 데이터 확인
+            if (localStorage.getItem('step1Data')) {
+                showMessage('저장된 데이터가 있습니다. "불러오기" 버튼을 클릭하여 데이터를 로드하세요.');
+            }
+
+            // 동적으로 행이 추가되거나 삭제될 때 총액 업데이트
+            const observer = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    if (mutation.type === 'childList') {
+                        updateGrandTotal();
+                    }
+                });
+            });
+
+            observer.observe(document.querySelector('#assetTable tbody'), { childList: true });
+        });
+    </script>
+</body>
+</html>

@@ -20,7 +20,7 @@
             
             <div class="col-md-12">
                 <div class="text-wrapper">
-                    <h1>상속세 절세 보고서(G) </h1>
+                    <h1>상속세 절세 보고서 </h1>
 
                     
 
@@ -61,9 +61,9 @@
 
                             <button onclick="loadAllData()">입력 데이터 불러오기</button> <br><br>
 
-                            <h2>상속인이 되는 자녀수와 주택가격</h2>
+                            <h2> 주택가격</h2>
                             <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
-                                <input type="number" id="childrensNumber" placeholder="자녀  명 ">
+                                
                                 <input type="text" id="houseValue" inputmode="numeric" oninput="formatNumber(this)" placeholder="주택가격 ">
 
                                 
@@ -325,8 +325,7 @@
                             
                                 <h3>뒤로 가기</h3>
                                 <div class="back-links">
-                                <div class="back-link" data-target="step1">자녀수와 주택가격</div>
-                                <div class="back-link" data-target="step2">비주거용건물(대지 포함)</div>
+                                <div class="back-link" data-target="step1"> 주택가격</div>                                <div class="back-link" data-target="step2">비주거용건물(대지 포함)</div>
                                 <div class="back-link" data-target="step3">농지</div>
                                 <div class="back-link" data-target="step4">임야(산)</div>
                                 <div class="back-link" data-target="step5">금융자산 등 그외상속재산</div>
@@ -358,7 +357,12 @@
 
                         <h2>▶ 배우자상속공제 한도까지 최대로 받기!</h2>
 
-
+                        <h4>상속인이 되는 자녀수</h4>
+                            <div style="display: flex; flex-direction: column; align-items: left; gap: 10px;">
+                                <input type="number" id="childrensNumber" placeholder="자녀  명 ">
+                               
+                        
+                            </div> 
                         
                            
                                                     <p> <strong>배우자 상속공제 한도 </strong> </p>
@@ -1406,6 +1410,7 @@
 
 
 <script>
+    
     function nextStep(stepNum) {
         document.getElementById("step" + (stepNum - 1)).style.display = "none";
         document.getElementById("step" + stepNum).style.display = "block";
