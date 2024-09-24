@@ -1,136 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Table with Local Storage</title>
+    <title>간소화된 Modal2 디자인</title>
     <style>
-        .selector {
+        .modal2 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-family: sans-serif;
+        }
+
+        .modal2.open {
+            display: block;
+        }
+
+        .modal2 button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 3px;
             cursor: pointer;
-        }
-        .checkbox-container {
-            display: flex;
-        }
-        td {
-            padding: 5px;
         }
     </style>
 </head>
 <body>
-    <table border="1" id="dynamicTable">
-        <thead>
-            <tr>
-                <th>Asset Type</th>
-                <th>Property Type</th>
-                <th>Is Foreign</th>
-                <th>Foreign Country</th>
-                <th>Location</th>
-                <th>Registration Number</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-                <th>Evaluation Standard</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- 동적으로 추가되는 행들이 여기에 삽입됩니다 -->
-        </tbody>
-    </table>
-    <button id="addRowBtn">Add Row</button>
-
-    <script>
-        // 행 데이터를 수집하고 JSON 문자열로 변환하는 함수
-        function getRowData(row) {
-            const assetType = row.querySelector('#assetTypeSelector').innerText;
-            const propertyType = row.querySelector('#propertyTypeSelector').innerText;
-            const isForeign = row.querySelector('input[name^="isForeign"]:checked')?.value || '';
-            const foreignCountry = row.querySelector('input[name="foreignCountry"]').value;
-            const location = row.querySelector('input[name="location"]').value;
-            const registrationNumber = row.querySelector('input[name="registrationNumber"]').value;
-            const quantity = row.querySelector('input[name="quantity"]').value;
-            const price = row.querySelector('input[name="price"]').value;
-            const total = parseFloat(quantity) * parseFloat(price);
-            const evaluationStandard = row.querySelector('#evaluationStandardSelector').innerText;
-
-            const rowData = {
-                assetType,
-                propertyType,
-                isForeign,
-                foreignCountry,
-                location,
-                registrationNumber,
-                quantity,
-                price,
-                total,
-                evaluationStandard
-            };
-
-            return JSON.stringify(rowData);
-        }
-
-        // 행 데이터를 로컬스토리지에 저장하는 함수
-        function saveRowDataToLocalStorage(row) {
-            const rowDataString = getRowData(row);
-            let storedData = JSON.parse(localStorage.getItem('tableData')) || [];
-            storedData.push(rowDataString);
-            localStorage.setItem('tableData', JSON.stringify(storedData));
-        }
-
-        // 로컬스토리지에서 데이터를 불러와 테이블에 추가하는 함수
-        function loadTableDataFromLocalStorage() {
-            const storedData = JSON.parse(localStorage.getItem('tableData')) || [];
-
-            storedData.forEach((dataString, index) => {
-                const data = JSON.parse(dataString);
-                addRowToTable(data, index);
-            });
-        }
-
-        // 행을 테이블에 추가하는 함수
-        function addRowToTable(data = {}, index = Date.now()) {
-            const newRow = document.createElement('tr');
-
-            newRow.innerHTML = `
-                <td><span id="assetTypeSelector" class="selector">${data.assetType || '선택'}</span></td>
-                <td><span id="propertyTypeSelector" class="selector">${data.propertyType || '선택'}</span></td>
-                <td>
-                    <div class="checkbox-container">
-                        <label><input type="radio" name="isForeign${index}" value="yes" ${data.isForeign === 'yes' ? 'checked' : ''}>여</label>
-                        <label><input type="radio" name="isForeign${index}" value="no" ${data.isForeign === 'no' ? 'checked' : ''}>부</label>
-                    </div>
-                </td>
-                <td><input type="text" name="foreignCountry" value="${data.foreignCountry || ''}"></td>
-                <td><input type="text" name="location" value="${data.location || ''}"></td>
-                <td><input type="text" name="registrationNumber" value="${data.registrationNumber || ''}"></td>
-                <td><input type="number" name="quantity" value="${data.quantity || 0}" /></td>
-                <td><input type="number" name="price" value="${data.price || 0}" /></td>
-                <td class="total">${data.total || 0}</td>
-                <td><span id="evaluationStandardSelector" class="selector">${data.evaluationStandard || '선택'}</span></td>
-                <td class="no-print"><button onclick="deleteRow(this)">삭제</button></td>
-            `;
-
-            document.querySelector('tbody').appendChild(newRow);
-
-            // 새로 추가된 행을 로컬스토리지에 저장
-            saveRowDataToLocalStorage(newRow);
-        }
-
-        // 행을 삭제하는 함수
-        function deleteRow(button) {
-            const row = button.closest('tr');
-            const index = Array.from(row.parentNode.children).indexOf(row);
-            let storedData = JSON.parse(localStorage.getItem('tableData')) || [];
-            storedData.splice(index, 1);
-            localStorage.setItem('tableData', JSON.stringify(storedData));
-            row.remove();
-        }
-
-        // 페이지 로드 시 테이블 데이터를 불러오기
-        document.addEventListener('DOMContentLoaded', loadTableDataFromLocalStorage);
-
-        // 행 추가 버튼 클릭 시 행 추가
-        document.getElementById('addRowBtn').addEventListener('click', () => addRowToTable());
-    </script>
+    <div id="modal2" class="modal2">
+        <p>모달 내용</p>
+        <button onclick="document.getElementById('modal2').classList.remove('open')">반영</button>
+        <button onclick="document.getElementById('modal2').classList.remove('open')">닫기</button>
+    </div>
 </body>
 </html>

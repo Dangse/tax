@@ -1,87 +1,471 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expandable Prep Item</title>
-    <style>
-        .expandable-container {
-            position: relative;
-            width: 300px;
-        }
-        .prep-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            opacity: 1;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .prep-item.additional {
-            opacity: 0;
-            height: 0;
-            overflow: hidden;
-            margin: 0;
-            transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out, margin 0.3s ease-in-out;
-        }
-        .prep-item.additional.visible {
-            opacity: 1;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        .prep-item-image {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-        .prep-item a {
-            text-decoration: none;
-            color: #333;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상속 공제 계산기</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    .input-field {
+      width: 150px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal.open {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <div id="expandableContainer" class="expandable-container">
-        <!-- 초기 아이템 -->
-    </div>
+  [별지 제9호서식](2020.0313 개정)
+  <h1>채무 공과금 장례비용 및 상속공제명세서</h1>
+  뒤쪽의 작성방법을 읽고 작성하시기 바랍니다. 
+  <hr>
+  ① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ ⑪ ⑫ ⑬ ⑭ ⑮ ⑯ ⑰ ⑱ ⑲ ⑳ ㉑ ㉒ ㉓ ㉔ ㉕ ㉖ ㉗ ㉘ ㉙ ㉚ ㉛
 
-    <script>
-        const container = document.getElementById('expandableContainer');
-        const prepItem = {
-            imageUrl: "https://tuzaga.com/wp-content/uploads/%EB%8F%88%EC%9C%BC%EB%A1%9C-%EB%A7%8C%EB%93%A0-%ED%86%A0%EB%81%BC-1.jpg",
-            alt: "📌",
-            linkUrl: "https://tuzaga.com/%ec%83%81%ec%86%8d%ec%9e%ac%ec%82%b0%ea%b3%bc-%ec%82%ac%ec%a0%84%ec%a6%9d%ec%97%ac%ec%9e%ac%ec%82%b0-%ec%95%8c%ec%95%84%eb%b3%b4%ea%b8%b0/",
-            linkText: "사전증여재산 알아보기 : 국세청홈텍스조회/세무서방문조회"
+  <!-- 채무 테이블 -->
+  <h4>가. 채무 </h4>
+  <table id="debtTable">
+      <tr>
+         <td rowspan="2">채무종류</td>
+         <td colspan="2">차입기간</td>
+         <td colspan="3">채권자</td>
+         <td rowspan="2"> 금액 </td>
+      </tr>
+      <tr>
+        <td>발생연원일</td>
+        <td>종료(예정)연월일</td>
+        <td>성명(상호)</td>
+        <td>주민등록번호(사업자등록번호)</td>
+        <td>주소(소재지)</td>
+      </tr>
+      <tbody id="debtTableBody">
+        <!-- 행이 동적으로 생성됩니다. -->
+      </tbody>
+      <tr class="total">
+          <td>합계</td>
+          <td colspan="5"></td>
+          <td id="debtTotal">0</td>
+      </tr>
+  </table>
+
+  <!-- 공과금 테이블 -->
+  <h4>공과금</h4>
+  <table id="utilityTable">
+      <tr>
+          <th>공과금종류코드</th>
+          <th>연도별</th>
+          <th>분기별</th>
+          <th>금액</th>                     
+      </tr>
+      <tbody id="utilityTableBody">
+        <!-- 행이 동적으로 생성됩니다. -->
+      </tbody>
+      <tr class="total">
+          <td>계</td>
+          <td colspan="2"></td>
+          <td id="utilityTotal">0</td>
+      </tr>
+  </table>
+
+  <!-- 장례비용 테이블 -->
+  <h4>다. 장례비용</h4>
+  <table id="funeralTable">
+      <tr>
+          <th colspan="2">지급처</th>
+          <th rowspan="2">지급내역</th>
+          <th rowspan="2">금액</th>
+      </tr>
+      <tr>
+          <td>주민등록번호<br>(사업자등록번호)</td>
+          <td>성명(상호)</td>
+      </tr>
+      <tbody id="funeralTableBody">
+        <!-- 행이 동적으로 생성됩니다. -->
+      </tbody>
+      <tr class="total">
+          <td>계</td>
+          <td colspan="2"></td>
+          <td id="funeralTotal">0</td>
+      </tr>
+  </table>
+
+  <!-- 상속 공제 테이블 -->
+  <h4>라.상속 공제</h4>
+  <table>
+    <tbody>
+        <tbody>
+        
+            <tr>
+              <td rowspan="5"> 기초공제 및 <br> 그 밖의 인적공제 </td>
+              <td>1. 기초공제</td>
+              <td><input type="text" id="baseDeduction" class="input-field" value="200,000,000" readonly></td>
+             
+            </tr>
+            <tr>
+              <td>2. 자녀공제 <button onclick="openModal('child')">계산</button></td>
+              <td><input type="text" id="childDeduction" class="input-field" value="0" readonly></td>
+             
+            </tr>
+            <tr>
+              <td>3. 미성년자공제 <button onclick="openModal('minor')">계산</button></td>
+              <td><input type="text" id="minorDeduction" class="input-field" value="0" readonly></td>
+             
+            </tr>
+            <tr>
+              <td>4. 연로자공제 <button onclick="openModal('elder')">계산</button></td>
+              <td><input type="text" id="elderDeduction" class="input-field" value="0" readonly></td>
+             
+            </tr>
+            <tr>
+              <td>5. 장애인공제 <button onclick="openModal('disabled')">계산</button></td>
+              <td><input type="text" id="disabledDeduction" class="input-field" value="0" readonly></td>
+              
+            </tr>
+            <tr>
+              <td colspan="2">6. 일괄공제</td>
+              <td><input type="text" id="totalDeduction" class="input-field" value="500,000,000" readonly></td>
+             
+            </tr>
+            <tr>
+              <td rowspan="2">추가 상속공제 </td>
+              <td>7. 가업상속공제</td>
+              <td><input type="text" id="businessInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+             
+            </tr>
+            <tr>
+              <td>8. 영농상속공제</td>
+              <td><input type="text" id="farmingInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+             
+            </tr>
+            <tr>
+              <td colspan="2">9. 배우자상속공제</td>
+              <td><input type="text" id="spouseInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+             
+            </tr>
+            <tr>
+              <td colspan="2">10. 금융재산상속공제</td>
+              <td><input type="text" id="financialInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+             
+            </tr>
+            <tr>
+              <td colspan="2">11. 재해손실세액공제</td>
+              <td><input type="text" id="disasterTaxDeduction" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+              
+            </tr>
+            <tr>
+              <td colspan="2">12. 동거주택상속공제</td>
+              <td><input type="text" id="cohabitationDeduction" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+             
+            </tr>
+            <tr>
+              <td colspan="2">13. 공제적용한도액</td>
+              <td><input type="text" id="deductionLimit" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+            
+            </tr>
+      
+            <tr>
+              <td colspan="2"><strong>14. 상속 공제 금액 합계</strong></td>
+              <td><input type="text" id="totalDeductionSum" class="input-field" value="0" readonly></td>
+            
+            </tr>
+    </tbody>
+  </table>
+
+  <!-- 저장, 불러오기, 삭제 버튼 -->
+  <button onclick="saveDataToLocalStorage()">데이터 저장</button>
+  <button onclick="loadDataFromLocalStorage()">데이터 불러오기</button>
+  <button onclick="deleteDataFromLocalStorage()">데이터 삭제</button>
+
+  <!-- 모달 창 -->
+  <div id="modal" class="modal">
+    <label id="modalTitle"></label><br>
+    <label id="modalDescription"></label><br>
+    <input type="number" id="modalInput1" class="input-field" placeholder="입력값"><br>
+    <input type="number" id="modalInput2" class="input-field" placeholder="추가 입력값" style="display:none;"><br>
+    <button onclick="applyModal()">반영</button><br>
+    <button onclick="closeModal()">닫기</button>
+  </div>
+
+  <script>
+    // 테이블 행을 동적으로 생성하는 함수
+    function generateTableRows(tableBodyId, rowCount, columns, classPrefix) {
+        const tableBody = document.getElementById(tableBodyId);
+        for (let i = 0; i < rowCount; i++) {
+            const tr = document.createElement('tr');
+            columns.forEach(col => {
+                const td = document.createElement('td');
+                if (col.type === 'select') {
+                    const select = document.createElement('select');
+                    col.options.forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt.value;
+                        option.textContent = opt.text;
+                        select.appendChild(option);
+                    });
+                    td.appendChild(select);
+                } else if (col.type === 'input') {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    if (col.className) input.className = col.className;
+                    if (col.onInput) input.setAttribute('onInput', col.onInput);
+                    td.appendChild(input);
+                }
+                tr.appendChild(td);
+            });
+            tableBody.appendChild(tr);
+        }
+    }
+
+    // 채무 테이블 행 생성
+    generateTableRows('debtTableBody', 5, [
+        { type: 'select', options: [
+            { value: 'finance', text: '금융채무' },
+            { value: 'personal', text: '개인사채' },
+            { value: 'deposit', text: '임대보증금' },
+            { value: 'other', text: '기타' }
+        ] },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input', className: 'debt-amount', onInput: "formatAndCalculateDebtUtility(this, 'debt')" },
+    ]);
+
+    // 공과금 테이블 행 생성
+    generateTableRows('utilityTableBody', 5, [
+        { type: 'select', options: [
+            { value: '01', text: '01:국세' },
+            { value: '02', text: '02:지방세' },
+            { value: '03', text: '03:공공요금' },
+            { value: '04', text: '04:과태료/범칙금' },
+            { value: '05', text: '05:회비' },
+            { value: '06', text: '06:기타' }
+        ] },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input', className: 'utility-amount', onInput: "formatAndCalculateDebtUtility(this, 'utility')" },
+    ]);
+
+    // 장례비용 테이블 행 생성
+    generateTableRows('funeralTableBody', 3, [
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input', className: 'funeral-amount', onInput: "formatAndCalculateDebtUtility(this, 'funeral')" },
+    ]);
+
+    // 숫자 포맷팅 함수
+    function formatNumber(num) {
+        return Math.floor(num).toLocaleString('ko-KR');
+    }
+
+    // 숫자 파싱 함수
+    function parseNumber(numStr) {
+        return parseInt(numStr.replace(/[^\d]/g, ''), 10) || 0;
+    }
+
+    // 채무, 공과금, 장례비용 합계 계산 함수
+    function formatAndCalculateDebtUtility(input, type) {
+        if (input) {
+            let numValue = parseNumber(input.value);
+            input.value = formatNumber(numValue);
+        }
+
+        let total = 0;
+        document.querySelectorAll(`.${type}-amount`).forEach(input => {
+            total += parseNumber(input.value);
+        });
+        document.getElementById(`${type}Total`).textContent = formatNumber(total);
+    }
+
+    // 상속 공제 금액 포맷팅 및 합계 계산
+    function formatAndCalculate() {
+        const ids = ['businessInheritance', 'farmingInheritance', 'spouseInheritance', 'financialInheritance', 'disasterTaxDeduction', 'cohabitationDeduction'];
+        ids.forEach(id => {
+            const input = document.getElementById(id);
+            input.value = formatNumber(parseNumber(input.value));
+        });
+        calculateInheritDeductionTotal();
+    }
+
+    // 모달 관련 변수 및 함수
+    let currentModal = '';
+
+    function openModal(type) {
+        currentModal = type;
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalInput2 = document.getElementById('modalInput2');
+        
+        modalInput2.style.display = 'none'; // 추가 입력 필드를 숨김
+        document.getElementById('modalInput1').value = '';
+
+        switch (type) {
+            case 'child':
+                modalTitle.textContent = '자녀공제'; 
+                modalDescription.textContent = ': 자녀수 * 1인당 5천만원 ';
+                break;
+            case 'minor':
+                modalTitle.textContent = '미성년자공제';
+                modalDescription.textContent = ': 미성년자들의 잔여연수(19세까지) 합산 * 1천만원';
+                break;
+            case 'elder':
+                modalTitle.textContent = '연로자 공제';
+                modalDescription.textContent = ':연로자수 * 1인당 5천만원';
+                break;
+            case 'disabled':
+                modalTitle.textContent = '장애인 공제';
+                modalDescription.textContent = ': 장애인 기대여명 연수 합계 * 1천만원 ';
+                break;
+        }
+        modal.classList.add('open');
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.remove('open');
+    }
+
+    function applyModal() {
+        const value1 = parseInt(document.getElementById('modalInput1').value) || 0;
+        const baseAmounts = {
+            child: 50000000,
+            minor: 10000000,
+            elder: 50000000,
+            disabled: 10000000
+        };
+        const calculatedValue = value1 * baseAmounts[currentModal];
+
+        const deductionIds = {
+            child: 'childDeduction',
+            minor: 'minorDeduction',
+            elder: 'elderDeduction',
+            disabled: 'disabledDeduction'
         };
 
-        function createPrepItem(isAdditional = false) {
-            const div = document.createElement('div');
-            div.className = isAdditional ? 'prep-item additional' : 'prep-item';
-            div.innerHTML = `
-                <img src="${prepItem.imageUrl}" alt="${prepItem.alt}" class="prep-item-image">
-                <a href="${prepItem.linkUrl}" target="_blank">${prepItem.linkText}</a>
-            `;
-            return div;
+        document.getElementById(deductionIds[currentModal]).value = formatNumber(calculatedValue);
+        closeModal();
+        calculateInheritDeductionTotal();
+    }
+
+    // 상속 공제 합계 계산 함수
+    function calculateInheritDeductionTotal() {
+        const ids = ['baseDeduction', 'childDeduction', 'minorDeduction', 'elderDeduction', 'disabledDeduction'];
+        let subtotal = 0;
+        ids.forEach(id => {
+            subtotal += parseNumber(document.getElementById(id).value);
+        });
+
+        const totalDeduction = parseNumber(document.getElementById('totalDeduction').value);
+        const maxTotal = Math.max(subtotal, totalDeduction);
+
+        const additionalIds = ['businessInheritance', 'farmingInheritance', 'spouseInheritance', 'financialInheritance', 'disasterTaxDeduction', 'cohabitationDeduction'];
+        let additionalTotal = 0;
+        additionalIds.forEach(id => {
+            additionalTotal += parseNumber(document.getElementById(id).value);
+        });
+
+        let finalTotal = maxTotal + additionalTotal;
+
+        const deductionLimit = parseNumber(document.getElementById('deductionLimit').value);
+        if (deductionLimit > 0) {
+            finalTotal = Math.min(finalTotal, deductionLimit);
         }
 
-        // 초기 아이템 추가
-        container.appendChild(createPrepItem());
+        document.getElementById('totalDeductionSum').value = formatNumber(finalTotal);
+    }
 
-        // 추가 아이템들 미리 생성
-        for (let i = 0; i < 4; i++) {
-            container.appendChild(createPrepItem(true));
-        }
+    // 데이터 저장 함수
+    function saveDataToLocalStorage() {
+        const data = {};
 
-        container.addEventListener('mouseenter', () => {
-            const additionalItems = container.querySelectorAll('.prep-item.additional');
-            additionalItems.forEach((item, index) => {
-                setTimeout(() => item.classList.add('visible'), 100 * index);
+        // 테이블 데이터 수집
+        ['debt', 'utility', 'funeral'].forEach(type => {
+            const rows = document.querySelectorAll(`#${type}TableBody tr`);
+            data[`${type}Data`] = [];
+            rows.forEach(row => {
+                const rowData = [];
+                row.querySelectorAll('input, select').forEach(input => {
+                    rowData.push(input.value);
+                });
+                data[`${type}Data`].push(rowData);
             });
         });
 
-        container.addEventListener('mouseleave', () => {
-            const additionalItems = container.querySelectorAll('.prep-item.additional');
-            additionalItems.forEach(item => item.classList.remove('visible'));
+        // 상속 공제 데이터 수집
+        const ids = ['baseDeduction', 'childDeduction', 'minorDeduction', 'elderDeduction', 'disabledDeduction', 'totalDeduction', 'businessInheritance', 'farmingInheritance', 'spouseInheritance', 'financialInheritance', 'disasterTaxDeduction', 'cohabitationDeduction', 'deductionLimit', 'totalDeductionSum'];
+        data.inheritanceDeductions = {};
+        ids.forEach(id => {
+            data.inheritanceDeductions[id] = document.getElementById(id).value;
         });
-    </script>
+
+        // 로컬 스토리지에 저장
+        localStorage.setItem('step2Data', JSON.stringify(data));
+        alert('데이터가 저장되었습니다.');
+    }
+
+    // 데이터 불러오기 함수
+    function loadDataFromLocalStorage() {
+        const data = JSON.parse(localStorage.getItem('step2Data'));
+        if (!data) {
+            alert('저장된 데이터가 없습니다.');
+            return;
+        }
+
+        // 테이블 데이터 불러오기
+        ['debt', 'utility', 'funeral'].forEach(type => {
+            const rows = document.querySelectorAll(`#${type}TableBody tr`);
+            data[`${type}Data`].forEach((rowData, index) => {
+                const inputs = rows[index].querySelectorAll('input, select');
+                inputs.forEach((input, idx) => {
+                    input.value = rowData[idx];
+                });
+            });
+            formatAndCalculateDebtUtility(null, type);
+        });
+
+        // 상속 공제 데이터 불러오기
+        const ids = ['baseDeduction', 'childDeduction', 'minorDeduction', 'elderDeduction', 'disabledDeduction', 'totalDeduction', 'businessInheritance', 'farmingInheritance', 'spouseInheritance', 'financialInheritance', 'disasterTaxDeduction', 'cohabitationDeduction', 'deductionLimit', 'totalDeductionSum'];
+        ids.forEach(id => {
+            if (data.inheritanceDeductions[id] !== undefined) {
+                document.getElementById(id).value = data.inheritanceDeductions[id];
+            }
+        });
+
+        formatAndCalculate();
+        alert('데이터를 불러왔습니다.');
+    }
+
+    // 데이터 삭제 함수
+    function deleteDataFromLocalStorage() {
+        localStorage.removeItem('step2Data');
+        alert('저장된 데이터가 삭제되었습니다.');
+    }
+  </script>
 </body>
 </html>

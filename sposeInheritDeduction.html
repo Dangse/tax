@@ -95,8 +95,7 @@
     </div>
 
     <div class="table-container">
-        <hr>
-        <h4>다. 배우자 상속공제 한도액</h4>
+       
         <table>
             
             <tr>
@@ -131,7 +130,7 @@
 
     <div class="table-container">
         <hr>
-        <h4>라. 배우자 상속공제 금액</h4>
+        <h4>다. 배우자 상속공제 금액</h4>
         <table>
             <tr>
                 <td> ⑮ 배우자 상속공제 금액 (④ 와 ⑭ 중 적은금액 )<br>
@@ -263,12 +262,12 @@
         const nonTaxableAmount = unformatNumber(document.getElementById('nonTaxableAmount').value);
         const taxableInheritance = totalInheritance - taxExemption2 - taxAndDebt - nonTaxableAmount;
         document.getElementById('taxableInheritance').textContent = formatNumber(taxableInheritance);
-        document.getElementById('taxableInheritance2').textContent = formatNumber(taxableInheritance);
+        
     }
 
     // 배우자 한도금액 계산
     function calculateSpouseLimitAmount() {
-        const taxableInheritance = unformatNumber(document.getElementById('taxableInheritance2').textContent);
+        const taxableInheritance = unformatNumber(document.getElementById('taxableInheritance').textContent);
         const nonHeirAmount = unformatNumber(document.getElementById('nonHeirAmount').value);
         const giftAmount = unformatNumber(document.getElementById('giftAmount').value);
         const spouseLegalShareStr = document.getElementById('spouseLegalShare').value;

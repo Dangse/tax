@@ -866,7 +866,7 @@
                                 <p>※ 양도가액과 취득가액이 동일하여 양도차익이 없습니다. 감정을 받을 필요없습니다.</p>
                                 <label for="transferPrice1">양도가액:</label>
                                 <input type="text" id="transferPrice1" inputmode="numeric" oninput="formatNumber(this)"><br>
-                                <label for="acquisitionPrice1">취득가액:</label>
+                               <label for="acquisitionPrice1">취득가액(=양도가액):</label>
                                 <input type="text" id="acquisitionPrice1" readonly><br>
                             </div>
 
@@ -877,11 +877,11 @@
                                 
                                 <label for="transferPrice2">양도가액:</label>
                                 <input type="text" id="transferPrice2" inputmode="numeric" oninput="formatNumber(this); syncTransferPrice();"><br>
-                                <label for="acquisitionPrice2">취득가액: </label>
+                                <label for="acquisitionPrice2">취득가액(상속세신고시 신고한 가액) : </label>
                                 <input type="text" id="acquisitionPrice2" inputmode="numeric" oninput="formatNumber(this)"><br>
-                                <label for="holdingPeriod2">보유기간:</label>
+                                <label for="holdingPeriod2">보유기간(년):</label>
                                 <input type="number" id="holdingPeriod2" step="0.1" min="0" oninput="syncHoldingPeriod();"><br>
-                                <label for="nonBusinessUse2">비사업용 여부:</label>
+                                <label for="nonBusinessUse2">비사업용 여부(5년이내 항상 사업용으로 봄):</label>
                                 <input type="checkbox" id="nonBusinessUse2" onchange="syncNonBusinessUse();"><br>
                             </div>
 
@@ -891,11 +891,11 @@
                                 <p>※ 취득가액이 기준시가가 됩니다. </p>
                                 <label for="transferPrice3">양도가액:</label>
                                 <input type="text" id="transferPrice3" inputmode="numeric" readonly><br>
-                                <label for="acquisitionPrice3">취득가액: </label>
+                                <label for="acquisitionPrice3">취득가액(상속당시 기준시가): </label>
                                 <input type="text" id="acquisitionPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
-                                <label for="holdingPeriod3">보유기간: </label>
+                                <label for="holdingPeriod3">보유기간(년): </label>
                                 <input type="number" id="holdingPeriod3" step="0.1" min="0" readonly><br>
-                                <label for="nonBusinessUse3">비사업용 여부:</label>
+                                <label for="nonBusinessUse3">비사업용 여부(5년이내 항상 사업용으로 봄):</label>
                                 <input type="checkbox" id="nonBusinessUse3" disabled><br>
                             </div>
 

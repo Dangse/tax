@@ -45,64 +45,162 @@
            
         }
         
-        /* 팝업 스타일 */
-        .popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: none;
-    z-index: 1000;
+        /* 모달 창 스타일 - 팝업 스타일 그대로 사용 가능 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* 배경 비활성화 효과 */
+            display: none; /* 기본적으로 숨김 처리 */
+            z-index: 1000;
+        }
+
+        .modal {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* 화면 중앙에 고정 */
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            
+        }
+            
+
+        .modal-content {
+            display: flex;
+            flex-direction: column;  /* 세로 방향으로 변경 */
+            align-items: stretch;  /* 버튼들을 컨테이너 너비에 맞춤 */   
+            justify-content: center;  /* 중앙 정렬 */
+            gap: 10px 15px;  /* 세로 간격 10px, 가로 간격 15px */
+            width: 100%;
+        }
+
+        .modal-content button {
+            flex: 0 1 auto;  /* 버튼 크기 자동 조절 */
+            padding: 10px 15px;
+            text-align: left;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;  /* 버튼 텍스트 줄바꿈 방지 */
+            width: 100%;  /* 버튼 너비를 100%로 설정 */
+            margin: 5px 0;  /* 상하 마진 추가 */
+        }
+
+        .modal-content button:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+         /* 모달 창 Step2 스타일 수정 */
+      .modalStep2 {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      max-width: 90%;
+      width: 600px;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .modalStep2.open {
+      display: block;
+      opacity: 1;
+    }
+
+    .modalStep2 h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 24px;
+    }
+
+    .modalStep2 p {
+      color: #666;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .modalStep2 button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 16px;
+    }
+
+    .modalStep2 button:hover {
+      background-color: #218838;
+    }
+
+    /* 입력 필드 스타일 */
+    .modalStep2 .input-field {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* 모달 창 내부 배치 */
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .modal-actions button {
+      margin-left: 10px;
+    }
+
+@media (max-width: 480px) {
+    .modalStep2 {
+        width: 85%;
+        padding: 20px;
+    }
+    
+    .modalStep2 h2 {
+        font-size: 1.5em;
+    }
+    
+    .modalStep2 p {
+        font-size: 1em;
+    }
+    
+    .modalStep2 button {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+
 }
 
-.popup {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #f9f9f9;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    animation: popIn 0.3s ease-out;
-}
-
-.popup-content {
-    display: flex;
-    flex-direction: column;  /* 세로 방향으로 변경 */
-    align-items: stretch;  /* 버튼들을 컨테이너 너비에 맞춤 */   
-    justify-content: center;  /* 중앙 정렬 */
-    gap: 10px 15px;  /* 세로 간격 10px, 가로 간격 15px */
-    width: 100%;
-}
-
-.popup-content button {
-    flex: 0 1 auto;  /* 버튼 크기 자동 조절 */
-    padding: 10px 15px;
-    text-align: left;
-    background-color: #e0e0e0;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    font-weight: bold;
-    color: #333;
-    white-space: nowrap;  /* 버튼 텍스트 줄바꿈 방지 */
-    width: 100%;  /* 버튼 너비를 100%로 설정 */
-    margin: 5px 0;  /* 상하 마진 추가 */
-}
-
-.popup-content button:hover {
-    background-color: #d0d0d0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
 /* x표시 디지인  */
 .close {
     position: absolute;
@@ -144,25 +242,7 @@
     background-color: #0056b3;
 }
 
-.popup-close {
-    background: #5E35B1;  /* 짙은 보라색 계열로 변경 */
-    color: #FFFFFF;  /* 텍스트 색상을 흰색으로 변경하여 대비 강화 */
-    border: none;
-    padding: 12px 24px;
-    cursor: pointer;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    align-self: center;
-    width: 80%;
-    max-width: 200px;
-}
 
-.popup-close:hover {
-    background: #4527A0;  /* 호버 시 약간 더 어두운 보라색 */
-    transform: translateY(-2px);
-}
 @keyframes popIn {
     from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
     to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
@@ -275,43 +355,39 @@
                     <button onclick="clearAssetData()">데이터 삭제</button>
                 </div>
 
-                
-                <!-- 자산 유형 선택 팝업 -->
-                <div id="assetTypePopup" class="popup-overlay">
-                    <div class="popup">
+                                <!-- 자산 유형 선택 모달 -->
+                <div id="assetTypeModal" class="modal-overlay">
+                    <div class="modal">
                         <span class="close">&times;</span>
-                        <div class="popup-content">
+                        <div class="modal-content">
                             <h2>자산 유형 선택</h2>
                             <div id="assetTypeContent"></div>
-                           
                         </div>
                     </div>
                 </div>
-
-                <!-- 재산 종류 선택 팝업 -->
-                <div id="propertyTypePopup" class="popup-overlay">
-                    <div class="popup">
+                <!-- 재산 종류 선택 모달 -->
+                <div id="propertyTypeModal" class="modal-overlay">
+                    <div class="modal">
                         <span class="close">&times;</span>
-                        <div class="popup-content">
+                        <div class="modal-content">
                             <h2>재산 종류 선택</h2>
                             <div id="propertyTypeContent"></div>
-                            
-                            
                         </div>
                     </div>
                 </div>
 
-                <!-- 평가 기준 선택 팝업 -->
-                <div id="evaluationStandardPopup" class="popup-overlay">
-                    <div class="popup">
+                <!-- 평가 기준 선택 모달 -->
+                <div id="evaluationStandardModal" class="modal-overlay">
+                    <div class="modal">
                         <span class="close">&times;</span>
-                        <div class="popup-content">
+                        <div class="modal-content">
                             <h2>평가 기준 선택</h2>
                             <div id="evaluationStandardContent"></div>
-                            
                         </div>
                     </div>
                 </div>
+
+                
 
             <button onclick="nextStep(2)">다음</button>
             <button onclick="printStep(1)">1단계 인쇄</button>
@@ -319,10 +395,195 @@
     </div>
 
     <div id="step2" style="display: none;" class="step step-landscape">
-        <button onclick="loadAssetData()">데이터 불러오기</button>
+       
+        <div class="print-area">
+          
+        <hr>
+        [별지 제9호서식](2020.0313 개정)
+        <h1>채무 공과금 장례비용 및 상속공제명세서</h1>
+        뒤쪽의 작성방법을 읽고 작성하시기 바랍니다. 
+        <hr>
+       
+      
+        <!-- 채무 테이블 -->
+        <h4>가. 채무 </h4>
+        <table id="debtTable">
+            <tr>
+               <td rowspan="2">채무종류</td>
+               <td colspan="2">차입기간</td>
+               <td colspan="3">채권자</td>
+               <td rowspan="2"> 금액 </td>
+            </tr>
+            <tr>
+              <td>발생연원일</td>
+              <td>종료(예정)연월일</td>
+              <td>성명(상호)</td>
+              <td>주민등록번호(사업자등록번호)</td>
+              <td>주소(소재지)</td>
+            </tr>
+            <tbody id="debtTableBody">
+              <!-- 행이 동적으로 생성됩니다. -->
+            </tbody>
+            <tr class="total">
+                <td>합계</td>
+                <td colspan="5"></td>
+                <td id="debtTotal">0</td>
+            </tr>
+        </table>
+      
+        <!-- 공과금 테이블 -->
+        <h4>공과금</h4>
+        <table id="utilityTable">
+            <tr>
+                <th>공과금종류코드</th>
+                <th>연도별</th>
+                <th>분기별</th>
+                <th>금액</th>                     
+            </tr>
+            <tbody id="utilityTableBody">
+              <!-- 행이 동적으로 생성됩니다. -->
+            </tbody>
+            <tr class="total">
+                <td>계</td>
+                <td colspan="2"></td>
+                <td id="utilityTotal">0</td>
+            </tr>
+        </table>
+      
+        <!-- 장례비용 테이블 -->
+        <h4>다. 장례비용</h4>
+        <table id="funeralTable">
+            <tr>
+                <th colspan="2">지급처</th>
+                <th rowspan="2">지급내역</th>
+                <th rowspan="2">금액</th>
+            </tr>
+            <tr>
+                <td>주민등록번호<br>(사업자등록번호)</td>
+                <td>성명(상호)</td>
+            </tr>
+            <tbody id="funeralTableBody">
+              <!-- 행이 동적으로 생성됩니다. -->
+            </tbody>
+            <tr class="total">
+                <td>계</td>
+                <td colspan="2"></td>
+                <td id="funeralTotal">0</td>
+            </tr>
+        </table>
+      
+        <!-- 상속 공제 테이블 -->
+        <h4>라.상속 공제</h4>
+        <table>
+          <tbody>
+              <tbody>
+              
+                  <tr>
+                    <td rowspan="5"> 기초공제 및 <br> 그 밖의 인적공제 </td>
+                    <td>1. 기초공제</td>
+                    <td><input type="text" id="baseDeduction" class="input-field" value="200,000,000" readonly></td>
+                   
+                  </tr>
+                  <tr>
+                    <td>2. 자녀공제 <button onclick="openmodalStep2('child')">계산</button></td>
+                    <td><input type="text" id="childDeduction" class="input-field" value="0" readonly></td>
+                   
+                  </tr>
+                  <tr>
+                    <td>3. 미성년자공제 <button onclick="openmodalStep2('minor')">계산</button></td>
+                    <td><input type="text" id="minorDeduction" class="input-field" value="0" readonly></td>
+                   
+                  </tr>
+                  <tr>
+                    <td>4. 연로자공제 <button onclick="openmodalStep2('elder')">계산</button></td>
+                    <td><input type="text" id="elderDeduction" class="input-field" value="0" readonly></td>
+                   
+                  </tr>
+                  <tr>
+                    <td>5. 장애인공제 <button onclick="openmodalStep2('disabled')">계산</button></td>
+                    <td><input type="text" id="disabledDeduction" class="input-field" value="0" readonly></td>
+                    
+                  </tr>
+                  <tr>
+                    <td colspan="2">6. 일괄공제</td>
+                    <td><input type="text" id="totalDeduction" class="input-field" value="500,000,000" readonly></td>
+                   
+                  </tr>
+                  <tr>
+                    <td rowspan="2">추가 상속공제 </td>
+                    <td>7. 가업상속공제</td>
+                    <td><input type="text" id="businessInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+                   
+                  </tr>
+                  <tr>
+                    <td>8. 영농상속공제</td>
+                    <td><input type="text" id="farmingInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+                   
+                  </tr>
+                  <tr>
+                    <td colspan="2">9.<a href="sposeInheritDeduction.html" target="_blank">배우자상속공제</a></td>
+                    <td><input type="text" id="spouseInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+                   
+                  </tr>
+                  <tr>
+                    <td colspan="2">10.<a href="finantialAssetDeduction.html" target="_blank">금융재산 상속공제</a> </td>
+                    <td><input type="text" id="financialInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+                   
+                  </tr>
+                  <tr>
+                    <td colspan="2">11. 재해손실세액공제</td>
+                    <td><input type="text" id="disasterTaxDeduction" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+                    
+                  </tr>
+                  <tr>
+                    <td colspan="2">12. <a href="coHabitationDeduction.html" target="_blank">동거주택 상속공제</a></td>
+                    <td><input type="text" id="cohabitationDeduction" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+                   
+                  </tr>
+                  <tr>
+                    <td colspan="2">13. <a href="inheritanceDeductionLimit.html" target="_blank">공제 적용 한도액</a></td>
+                    <td><input type="text" id="deductionLimit" class="input-field" value="0" oninput="formatAndCalculate()"></td>
+                  
+                  </tr>
+            
+                  <tr>
+                    <td colspan="2"><strong>14. 상속 공제 금액 합계</strong></td>
+                    <td><input type="text" id="totalDeductionSum" class="input-field" value="0" readonly></td>
+                  
+                  </tr>
+          </tbody>
+        </table>
+      
+        <!-- 저장, 불러오기, 삭제 버튼 -->
+        <button onclick="saveDataToLocalStorage2()">데이터 저장 2</button>
+        <button onclick="loadDataFromLocalStorage2()">데이터 불러오기 2</button>
+        <button onclick="deleteDataFromLocalStorage2()">데이터 삭제 2</button>
+      
+        <!-- 모달 창 -->
+        <div id="modalStep2" class="modalStep2">
+          <div class="modal-content">
+            <h2 id="modalStep2Title"></h2>
+            <p id="modalStep2Description"></p>
+            <input type="number" id="modalStep2Input1" class="input-field" placeholder="입력값">
+            <input type="number" id="modalStep2Input2" class="input-field" placeholder="추가 입력값" style="display:none;">
+            <div class="modal-actions">
+              <button onclick="closemodalStep2()">닫기</button>
+              <button onclick="applymodalStep2()">반영</button>
+            </div>
+          </div>
+        </div>
+        
+            
+        </div>
+            <button class="no-print" onclick="nextStep(3)">다음</button>
+            <button class="no-print" onclick="previousStep(1)">뒤로가기</button> 
+            <button onclick="printStep(2)">2단계 인쇄</button>
+    </div>
+
+    <div id="step3" style="display: none;" class="step">
         <div class="print-area">
             
-            
+             
             ◼ 상속세 및 증여세법 시행규직 [별지 제9호서식 부표 1](2024.03.22 개정)
             관리번호  - <h1>상속세과세가액계산명세서</h1>
             ፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.               (앞쪽)
@@ -497,201 +758,6 @@
         
             <hr>
         
-            
-        </div>
-            <button class="no-print" onclick="nextStep(3)">다음</button>
-            <button class="no-print" onclick="previousStep(1)">뒤로가기</button> 
-            <button onclick="printStep(2)">2단계 인쇄</button>
-    </div>
-
-    <div id="step3" style="display: none;" class="step">
-        <div class="print-area">
-            
-            <h1 class="text-center">[별지 제9호서식 부표 3](2020.03.13 개정)</h1>
-    <div>관리번호: _________________</div>
-    <h2 class="text-center">채무ㆍ공과금ㆍ장례비용 및 상속공제명세서</h2>
-
-    <h3>가. 채무</h3>
-    <table>
-        <tr>
-            <th>① 채무종류</th>
-            <th colspan="2">② 차입기간</th>
-            <th colspan="3">채권자</th>
-            <th rowspan="2">⑥금 액</th>
-        </tr>
-        <tr>
-            <th>발생연월일</th>
-            <th>종료(예정)연월일</th>
-            <th>③ 성 명(상 호)</th>
-            <th>④ 주민등록번호(사업자등록번호)</th>
-            <th>⑤ 주소(소재지)</th>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th colspan="6" class="text-right">⑦ 계</th>
-            <td></td>
-        </tr>
-    </table>
-
-    <h3>나. 공과금</h3>
-    <table>
-        <tr>
-            <th>⑧ 공과금종류코드</th>
-            <th>⑨ 연도별</th>
-            <th>분기별</th>
-            <th>금액</th>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th colspan="3" class="text-right">계</th>
-            <td></td>
-        </tr>
-    </table>
-
-    <h3>다. 장례비용</h3>
-    <table>
-        <tr>
-            <th colspan="2">지급처</th>
-            <th rowspan="2">지급내역</th>
-            <th rowspan="2">금액</th>
-        </tr>
-        <tr>
-            <th>주민등록번호(사업자등록번호)</th>
-            <th>성명(상호)</th>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th colspan="3" class="text-right">계</th>
-            <td></td>
-        </tr>
-    </table>
-
-    <h3>라. 상속공제</h3>
-    <table>
-        <tr>
-            <th colspan="2">기초공제 및 그 밖의 인적공제</th>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">기초공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">자녀공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">미성년자공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">연로자공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">장애인공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">일괄공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <th colspan="2">추가상속공제</th>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">가업상속공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">영농상속공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2"><a href="배우자 상속공제명세서.html" >배우자상속공제</a></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">금융재산상속공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">재해손실공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="2">동거주택상속공제</td>
-            <td></td>
-        </tr>
-        <tr>
-            <th colspan="2">공제적용한도액</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th colspan="2">상속공제금액합계</th>
-            <td></td>
-        </tr>
-    </table>
-
-    <p>신청(신고)인 ______________ (서명 또는 인)</p>
-
-    <h3>제출서류</h3>
-    <p>1. 채무부담 및 공과금ㆍ장례비ㆍ감정평가수수료 지급 입증서류</p>
-
-    <h3>작성방법</h3>
-    <ol>
-        <li>채무와 공과금은 상속개시 당시의 현황에 따라 적습니다.</li>
-        <li>"① 채무종류"란 : 금융채무, 개인사채, 상가 임대보증금 등 채무의 종류를 적습니다.</li>
-        <li>"⑧ 공과금종류코드"란 : 아래의 공과금종류구분에 해당하는 코드를 적습니다.</li>
-    </ol>
-
-    <table>
-        <tr>
-            <th>공과금종류</th>
-            <th>국세</th>
-            <th>지방세</th>
-            <th>공공요금</th>
-            <th>과태료/범칙금</th>
-            <th>회비</th>
-            <th>기타</th>
-        </tr>
-        <tr>
-            <th>코드</th>
-            <td>01</td>
-            <td>02</td>
-            <td>03</td>
-            <td>04</td>
-            <td>05</td>
-            <td>06</td>
-        </tr>
-    </table>
-
-    <p>4. "배우자상속공제"란 : 배우자상속공제명세서(별지 제9호서식 부표 3의2)의 "배우자 상속공제 금액"란의 금액을 옮겨 적습니다.</p>
-
-    <footer>
-        <p class="text-center">210mm×297mm[백상지 80g/㎡]</p>
-    </footer>
-
-           
              
         </div>
             <button class="no-print" onclick="nextStep(4)">다음</button>
@@ -923,11 +989,11 @@
             addRowListeners(newRow);
 
             // 팝업 선택 기능 적용
-            setupSelector('.assetTypeSelector', 'assetTypePopup', 'assetTypeContent', assetTypes);
-            setupSelector('.propertyTypeSelector', 'propertyTypePopup', 'propertyTypeContent', propertyTypes);
-            setupSelector('.evaluationStandardSelector', 'evaluationStandardPopup', 'evaluationStandardContent', evaluationStandards);
+            setupSelector('.assetTypeSelector', 'assetTypeModal', 'assetTypeContent', assetTypes);
+            setupSelector('.propertyTypeSelector', 'propertyTypeModal', 'propertyTypeContent', propertyTypes);
+            setupSelector('.evaluationStandardSelector', 'evaluationStandardModal', 'evaluationStandardContent', evaluationStandards);
 
-            calculateTotal(newRow); // 새 행에 대한 총액 계산 초기화
+            calculateInheritDeductionTotal(newRow); // 새 행에 대한 총액 계산 초기화
         }
 
 
@@ -944,13 +1010,13 @@
             const priceInput = row.querySelector('input[name="price"]');
         
             if (quantityInput && priceInput) {
-                quantityInput.addEventListener('input', () => calculateTotal(row));
-                priceInput.addEventListener('input', () => calculateTotal(row));
+                quantityInput.addEventListener('input', () => calculateRowTotal(row));
+                priceInput.addEventListener('input', () => calculateRowTotal(row));
             }
         }
         
 
-        function calculateTotal(row) {
+        function calculateRowTotal(row) {
             const quantity = parseFloat(row.querySelector('input[name="quantity"]').value) || 0;
             const price = parseFloat(row.querySelector('input[name="price"]').value) || 0;
             const total = quantity * price;
@@ -1063,69 +1129,68 @@ function loadAssetData() {
 }
 
 
-// 개별 행에 setupSelector 적용하는 함수
-    function setupSelectorForRow(row) {
-        const assetTypeSelector = row.querySelector('.assetTypeSelector');
-        setupSelectorForElement(assetTypeSelector, 'assetTypePopup', 'assetTypeContent', assetTypes);
 
-        const propertyTypeSelector = row.querySelector('.propertyTypeSelector');
-        setupSelectorForElement(propertyTypeSelector, 'propertyTypePopup', 'propertyTypeContent', propertyTypes);
 
-        const evaluationStandardSelector = row.querySelector('.evaluationStandardSelector');
-        setupSelectorForElement(evaluationStandardSelector, 'evaluationStandardPopup', 'evaluationStandardContent', evaluationStandards);
-    }
 
 // 개별 선택기에 대해 setupSelector 적용
-function setupSelectorForElement(selector, popupId, contentId, data) {
-    const popup = document.getElementById(popupId);
+function setupSelectorForElement(selector, modalId, contentId, data) {
+    const modal = document.getElementById(modalId);
     const content = document.getElementById(contentId);
-    const closeBtn = popup.querySelector('.close');
+    const closeBtn = modal.querySelector('.close');
 
-    function createPopupContent(selectedElement) {
+//
+
+    function createModalContent(selectedElement) {
         content.innerHTML = '';
         data.forEach(item => {
             const button = document.createElement('button');
             button.textContent = `${item.name} - ${item.code}`;
             button.onclick = function() {
                 selectedElement.textContent = item.code;
-                popup.style.display = 'none';
+                modal.style.display = 'none'; // 모달 닫기
+                document.body.style.overflow = 'auto'; // 모달 닫힐 때 배경 스크롤 복구
             };
             content.appendChild(button);
         });
     }
 
-    // 선택기 클릭 시 팝업 열기
+    // 선택기 클릭 시 모달 열기
     selector.onclick = function(event) {
         event.stopPropagation();
-        createPopupContent(this);
-        popup.style.display = 'block';
+        createModalContent(this);
+        modal.style.display = 'block'; // 모달 열기
+        document.body.style.overflow = 'hidden'; // 모달 열리면 배경 스크롤 비활성화
     };
 
-    // 닫기 버튼 클릭 시 팝업 닫기
+    // 닫기 버튼 클릭 시 모달 닫기
     closeBtn.onclick = function() {
-        popup.style.display = 'none';
+        modal.style.display = 'none'; // 모달 닫기
+        document.body.style.overflow = 'auto'; // 배경 스크롤 복구
     };
 
-    // 팝업 외부 클릭 시 팝업 닫기
+    // 모달 외부 클릭 시 모달 닫기
     window.onclick = function(event) {
-        if (event.target == popup) {
-            popup.style.display = 'none';
+        if (event.target == modal) {
+            modal.style.display = 'none'; // 모달 닫기
+            document.body.style.overflow = 'auto'; // 배경 스크롤 복구
         }
     };
 }
 
-
 // 개별 행에 setupSelector 적용하는 함수
 function setupSelectorForRow(row) {
-    const assetTypeSelector = row.querySelector('.assetTypeSelector');
-    setupSelectorForElement(assetTypeSelector, 'assetTypePopup', 'assetTypeContent', assetTypes);
+        const assetTypeSelector = row.querySelector('.assetTypeSelector');
+        setupSelectorForElement(assetTypeSelector, 'asset', 'assetTypeContent', assetTypes);
 
-    const propertyTypeSelector = row.querySelector('.propertyTypeSelector');
-    setupSelectorForElement(propertyTypeSelector, 'propertyTypePopup', 'propertyTypeContent', propertyTypes);
+        const propertyTypeSelector = row.querySelector('.propertyTypeSelector');
+        setupSelectorForElement(propertyTypeSelector, 'propertyTypeModal', 'propertyTypeContent', propertyTypes);
 
-    const evaluationStandardSelector = row.querySelector('.evaluationStandardSelector');
-    setupSelectorForElement(evaluationStandardSelector, 'evaluationStandardPopup', 'evaluationStandardContent', evaluationStandards);
-}
+        const evaluationStandardSelector = row.querySelector('.evaluationStandardSelector');
+        setupSelectorForElement(evaluationStandardSelector, 'evaluationStandardModal', 'evaluationStandardContent', evaluationStandards);
+    }
+
+
+
 
 
 // 데이터 삭제
@@ -1134,20 +1199,20 @@ function setupSelectorForRow(row) {
                     alert('저장된 데이터가 삭제되었습니다.');
                 }
 
-        function setupSelector(selectorClass, popupId, contentId, data) {
+        function setupSelector(selectorClass,modalId, contentId, data) {
             const selectors = document.querySelectorAll(selectorClass);
-            const popup = document.getElementById(popupId);
+            const modal = document.getElementById(modalId);
             const content = document.getElementById(contentId);
-            const closeBtn = popup.querySelector('.close');
+            const closeBtn =modal.querySelector('.close');
             
-            function createPopupContent(selectedElement) {
+            function createmodalContent(selectedElement) {
                 content.innerHTML = '';
                 data.forEach(item => {
                     const button = document.createElement('button');
                     button.textContent = `${item.name} - ${item.code}`;
                     button.onclick = function() {
                         selectedElement.textContent = item.code;
-                        popup.style.display = 'none';
+                       modal.style.display = 'none';
                     };
                     content.appendChild(button);
                 });
@@ -1156,25 +1221,25 @@ function setupSelectorForRow(row) {
             selectors.forEach(selector => {
                 selector.onclick = function(event) {
                     event.stopPropagation();
-                    createPopupContent(this);
-                    popup.style.display = 'block';
+                    createmodalContent(this);
+                   modal.style.display = 'block';
                 };
             });
 
             closeBtn.onclick = function() {
-                popup.style.display = 'none';
+               modal.style.display = 'none';
             };
 
             window.onclick = function(event) {
-                if (event.target == popup) {
-                    popup.style.display = 'none';
+                if (event.target ==modal) {
+                   modal.style.display = 'none';
                 }
             };
         }
 
-        setupSelector('.assetTypeSelector', 'assetTypePopup', 'assetTypeContent', assetTypes);
-        setupSelector('.propertyTypeSelector', 'propertyTypePopup', 'propertyTypeContent', propertyTypes);
-        setupSelector('.evaluationStandardSelector', 'evaluationStandardPopup', 'evaluationStandardContent', evaluationStandards);
+        setupSelector('.assetTypeSelector', 'assetTypeModal', 'assetTypeContent', assetTypes);
+        setupSelector('.propertyTypeSelector', 'propertyTypeModal', 'propertyTypeContent', propertyTypes);
+        setupSelector('.evaluationStandardSelector', 'evaluationStandardModal', 'evaluationStandardContent', evaluationStandards);
 
 
 // 입력된 값을 천단위로 쉼표 구분하여 표시하는 함수
@@ -1188,7 +1253,262 @@ document.querySelectorAll('.currency-input').forEach(input => {
     });
 });
     
+//step2 의 함수 
+ // 테이블 행을 동적으로 생성하는 함수
+ function generateTableRows(tableBodyId, rowCount, columns, classPrefix) {
+        const tableBody = document.getElementById(tableBodyId);
+        for (let i = 0; i < rowCount; i++) {
+            const tr = document.createElement('tr');
+            columns.forEach(col => {
+                const td = document.createElement('td');
+                if (col.type === 'select') {
+                    const select = document.createElement('select');
+                    col.options.forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt.value;
+                        option.textContent = opt.text;
+                        select.appendChild(option);
+                    });
+                    td.appendChild(select);
+                } else if (col.type === 'input') {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    if (col.className) input.className = col.className;
+                    if (col.onInput) input.setAttribute('onInput', col.onInput);
+                    td.appendChild(input);
+                }
+                tr.appendChild(td);
+            });
+            tableBody.appendChild(tr);
+        }
+    }
 
+    // 채무 테이블 행 생성
+    generateTableRows('debtTableBody', 5, [
+        { type: 'select', options: [
+            { value: 'finance', text: '금융채무' },
+            { value: 'personal', text: '개인사채' },
+            { value: 'deposit', text: '임대보증금' },
+            { value: 'other', text: '기타' }
+        ] },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input', className: 'debt-amount', onInput: "formatAndCalculateDebtUtility(this, 'debt')" },
+    ]);
+
+    // 공과금 테이블 행 생성
+    generateTableRows('utilityTableBody', 5, [
+        { type: 'select', options: [
+            { value: '01', text: '01:국세' },
+            { value: '02', text: '02:지방세' },
+            { value: '03', text: '03:공공요금' },
+            { value: '04', text: '04:과태료/범칙금' },
+            { value: '05', text: '05:회비' },
+            { value: '06', text: '06:기타' }
+        ] },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input', className: 'utility-amount', onInput: "formatAndCalculateDebtUtility(this, 'utility')" },
+    ]);
+
+    // 장례비용 테이블 행 생성
+    generateTableRows('funeralTableBody', 5, [
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input' },
+        { type: 'input', className: 'funeral-amount', onInput: "formatAndCalculateDebtUtility(this, 'funeral')" },
+    ]);
+
+    // 숫자 포맷팅 함수
+    function formatNumber(num) {
+        return Math.floor(num).toLocaleString('ko-KR');
+    }
+
+    // 숫자 파싱 함수
+    function parseNumber(numStr) {
+        return parseInt(numStr.replace(/[^\d]/g, ''), 10) || 0;
+    }
+
+    // 채무, 공과금, 장례비용 합계 계산 함수
+    function formatAndCalculateDebtUtility(input, type) {
+        if (input) {
+            let numValue = parseNumber(input.value);
+            input.value = formatNumber(numValue);
+        }
+
+        let total = 0;
+        document.querySelectorAll(`.${type}-amount`).forEach(input => {
+            total += parseNumber(input.value);
+        });
+        document.getElementById(`${type}Total`).textContent = formatNumber(total);
+    }
+
+    // 상속 공제 금액 포맷팅 및 합계 계산
+    function formatAndCalculate() {
+        const ids = ['businessInheritance', 'farmingInheritance', 'spouseInheritance', 'financialInheritance', 'disasterTaxDeduction', 'cohabitationDeduction'];
+        ids.forEach(id => {
+            const input = document.getElementById(id);
+            input.value = formatNumber(parseNumber(input.value));
+        });
+        calculateInheritDeductionTotal();
+    }
+
+    // 모달 관련 변수 및 함수
+    let currentmodalStep2 = '';
+
+    function openmodalStep2(type) {
+        currentmodalStep2 = type;
+        const modalStep2 = document.getElementById('modalStep2');
+        const modalStep2Title = document.getElementById('modalStep2Title');
+        const modalStep2Description = document.getElementById('modalStep2Description');
+        const modalStep2Input2 = document.getElementById('modalStep2Input2');
+        
+        modalStep2Input2.style.display = 'none'; // 추가 입력 필드를 숨김
+        document.getElementById('modalStep2Input1').value = '';
+
+        switch (type) {
+            case 'child':
+                modalStep2Title.textContent = '자녀공제'; 
+                modalStep2Description.textContent = ': 자녀수 * 1인당 5천만원 ';
+                break;
+            case 'minor':
+                modalStep2Title.textContent = '미성년자공제';
+                modalStep2Description.textContent = ': 미성년자들의 잔여연수(19세까지) 합산 * 1천만원';
+                break;
+            case 'elder':
+                modalStep2Title.textContent = '연로자 공제';
+                modalStep2Description.textContent = ':연로자수 * 1인당 5천만원';
+                break;
+            case 'disabled':
+                modalStep2Title.textContent = '장애인 공제';
+                modalStep2Description.textContent = ': 장애인 기대여명 연수 합계 * 1천만원 ';
+                break;
+        }
+        modalStep2.classList.add('open');
+    }
+
+    function closemodalStep2() {
+        document.getElementById('modalStep2').classList.remove('open');
+    }
+
+    function applymodalStep2() {
+        const value1 = parseInt(document.getElementById('modalStep2Input1').value) || 0;
+        const baseAmounts = {
+            child: 50000000,
+            minor: 10000000,
+            elder: 50000000,
+            disabled: 10000000
+        };
+        const calculatedValue = value1 * baseAmounts[currentmodalStep2];
+
+        const deductionIds = {
+            child: 'childDeduction',
+            minor: 'minorDeduction',
+            elder: 'elderDeduction',
+            disabled: 'disabledDeduction'
+        };
+
+        document.getElementById(deductionIds[currentmodalStep2]).value = formatNumber(calculatedValue);
+        closemodalStep2();
+        calculateInheritDeductionTotal();
+    }
+
+    // 상속 공제 합계 계산 함수
+    function calculateInheritDeductionTotal() {
+        const ids = ['baseDeduction', 'childDeduction', 'minorDeduction', 'elderDeduction', 'disabledDeduction'];
+        let subtotal = 0;
+        ids.forEach(id => {
+            subtotal += parseNumber(document.getElementById(id).value);
+        });
+
+        const totalDeduction = parseNumber(document.getElementById('totalDeduction').value);
+        const maxTotal = Math.max(subtotal, totalDeduction);
+
+        const additionalIds = ['businessInheritance', 'farmingInheritance', 'spouseInheritance', 'financialInheritance', 'disasterTaxDeduction', 'cohabitationDeduction'];
+        let additionalTotal = 0;
+        additionalIds.forEach(id => {
+            additionalTotal += parseNumber(document.getElementById(id).value);
+        });
+
+        let finalTotal = maxTotal + additionalTotal;
+
+        const deductionLimit = parseNumber(document.getElementById('deductionLimit').value);
+        if (deductionLimit > 0) {
+            finalTotal = Math.min(finalTotal, deductionLimit);
+        }
+
+        document.getElementById('totalDeductionSum').value = formatNumber(finalTotal);
+    }
+
+    // 데이터 저장 함수
+    function saveDataToLocalStorage2() {
+        const data = {};
+
+        // 테이블 데이터 수집
+        ['debt', 'utility', 'funeral'].forEach(type => {
+            const rows = document.querySelectorAll(`#${type}TableBody tr`);
+            data[`${type}Data`] = [];
+            rows.forEach(row => {
+                const rowData = [];
+                row.querySelectorAll('input, select').forEach(input => {
+                    rowData.push(input.value);
+                });
+                data[`${type}Data`].push(rowData);
+            });
+        });
+
+        // 상속 공제 데이터 수집
+        const ids = ['baseDeduction', 'childDeduction', 'minorDeduction', 'elderDeduction', 'disabledDeduction', 'totalDeduction', 'businessInheritance', 'farmingInheritance', 'spouseInheritance', 'financialInheritance', 'disasterTaxDeduction', 'cohabitationDeduction', 'deductionLimit', 'totalDeductionSum'];
+        data.inheritanceDeductions = {};
+        ids.forEach(id => {
+            data.inheritanceDeductions[id] = document.getElementById(id).value;
+        });
+
+        // 로컬 스토리지에 저장
+        localStorage.setItem('step2Data', JSON.stringify(data));
+        alert('데이터가 저장되었습니다.');
+    }
+
+    // 데이터 불러오기 함수
+    function loadDataFromLocalStorage2() {
+        const data = JSON.parse(localStorage.getItem('step2Data'));
+        if (!data) {
+            alert('저장된 데이터가 없습니다.');
+            return;
+        }
+
+        // 테이블 데이터 불러오기
+        ['debt', 'utility', 'funeral'].forEach(type => {
+            const rows = document.querySelectorAll(`#${type}TableBody tr`);
+            data[`${type}Data`].forEach((rowData, index) => {
+                const inputs = rows[index].querySelectorAll('input, select');
+                inputs.forEach((input, idx) => {
+                    input.value = rowData[idx];
+                });
+            });
+            formatAndCalculateDebtUtility(null, type);
+        });
+
+        // 상속 공제 데이터 불러오기
+        const ids = ['baseDeduction', 'childDeduction', 'minorDeduction', 'elderDeduction', 'disabledDeduction', 'totalDeduction', 'businessInheritance', 'farmingInheritance', 'spouseInheritance', 'financialInheritance', 'disasterTaxDeduction', 'cohabitationDeduction', 'deductionLimit', 'totalDeductionSum'];
+        ids.forEach(id => {
+            if (data.inheritanceDeductions[id] !== undefined) {
+                document.getElementById(id).value = data.inheritanceDeductions[id];
+            }
+        });
+
+        formatAndCalculate();
+        alert('데이터를 불러왔습니다.');
+    }
+
+    // 데이터 삭제 함수
+    function deleteDataFromLocalStorage2() {
+        localStorage.removeItem('step2Data');
+        alert('저장된 데이터가 삭제되었습니다.');
+    }
     </script>
 </body>
 </html>

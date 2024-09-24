@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>금융자산 및 채무 계산기</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 2px;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <p style="font-size: 14px; color: #2b2a2a; text-align: left; margin-bottom: 5px;">[별지 제5호서식] (2020.03.13 개정)</p>
+    <h2 style="text-align: center; color: #333; margin-bottom: 20px;">금융재산 상속공제 신고서 </h2>
+    <p style="font-size: 14px; color: #2b2a2a; text-align: left; margin-bottom: 5px;">፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.</p>
+    <hr>
+    <h4>1.피상속인 및 신고인 ( 상속인) 인적사항 </h4>
+    <table id="inheritance-table">
+        <tr id="deceased-row">
+            <td>피상속인</td>
+            <td>성명</td>
+            <td><input type="text" id="deceased-name"></td>
+            <td>주민등록번호</td>
+            <td><input type="text" id="deceased-id-number"></td>
+        </tr>
+        <tr id="heir-row">
+            <td>상속인</td>
+            <td>성명</td>
+            <td><input type="text" id="heir-name"></td>
+            <td>주민등록번호</td>
+            <td><input type="text" id="heir-id-number"></td>
+        </tr>
+    </table>
+    <h4>2.금융재산 및 금융채무</h4>
+    <hr>
+    <h4>가-1. 금융재산</h4>
+    <table id="financeAssetTable">
+        <tr>
+            <th>종류</th>
+            <th>계좌번호 등</th>
+            <th>상호</th>
+            <th>사업자등록번호</th>
+            <th>단가</th>
+            <th>금액</th>
+        </tr>
+
+        <tr>
+            <td><input type="text" name="assetType1"></td>
+            <td><input type="text" name="assetAccount1"></td>
+            <td><input type="text" name="assetCompany1"></td>
+            <td><input type="text" name="assetBusinessNumber1"></td>
+            <td><input type="text" name="assetUnitPrice1"></td>
+            <td><input type="text" name="assetAmount1" class="amount" data-type="asset"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="assetType2"></td>
+            <td><input type="text" name="assetAccount2"></td>
+            <td><input type="text" name="assetCompany2"></td>
+            <td><input type="text" name="assetBusinessNumber2"></td>
+            <td><input type="text" name="assetUnitPrice2"></td>
+            <td><input type="text" name="assetAmount2" class="amount" data-type="asset"></td>   
+        </tr>
+        <tr>
+            <td><input type="text" name="assetType3"></td>
+            <td><input type="text" name="assetAccount3"></td>
+            <td><input type="text" name="assetCompany3"></td>
+            <td><input type="text" name="assetBusinessNumber3"></td>
+            <td><input type="text" name="assetUnitPrice3"></td>
+            <td><input type="text" name="assetAmount3" class="amount" data-type="asset"></td>       
+        </tr>
+        <tr>
+            <td><input type="text" name="assetType4"></td>
+            <td><input type="text" name="assetAccount4"></td>
+            <td><input type="text" name="assetCompany4"></td>
+            <td><input type="text" name="assetBusinessNumber4"></td>
+            <td><input type="text" name="assetUnitPrice4"></td>
+            <td><input type="text" name="assetAmount4" class="amount" data-type="asset"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="assetType5"></td>
+            <td><input type="text" name="assetAccount5"></td>
+            <td><input type="text" name="assetCompany5"></td>
+            <td><input type="text" name="assetBusinessNumber5"></td>
+            <td><input type="text" name="assetUnitPrice5"></td>
+            <td><input type="text" name="assetAmount5" class="amount" data-type="asset"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="assetType6"></td>
+            <td><input type="text" name="assetAccount6"></td>
+            <td><input type="text" name="assetCompany6"></td>
+            <td><input type="text" name="assetBusinessNumber6"></td>
+            <td><input type="text" name="assetUnitPrice6"></td>
+            <td><input type="text" name="assetAmount6" class="amount" data-type="asset"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="assetType7"></td>
+            <td><input type="text" name="assetAccount7"></td>
+            <td><input type="text" name="assetCompany7"></td>
+            <td><input type="text" name="assetBusinessNumber7"></td>
+            <td><input type="text" name="assetUnitPrice7"></td>
+            <td><input type="text" name="assetAmount7" class="amount" data-type="asset"></td>
+        </tr>
+
+        <tr>
+            <td><input type="text" name="assetType8"></td>
+            <td><input type="text" name="assetAccount8"></td>
+            <td><input type="text" name="assetCompany8"></td>
+            <td><input type="text" name="assetBusinessNumber8"></td>
+            <td><input type="text" name="assetUnitPrice8"></td>
+            <td><input type="text" name="assetAmount8" class="amount" data-type="asset"></td>   
+        </tr>
+
+        <tr>
+            <td><input type="text" name="assetType9"></td>
+            <td><input type="text" name="assetAccount9"></td>
+            <td><input type="text" name="assetCompany9"></td>
+            <td><input type="text" name="assetBusinessNumber9"></td>
+            <td><input type="text" name="assetUnitPrice9"></td>
+            <td><input type="text" name="assetAmount9" class="amount" data-type="asset"></td>
+        </tr>
+
+        <tr>
+            <td><input type="text" name="assetType10"></td>
+            <td><input type="text" name="assetAccount10"></td>
+            <td><input type="text" name="assetCompany10"></td>
+            <td><input type="text" name="assetBusinessNumber10"></td>
+            <td><input type="text" name="assetUnitPrice10"></td>
+            <td><input type="text" name="assetAmount10" class="amount" data-type="asset"></td>
+        </tr>
+       
+       
+        <tr class="total-row">
+            <td colspan="5">합계</td>
+            <td id="assetTotal">0</td>
+        </tr>
+    </table>
+
+    <h4>가-2.금융채무</h4>
+    <table id="financeDebtTable">
+        <tr>
+            <th>종류</th>
+            <th>계좌번호 등</th>
+            <th>상호</th>
+            <th>사업자등록번호</th>
+            <th>단가</th>
+            <th>금액</th>
+        </tr>
+
+        <tr></tr>
+            <td><input type="text" name="debtType1"></td>
+            <td><input type="text" name="debtAccount1"></td>
+            <td><input type="text" name="debtCompany1"></td>
+            <td><input type="text" name="debtBusinessNumber1"></td>
+            <td><input type="text" name="debtUnitPrice1"></td>
+            <td><input type="text" name="debtAmount1" class="amount" data-type="debt"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="debtType2"></td>
+            <td><input type="text" name="debtAccount2"></td>
+            <td><input type="text" name="debtCompany2"></td>
+            <td><input type="text" name="debtBusinessNumber2"></td>
+            <td><input type="text" name="debtUnitPrice2"></td>
+            <td><input type="text" name="debtAmount2" class="amount" data-type="debt"></td> 
+        </tr>
+        <tr>
+            <td><input type="text" name="debtType3"></td>
+            <td><input type="text" name="debtAccount3"></td>
+            <td><input type="text" name="debtCompany3"></td>
+            <td><input type="text" name="debtBusinessNumber3"></td>
+            <td><input type="text" name="debtUnitPrice3"></td>
+            <td><input type="text" name="debtAmount3" class="amount" data-type="debt"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="debtType4"></td>
+            <td><input type="text" name="debtAccount4"></td>
+            <td><input type="text" name="debtCompany4"></td>
+            <td><input type="text" name="debtBusinessNumber4"></td>
+            <td><input type="text" name="debtUnitPrice4"></td>
+            <td><input type="text" name="debtAmount4" class="amount" data-type="debt"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="debtType5"></td>
+            <td><input type="text" name="debtAccount5"></td>
+            <td><input type="text" name="debtCompany5"></td>
+            <td><input type="text" name="debtBusinessNumber5"></td>
+            <td><input type="text" name="debtUnitPrice5"></td>
+            <td><input type="text" name="debtAmount5" class="amount" data-type="debt"></td>
+        </tr>
+
+        <tr>
+            <td><input type="text" name="debtType6"></td>
+            <td><input type="text" name="debtAccount6"></td>
+            <td><input type="text" name="debtCompany6"></td>
+            <td><input type="text" name="debtBusinessNumber6"></td>
+            <td><input type="text" name="debtUnitPrice6"></td>
+            <td><input type="text" name="debtAmount6" class="amount" data-type="debt"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="debtType7"></td>
+            <td><input type="text" name="debtAccount7"></td>
+            <td><input type="text" name="debtCompany7"></td>
+            <td><input type="text" name="debtBusinessNumber7"></td>
+            <td><input type="text" name="debtUnitPrice7"></td>
+            <td><input type="text" name="debtAmount7" class="amount" data-type="debt"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="debtType8"></td>
+            <td><input type="text" name="debtAccount8"></td>
+            <td><input type="text" name="debtCompany8"></td>
+            <td><input type="text" name="debtBusinessNumber8"></td>
+            <td><input type="text" name="debtUnitPrice8"></td>
+            <td><input type="text" name="debtAmount8" class="amount" data-type="debt"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="debtType9"></td>
+            <td><input type="text" name="debtAccount9"></td>
+            <td><input type="text" name="debtCompany9"></td>
+            <td><input type="text" name="debtBusinessNumber9"></td>
+            <td><input type="text" name="debtUnitPrice9"></td>
+            <td><input type="text" name="debtAmount9" class="amount" data-type="debt"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="debtType10"></td>
+            <td><input type="text" name="debtAccount10"></td>
+            <td><input type="text" name="debtCompany10"></td>
+            <td><input type="text" name="debtBusinessNumber10"></td>
+            <td><input type="text" name="debtUnitPrice10"></td>
+            <td><input type="text" name="debtAmount10" class="amount" data-type="debt"></td>
+        </tr>
+
+        <tr class="total-row">
+            <td colspan="5">합계</td>
+            <td id="debtTotal">0</td>
+        </tr>
+    </table>
+
+    <h4>금융재산 상속공제금액</h4>
+    <table>
+        <tr>
+            <td>③ 순금융재산가액 (① -② )</td>
+            <td id="netAsset">0</td>
+        </tr>
+        <tr>
+            <td>④금융재산 상속공제 한도액</td>
+            <td id="inheritanceLimit">0</td>
+        </tr>
+        <tr>
+            <td> ⑤ 금융재산 상속공제금액</td>
+            <td id="inheritanceDeduction">0</td>
+        </tr>
+    </table>
+    「상속세 및 증여세법」 제22조 및 같은 법 시행령 제19조제3항에 따라 금융재산 상속공제 신고서를 
+제출합니다. 
+                                                     년         월         일
+                                       신고인              (서명 또는 인)
+        <h3>세무서장  귀하</h3>
+        <hr>
+        <table>
+            <tr>
+                <td>신고인제출서류</td><td>금융재산보유 및 금융채무 사실을 확인할수 있는 서류 </td> <td> 수수료 없음</td>
+        </table>
+        <hr>
+
+        <div style="margin-top: 20px;">
+            <button id="saveButton">저장</button>
+            <button id="loadButton">불러오기</button>
+            <button id="deleteButton">삭제</button>
+        </div>
+
+<script>
+    // 상수 정의
+    const LIMIT_1 = 20000000;
+    const LIMIT_2 = 100000000;
+    const LIMIT_3 = 1000000000;
+    const MAX_DEDUCTION = 200000000;
+
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function unformatNumber(str) {
+        return parseInt(str.replace(/,/g, '')) || 0;
+    }
+
+    function calculateDeductionLimit(netAsset) {
+        if (netAsset <= LIMIT_1) return netAsset;
+        if (netAsset <= LIMIT_2) return LIMIT_1;
+        if (netAsset <= LIMIT_3) return netAsset * 0.2;
+        return MAX_DEDUCTION;
+    }
+
+    function updateResults() {
+        const assetInputs = document.querySelectorAll('#financeAssetTable .amount');
+        const debtInputs = document.querySelectorAll('#financeDebtTable .amount');
+
+        const totalAssets = Array.from(assetInputs).reduce((sum, input) => sum + unformatNumber(input.value), 0);
+        const totalDebts = Array.from(debtInputs).reduce((sum, input) => sum + unformatNumber(input.value), 0);
+
+        document.getElementById('assetTotal').textContent = formatNumber(totalAssets);
+        document.getElementById('debtTotal').textContent = formatNumber(totalDebts);
+
+        const netAsset = Math.max(totalAssets - totalDebts, 0);  // 음수 방지
+        document.getElementById('netAsset').textContent = formatNumber(netAsset);
+
+        const deductionLimit = calculateDeductionLimit(netAsset);
+        document.getElementById('inheritanceLimit').textContent = formatNumber(deductionLimit);
+
+        const actualDeduction = Math.min(netAsset, deductionLimit);
+        document.getElementById('inheritanceDeduction').textContent = formatNumber(actualDeduction);
+    }
+
+    // 이벤트 리스너 등록
+    document.querySelectorAll('.amount').forEach(input => {
+        input.addEventListener('input', function() {
+            this.value = formatNumber(unformatNumber(this.value));
+            updateResults();
+        });
+    });
+
+    // 저장 기능 구현
+    function saveData() {
+        const inputs = document.querySelectorAll('input');
+        const data = {};
+        inputs.forEach(input => {
+            if (input.name) {
+                data[input.name] = input.value;
+            }
+        });
+        localStorage.setItem('formData', JSON.stringify(data));
+        alert('데이터가 저장되었습니다.');
+    }
+
+    // 불러오기 기능 구현
+    function loadData() {
+        const data = JSON.parse(localStorage.getItem('formData'));
+        if (data) {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                if (input.name && data[input.name] !== undefined) {
+                    input.value = data[input.name];
+                }
+            });
+            updateResults();  // 계산 결과 업데이트
+            alert('데이터가 불러와졌습니다.');
+        } else {
+            alert('저장된 데이터가 없습니다.');
+        }
+    }
+
+    // 삭제 기능 구현
+    function deleteData() {
+        localStorage.removeItem('formData');
+        alert('저장된 데이터가 삭제되었습니다.');
+    }
+
+    // 버튼에 이벤트 리스너 추가
+    document.getElementById('saveButton').addEventListener('click', saveData);
+    document.getElementById('loadButton').addEventListener('click', loadData);
+    document.getElementById('deleteButton').addEventListener('click', deleteData);
+
+    // 초기 실행
+    updateResults();
+        
+</script>
+</body>
+</html>
