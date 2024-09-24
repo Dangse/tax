@@ -274,11 +274,11 @@ tr:hover {
 }
 
 .submit-btn:hover {
-    background-color: #2980b9;
+    background-color: #e82892;
 }
 
 .load-button, .save-button, .print-button {
-    background-color: #2ecc71;
+    background-color: #9F244D;
     color: #fff;
     width: 300px;
     height: 50px;
@@ -295,7 +295,7 @@ tr:hover {
 }
 
 .load-button:hover, .save-button:hover, .print-button:hover {
-    background-color: #27ae60;
+    background-color: 
 }
 
 .section-title {
