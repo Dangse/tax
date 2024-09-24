@@ -14,8 +14,8 @@
 </head>
 <body>
     <h2>상속주택 취득세 계산</h2>
-    <button onclick="loadContent()">저장내용 불러오기</button><br><br>
-    <label for="marketValue">시가표준액:</label>
+    
+    <label for="marketValue">시가표준액( 아파트: 공동주택가격, 단독주택 : 개별주택가격):</label>
     <input type="text" id="marketValue"  inputmode="numeric"  oninput="formatNumber(this)" placeholder="시가표준액 입력">
     
     <div>
@@ -33,7 +33,7 @@
     <h3>계산 결과</h3>
     <strong><div id="result" class="result"></div></strong><br>
 
-    <p style="text-align: center; font-weight: bold; margin: 20px 0;"><strong>이 보다 세금을 많이 냈셨나요?  지금 문의 주세요!</strong></p><br>
+    <p style="text-align: center; font-weight: bold; margin: 20px 0;"><strong>이 보다 세금을 많이 내셨나요?  지금 문의 주세요!</strong></p><br>
     
     <div class="contact-form">
         <h2> 상담 문의하기</h2>
@@ -58,7 +58,7 @@
         </form>
     </div>
     
-    <button onclick="saveContent()">저장하기</button>
+    
     
     <button id="printButton" onclick="printContent()">인쇄하기</button>
    

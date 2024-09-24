@@ -50,7 +50,7 @@ input[type="text"]:focus, input[type="number"]:focus {
 }
 
 button {
-    background-color: #2ecc71;
+    background-color: #9F244D;
     color: #fff;
     width: 300px;
     height: 50px;
@@ -67,7 +67,7 @@ button {
 }
 
 button:hover {
-    background-color: #27ae60;
+    background-color: #be4f73;
 }
 
 table {

@@ -12,20 +12,20 @@
   <h2>상속후 종합부동산세 너무 많다고요 ?</h2>
 
   <p>상속받은 주택이 추가되면서 세금이 얼마나 늘어날지 궁금하신가요? 상속 전후의 재산세와 종부세를 비교해보세요.</p>
-  <button id="loadFormData" type="button">불러오기</button>
+  
 
   <h3>▶ 상속 후 재산세 비교</h3>
 <label for="owned_houses">상속 전 나의 소유주택 수:</label>
 <input type="text" id="owned_houses" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속 전 주택수">
   
 <br>
-<label for="gongsi_1">상속전 나의 주택공시가 합 :</label>
+<label for="gongsi_1">상속전 나의 주택 공시가 합 :</label>
 <input type="text" id="gongsi_1" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속 전 주택 공시가 합">
 <br>
 <label for="ownedHousesAfter">상속 후 나의 소유주택 수:</label>
 <input type="text" id="ownedHousesAfter" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 지분으로 소유하고 있는 주택 포함">
 <br>
-<label for="gongsi_2">상속주택분 공시가격:</label>
+<label for="gongsi_2">상속주택의 공시가격:</label>
 <input type="text" id="gongsi_2" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속받은 주택분 공시가">
   
   <button onclick="comparePropertyTax()">계산하기</button>
@@ -103,7 +103,7 @@
        
     </form>
 </div>
-<button id="saveFormData" type="button">저장</button>
+
 <button id="printButton" onclick="printContent()">인쇄하기</button>
    
     <p style="font-weight: bold; text-align: center;">* 문의하기는 PDF 인쇄 후 tax@taxdh.net 로 보내주세요.</p>
