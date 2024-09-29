@@ -5,27 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>동거주택 상속공제신고서</title>
     <style>
-       body {
+      body {
             font-family: Arial, sans-serif;
+            line-height: 1.4;
+            margin: 0;
+            padding: 30px;
+            font-size: 16px;           
         }
+        
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            margin-top: 0px;
+           
         }
-        th, td {
-            border: 1px solid black;
-            padding: 3px;
-            text-align: center;
+        td, th {
+        padding: 2px; /* 패딩을 2px로 설정 */
+        font-size: 16px; /* 폰트 크기 조정 */
         }
-        th {
-            background-color: #f2f2f2;
+
+        td {
+            border: 1px solid;
+            padding: 1px;
+            text-align: left;
+        }        
+        
+        /*  위쪽과 아래쪽 굵은 테두리 */
+        table tr:first-child {
+            border-top: 2px solid #000;
+        }
+        table tr:last-child {
+            border-bottom: 2px solid #000;
+        }
+        /* 옆쪽 테두리 제거 */
+        table, th, td {
+            border-left: none;
+            border-right: none;
+        }
+
+        .table-container {
+            margin-bottom: 0px;
+        }
+        input[type="text"] {
+            width: 100%;
+            height: 100%;
+            padding: 0px;
+            box-sizing: border-box;
+            font-size: 12px;
+        }  
+
+        .result {
+            font-weight: bold;
+            text-align: right;
+            font-size: 14px;
         }
         select, input[type="text"], input[type="number"] {
             width: 100%;
             padding: 5px;
             box-sizing: border-box;
-            border: none;
+           
             text-align: center;
         }
         .checkbox-container {
@@ -45,182 +84,68 @@
            
         }
         
-        /* 팝업 스타일 */
-        .popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: none;
-    z-index: 1000;
-}
-
-.popup {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #f9f9f9;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    animation: popIn 0.3s ease-out;
-}
-
-.popup-content {
-    display: flex;
-    flex-direction: column;  /* 세로 방향으로 변경 */
-    align-items: stretch;  /* 버튼들을 컨테이너 너비에 맞춤 */   
-    justify-content: center;  /* 중앙 정렬 */
-    gap: 10px 15px;  /* 세로 간격 10px, 가로 간격 15px */
-    width: 100%;
-}
-
-.popup-content button {
-    flex: 0 1 auto;  /* 버튼 크기 자동 조절 */
-    padding: 10px 15px;
-    text-align: left;
-    background-color: #e0e0e0;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    font-weight: bold;
-    color: #333;
-    white-space: nowrap;  /* 버튼 텍스트 줄바꿈 방지 */
-    width: 100%;  /* 버튼 너비를 100%로 설정 */
-    margin: 5px 0;  /* 상하 마진 추가 */
-}
-
-.popup-content button:hover {
-    background-color: #d0d0d0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-/* x표시 디자인  */
-.close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    color: #aaa;
-    font-size: 36px;  /* 크기 증가 */
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    line-height: 1;  /* 라인 높이 조정 */
-    width: 40px;  /* 너비 설정 */
-    height: 40px;  /* 높이 설정 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.1);  /* 배경색 추가 */
-    border-radius: 50%;  /* 원형 모양 */
-}
-.close:hover {
-    color: #333;
-    background-color: rgba(0, 0, 0, 0.2);  /* 호버 시 배경색 변경 */
-}
-
-
-.help-button {
-    font-size: 12px;
-    margin-left: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.help-button:hover {
-    background-color: #0056b3;
-}
-
-.popup-close {
-    background: #5E35B1;  /* 짙은 보라색 계열로 변경 */
-    color: #FFFFFF;  /* 텍스트 색상을 흰색으로 변경하여 대비 강화 */
-    border: none;
-    padding: 12px 24px;
-    cursor: pointer;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    align-self: center;
-    width: 80%;
-    max-width: 200px;
-}
-
-.popup-close:hover {
-    background: #4527A0;  /* 호버 시 약간 더 어두운 보라색 */
-    transform: translateY(-2px);
-}
-@keyframes popIn {
-    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-                
-        .display-text {
-            cursor: pointer;
-        }
+       
 
 /* 인쇄용 스타일 */
 @media print {
-        body {
-            padding: 0;
+        /* Set the page size to A4 */
+        @page {
+            size: A4;
+            margin: 20mm; /* Adjust margins as needed */
         }
-        .step {
-            page-break-after: always;
-        }
-        button {
-            display: none;
-        }
-        .step-landscape {
-            transform: rotate(0deg); /* 회전 제거 */
-            width: 100%; /* 전체 너비 사용 */
-            height: auto; /* 높이 자동 조정 */
-            position: relative; /* absolute 대신 relative 사용 */
-            left: 0; /* 왼쪽 위치 조정 */
-            page-break-before: always; /* 새 페이지에서 시작 */
-            overflow: visible; /* 내용이 넘칠 경우 표시 */
+        
+        p, h4, input, td, th {
+            font-size: 8pt;
         }
 
-        @page {
-            size: landscape; /* 페이지 자체를 가로 방향으로 설정 */
+        input[type="text"] {
+        padding: 0;
+        border: none;
         }
-        /* 효율적인 단계별 인쇄 처리 */
-        .step {
+
+        /* Hide elements that shouldn't appear in print */
+         /* 인쇄 시 숨기고 싶은 요소 */
+        #saveButton, #loadButton, #deleteButton, #printButton {
             display: none;
         }
-        body[data-print-step] [id^="step"]:not([id="step" + attr(data-print-step)]) {
-            display: none;
+
+        /* Adjust table styles for printing */
+        table {
+            width: 100%;
+            font-size: 9px; /* Adjust font size for print */
         }
-        body[data-print-step] [id="step" + attr(data-print-step)] {
-            display: block;
+
+        td, th {
+            padding: 2px; /* Reduce padding to fit more content */
         }
-        body[data-print-all] .step {
-            display: block;
-        }
+
+        /* Additional print-specific styles if needed */
     }
 
+    select {
+        -webkit-appearance: none; /* 크롬 및 사파리에서 기본 드롭다운 스타일 제거 */
+        appearance: none; /* 기본 드롭다운 스타일 제거 */
+        border: none; /* 테두리 제거 */
+        background: transparent; /* 배경 제거 */
+        box-shadow: none; /* 그림자 제거 */
+    }
+    
         
     </style>
 </head>
 <body>
 
-    <p style="font-size: 14px; color: #2b2a2a; text-align: left; margin-bottom: 5px;">[별지 제5호서식] (2020.03.13 개정)</p>
-    <h2 style="text-align: center; color: #333; margin-bottom: 20px;">동거주택상속공제신고서 </h2>
-    <p style="font-size: 14px; color: #2b2a2a; text-align: left; margin-bottom: 5px;">፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.</p>
-    <hr>
-    <h4>1.신고자</h4>
+    <p style="font-size: 10px; color: #2b2a2a; text-align: left; margin-bottom: -10px;">[별지 제5호서식] (2020.03.13 개정)</p>
+    <h2 style="text-align: center; color: #333; margin-bottom: 0px;">동거주택상속공제신고서 </h2>
+    <p style="font-size: 10px; color: #2b2a2a; text-align: left; margin-bottom: -10px;">፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.</p>
+
+    <div style="text-align: right; margin-top: -10px;">
+        <button id="saveButton"  style="padding: 10px 20px;">저장</button>
+        <button id="loadButton"  style="padding: 10px 20px;">불러오기</button>
+        <button id="deleteButton" style="padding: 10px 20px;">삭제</button>
+        <button id="printButton"style="padding: 10px 20px;">인쇄</button>
+    </div>
+    <p><strong>1.신고자</strong></p>
     <table>
         <tr>           
             <td rowspan="2">피상속인</td>
@@ -232,18 +157,21 @@
             <td colspan="3"><input type="text" name="inheritanceStartDate"></td>
         </tr>
         <tr>           
-            <td rowspan="2">신청인<br>(상속인)</td>
-            <td>성명</td> <td><input type="text" name="applicantName"></td>
-            <td>주민등록번호 </td><td><input type="text" name="applicantID">            
+            <td rowspan="2">신청인<br>(상속인)</td>           
+            <td>성명</td>
+            <td><input type="text" id="heir-name"></td>
+            <td>주민등록번호</td>
+            <td><input type="text" id="heir-id-number"></td>
         </tr>
+             
         <tr>
             <td>주 소 </td>
             <td colspan="3"><input type="text" name="applicantAddress"></td>
         </tr>
         
     </table>
-    <hr>
-<h4>2. 동거주택 현황</h4>
+   
+    <p><strong>2. 동거주택 현황</strong></p>
 <table>
     <tr>
         <td rowspan="4">동거주택</td>
@@ -253,9 +181,9 @@
     <tr>
         <td>취득일</td>
         <td><input type="text" name="acquisitionDate"></td>
-        <td>동거기간<br>(상속인이 미성년자인 <br>기간은 제외)</td>
+        <td>① 동거기간<br><small>(상속인이 미성년자인 기간은 제외)</small></td>
         <td><input type="text" name="cohabitationPeriod"></td>
-        <td>평가가액 <br>(주택가액 - 담보채무액 )</td>       
+        <td>② 평가가액 <br><small>(주택가액 - 담보채무액 )</small></td>       
         <td><input type="text" id="propertyValue" name="propertyValue"></td>
     </tr>
     
@@ -292,12 +220,12 @@
         <td rowspan="2">성명</td>
         <td rowspan="2">주민등록번호</td>
         <td rowspan="2">⑤ 동거주택지분 (%)</td>
-        <td colspan="2">요건충족 여부</td>
-        <td rowspan="2">요건충족지분</td>
+        <td colspan="2" style="text-align: center; vertical-align: middle;">요건충족 여부</td>
+        <td rowspan="2" style="text-align: center; vertical-align: middle;">⑧ 요건충족지분</td>
     </tr>
     <tr>
-        <td>10년이상 동거</td>
-        <td>무주택자 <br>(피상속인과 공동으로 1세대 <br> 1주택을 보유한 자 포함) </td>        
+        <td>⑥ 10년이상 동거</td>
+        <td>⑦ 무주택자 <small>(피상속인과 공동으로 1세대 <br> 1주택을 보유한 자 포함)</small> </td>        
     </tr>
     <!-- 상속인 정보 입력 행들을 name 속성으로 수정 -->
     <tr>
@@ -333,7 +261,7 @@
         <td><input type="text" name="heirEligibleShare4"></td>
     </tr>
     <tr>
-        <td colspan="5">⑨ 계</td>
+        <td style="text-align: center;" colspan="5">⑨ 계</td>
         <td><input type="text" id="totalEligibleAmount" name="totalEligibleAmount" readonly></td>
     </tr>
 
@@ -342,7 +270,7 @@
     
 </table>
 
-<h4>3. 동거주택 상속공제</h4>
+ <p><strong>3.동거주택상속공제</strong></p>
 
 <table>
     
@@ -353,7 +281,7 @@
     <tr>
         <td rowspan="2">동거주택상속공제 </td>
         <td>⑪ 한도금액 </td>
-        <td>6억원</td>
+        <td style="text-align: center;">6억원</td>
     </tr>
     <tr>
         <td>⑫ 동거주택 상속공제액 (⑩과 ⑪ 중 적은 금액)</td>
@@ -361,33 +289,38 @@
     </tr>
 </table>
 
-<!-- 저장, 불러오기, 삭제 버튼 추가 -->
-<div class="button-container">
-    <button id="saveButton">저장</button>
-    <button id="loadButton">불러오기</button>
-    <button id="deleteButton">삭제</button>
-</div>
 
-<p>「상속세 및 증여세법」 제23조의2 및같은 법 시행령 제20조의2에 따라 동거주택상속공제신고서를 
-제출합니다. </p>
 
-년         월         일
-신고인              (서명 또는 인 )
+<!-- 날짜 입력 필드 추가 및 기본값 설정 -->
+<p>  「상속세 및 증여세법」 제23조의 2 및 같은 법 시행령 제20조의 2에 따라 동거주택 상속공제 신고서를 제출합니다.  <input type="text" id="inputYear" placeholder="년" style="width: 50px;">년
+    <input type="text" id="inputMonth" placeholder="월" style="width: 30px;">월
+    <input type="text" id="inputDay" placeholder="일" style="width: 30px;">일.
+    신고인 <span id="declarerName" style="font-weight: bold;">(서명 또는 인)</span> </p>      
 
-<p>세무서장 귀하 </p>
-<hr>
+ <p> <input type="text"  style="width: 50px;">세무서장  귀하</p>
+
 <table>
     <tr>
-        <td>신청(신고)인
-            제출서류</td>
+        <td>신청(신고)인   제출서류</td>
         <td>1. 피상속인과 동거주택 상속인이 10년 이상 함께 동거한 사실을 알 수 있는 서류</td>
         <td rowspan="2">수수료 
             없음</td>
     </tr>
     <tr>
-        <td>담당공무원 <br> 확인사항</td>
-        <td>1. 건물 등기사항 증명서 <br> 2. 주민등록표등본</td>
+        <td>담당공무원  확인사항</td>
+        <td>1. 건물 등기사항 증명서  2. 주민등록표등본</td>
     </tr>
+</table>
+<table>
+    <tr>        
+        <td  style="text-align: center;" ><strong>행정정보 공동이용 동의서</strong></td>
+    </tr>    
+    <tr>        
+        <td>본인은 이 건 업무처리와 관련하여 담당 공무원이 「전자정부법」 제36조제1항에 따른 행정정보의 공동이용을 통하여 위의 담당 
+            공무원 확인사항 제2호를 확인하는 것에 동의합니다.  * 동의하지 아니하는 경우에는 신청인이 직접 관련 서류를 제출하여야 합니다.
+            신청인 <span id="declarerName" style="font-weight: bold;">(서명 또는 인)</span> </td>
+    </tr>  
+
 </table>
 
 
@@ -458,7 +391,25 @@ function calculate() {
     document.getElementById('finalDeductionAmount').value = formatNumber(finalDeductionAmount);
 }
 
-// 저장 기능 구현
+document.addEventListener("DOMContentLoaded", function () {
+    // Date auto-fill (current date)
+    const currentDate = new Date();
+    document.getElementById('inputYear').value = currentDate.getFullYear();
+    document.getElementById('inputMonth').value = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+    document.getElementById('inputDay').value = String(currentDate.getDate()).padStart(2, '0');
+
+    // Auto-fill 신고인 and 신청인 fields based on 상속인 성명
+    const heirNameInput = document.getElementById('heir-name');
+    const declarerNameFields = document.querySelectorAll('#declarerName');
+
+    heirNameInput.addEventListener('input', function () {
+        declarerNameFields.forEach(field => {
+            field.textContent = heirNameInput.value || "(서명 또는 인)";
+        });
+    });
+});
+
+// Save and load functions remain the same
 function saveData() {
     const inputs = document.querySelectorAll('input, select');
     const data = {};
@@ -475,7 +426,6 @@ function saveData() {
     alert('데이터가 저장되었습니다.');
 }
 
-// 불러오기 기능 구현
 function loadData() {
     const data = JSON.parse(localStorage.getItem('formData'));
     if (data) {
@@ -496,7 +446,6 @@ function loadData() {
     }
 }
 
-// 삭제 기능 구현
 function deleteData() {
     localStorage.removeItem('formData');
     alert('저장된 데이터가 삭제되었습니다.');
@@ -509,6 +458,12 @@ document.getElementById('deleteButton').addEventListener('click', deleteData);
 
 // 초기 실행
 calculate();
+
+// 인쇄 기능 구현
+document.getElementById('printButton').addEventListener('click', function() {
+    window.print();
+});
+
 
 </script>
 

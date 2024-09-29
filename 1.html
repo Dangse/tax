@@ -5,231 +5,249 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상속세 과세가액 명세서</title>
     <style>
-       body {
-            font-family: Arial, sans-serif;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 5px;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 3px;
+    body {
+    font-family: Arial, sans-serif;
+}
+
+h1, h2 {
             text-align: center;
         }
-        th {
-            background-color: #f2f2f2;
-        }
-        select, input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 5px;
-            box-sizing: border-box;
-            border: none;
-            text-align: center;
-        }
-        .checkbox-container {
-            display: flex;
-            justify-content: space-around;
-        }
-        .button-container {
-            margin-bottom: 10px;
-        }
-        button {
-            margin-right: 10px;
-            padding: 5px 10px;
-        }
-        /* 재산구분선택  */
-        .selector {
-            cursor: pointer;
-           
-        }
-        
-        /* 모달 창 스타일 - 팝업 스타일 그대로 사용 가능 */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* 배경 비활성화 효과 */
-            display: none; /* 기본적으로 숨김 처리 */
-            z-index: 1000;
-        }
 
-        .modal {
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%); /* 화면 중앙에 고정 */
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
-            
-        }
-            
-
-        .modal-content {
-            display: flex;
-            flex-direction: column;  /* 세로 방향으로 변경 */
-            align-items: stretch;  /* 버튼들을 컨테이너 너비에 맞춤 */   
-            justify-content: center;  /* 중앙 정렬 */
-            gap: 10px 15px;  /* 세로 간격 10px, 가로 간격 15px */
-            width: 100%;
-        }
-
-        .modal-content button {
-            flex: 0 1 auto;  /* 버튼 크기 자동 조절 */
-            padding: 10px 15px;
+h3, h4 {
             text-align: left;
-            background-color: #e0e0e0;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            font-weight: bold;
-            color: #333;
-            white-space: nowrap;  /* 버튼 텍스트 줄바꿈 방지 */
-            width: 100%;  /* 버튼 너비를 100%로 설정 */
-            margin: 5px 0;  /* 상하 마진 추가 */
         }
 
-        .modal-content button:hover {
-            background-color: #d0d0d0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
+table {
+    width: 100%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
 
-         /* 모달 창 Step2 스타일 수정 */
-      .modalStep2 {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #ffffff;
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      max-width: 90%;
-      width: 600px;
-      transition: opacity 0.3s ease;
-      opacity: 0;
-    }
+th, td {
+    border: 1px solid black;
+    padding: 0px;
+    text-align: center; 
+    
+}
 
-    .modalStep2.open {
-      display: block;
-      opacity: 1;
-    }
 
-    .modalStep2 h2 {
-      margin-top: 0;
-      color: #333;
-      font-size: 24px;
-    }
+th {
+    background-color: #f2f2f2;
+}
 
-    .modalStep2 p {
-      color: #666;
-      line-height: 1.6;
-      font-size: 16px;
-    }
+select, input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    text-align: center;
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+    
+}
 
-    .modalStep2 button {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      font-size: 16px;
-    }
+input[name="location"] {
+    font-size: 12px; /* 주소의 경우  글꼴 크기 작게  */
+}
 
-    .modalStep2 button:hover {
-      background-color: #218838;
-    }
+.checkbox-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 20px 0;
+}
 
-    /* 입력 필드 스타일 */
-    .modalStep2 .input-field {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
+.button-container {
+    margin: 20px 0;
+}
 
-    /* 모달 창 내부 배치 */
-    .modal-content {
-      display: flex;
-      flex-direction: column;
-    }
+button {
+    margin: 10px 10px 10px 0;
+    padding: 10px 20px;
+}
 
-    .modal-actions {
-      margin-top: 20px;
-      display: flex;
-      justify-content: flex-end;
-    }
+/* 재산구분선택 */
+.selector {
+    cursor: pointer;
+}
 
-    .modal-actions button {
-      margin-left: 10px;
-    }
+/* 모달 창 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    z-index: 1000;
+}
+
+.modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.modal-content button {
+    flex: 0 1 auto;
+    padding: 15px 20px;
+    text-align: left;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.modal-content button:hover {
+    background-color: #d0d0d0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 모달 창 Step2 스타일 수정 */
+.modalStep2 {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    width: 80%;
+    max-width: 700px;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.modalStep2.open {
+    display: block;
+    opacity: 1;
+}
+
+.modalStep2 h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.modalStep2 p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.modalStep2 button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 16px;
+}
+
+.modalStep2 button:hover {
+    background-color: #218838;
+}
+
+/* 입력 필드 스타일 */
+.modalStep2 .input-field {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 모달 창 내부 배치 */
+.modal-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-actions button {
+    margin-left: 10px;
+}
 
 @media (max-width: 480px) {
     .modalStep2 {
         width: 85%;
-        padding: 20px;
+        padding: 30px;
     }
-    
+
     .modalStep2 h2 {
         font-size: 1.5em;
     }
-    
+
     .modalStep2 p {
         font-size: 1em;
     }
-    
+
     .modalStep2 button {
-        padding: 10px 15px;
+        padding: 12px 18px;
         font-size: 0.9em;
     }
-
 }
 
-/* x표시 디지인  */
+/* x표시 디자인 */
 .close {
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 20px;
+    right: 20px;
     color: #aaa;
-    font-size: 36px;  /* 크기 증가 */
+    font-size: 36px;
     font-weight: bold;
     cursor: pointer;
     transition: color 0.3s ease;
-    line-height: 1;  /* 라인 높이 조정 */
-    width: 40px;  /* 너비 설정 */
-    height: 40px;  /* 높이 설정 */
+    line-height: 1;
+    width: 50px;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.1);  /* 배경색 추가 */
-    border-radius: 50%;  /* 원형 모양 */
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
 }
+
 .close:hover {
     color: #333;
-    background-color: rgba(0, 0, 0, 0.2);  /* 호버 시 배경색 변경 */
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
-
 .help-button {
-    font-size: 12px;
-    margin-left: 10px;
-    padding: 5px 10px;
+    font-size: 14px;
+    margin-left: 15px;
+    padding: 8px 12px;
     cursor: pointer;
     background-color: #007bff;
     color: white;
@@ -242,15 +260,69 @@
     background-color: #0056b3;
 }
 
-
 @keyframes popIn {
-    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
-                
-        .display-text {
+
+/* 5단계 이미지 관련 디자인 */
+.image-container {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.image-container img {
+    max-width: 70%;
+    height: auto;
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+}
+
+.image-container img.zoomed {
+    transform: scale(1.2);
+    cursor: zoom-out;
+}
+
+.note {
+    background-color: #f8f8f8;
+    border-left: 5px solid #e74c3c;
+    padding: 15px 20px;
+    margin: 30px 0;
+}
+
+.highlight {
+    background-color: #fffacd;
+    padding: 4px 8px;
+}
+
+ul, ol {
+    padding-left: 35px;
+}
+
+
+/* select 요소의 기본 스타일 제거 */
+select {
+            border: none;
+            background: none;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            padding: 0;
+            font-size: 1em;
             cursor: pointer;
         }
+
+/* select 요소의 포커스 효과 제거 */
+select:focus {
+    outline: none;
+}
 
 /* 인쇄용 스타일 */
 @media print {
@@ -291,6 +363,7 @@
         }
     }
 
+
         
 
     </style>
@@ -301,22 +374,27 @@
         
         <div class="print-area"></div>
             
-                <h2>상속세 과세가액 명세서</h2>
+                <h1>상 속 세 과 세 가 액 계 산 명 세 서 (별지)</h1>
                 
+                <h3>가. 상속받은 총재산명세</h3>
                 <table id="assetTable">
                     <thead>
                         <tr>
-                            <th>재산구분코드</th>
-                            <th>재산종류코드</th>
-                            <th>국외자산 여부</th>
-                            <th>국외재산 국가명</th>
-                            <th>소재지</th>
-                            <th>사업자등록번호</th>
-                            <th>수량</th>
-                            <th>단가</th>
-                            <th>평가가액</th>
-                            <th>평가기준코드</th>
-                            <th>삭제</th>
+                            <th rowspan="2">① 재산구분코드</th>
+                            <th rowspan="2">② 재산종류코드</th>
+                            <th colspan="3">③ 소재지</th>                          
+                           
+                            <th rowspan="2"> ④ 사업자등록번호<br>(계좌번호,지분)</th>
+                            <th rowspan="2">⑤ 수량(면적)</th>
+                            <th rowspan="2"> ⑥ 단 가</th>
+                            <th rowspan="2"> ⑥ 평가가액</th>
+                            <th rowspan="2">⑧ 평가기준코드</th>
+                            <th rowspan="2">삭제</th>
+                        </tr>
+                        <tr>
+                            <th>국외자산<br> 여부</th>
+                            <th>국외재산<br> 국가명</th>
+                            <th  style="width: 300px;">소재지ㆍ법인명 </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -400,158 +478,165 @@
           
         <hr>
         [별지 제9호서식](2020.0313 개정)
-        <h1>채무 공과금 장례비용 및 상속공제명세서</h1>
+        <h1>채무 · 공과금 · 장례비용 및 상속공제명세서</h1>
         뒤쪽의 작성방법을 읽고 작성하시기 바랍니다. 
         <hr>
        
       
         <!-- 채무 테이블 -->
-        <h4>가. 채무 </h4>
+        <h3>가. 채무 </h3>
         <table id="debtTable">
             <tr>
-               <td rowspan="2">채무종류</td>
-               <td colspan="2">차입기간</td>
-               <td colspan="3">채권자</td>
-               <td rowspan="2"> 금액 </td>
+               <th rowspan="2">① 채무종류</th>
+               <th colspan="2">② 차입기간</th>
+               <th colspan="3"> 채권자</th>
+               <th rowspan="2"> ⑥ 금액 </th>
             </tr>
             <tr>
-              <td>발생연원일</td>
-              <td>종료(예정)연월일</td>
-              <td>성명(상호)</td>
-              <td>주민등록번호(사업자등록번호)</td>
-              <td>주소(소재지)</td>
+              <th>발생연원일</th>
+              <th>종료(예정)연월일</th>
+              <th> ③ 성명(상호)</th>
+              <th>④ 주민등록번호<br>(사업자등록번호)</th>
+              <th style="width: 400px;">⑤ 주소(소재지)</th>
             </tr>
             <tbody id="debtTableBody">
               <!-- 행이 동적으로 생성됩니다. -->
             </tbody>
             <tr class="total">
-                <td>합계</td>
-                <td colspan="5"></td>
-                <td id="debtTotal">0</td>
+                <th>⑦계</th>
+                <th colspan="5"></th>
+                <th id="debtTotal">0</th>
             </tr>
         </table>
       
         <!-- 공과금 테이블 -->
-        <h4>공과금</h4>
+        <h3>나. 공과금</h3>
         <table id="utilityTable">
             <tr>
-                <th>공과금종류코드</th>
-                <th>연도별</th>
-                <th>분기별</th>
-                <th>금액</th>                     
+                <th>⑧ 공과금종류코드</th>
+                <th>⑨ 연도별</th>
+                <th>⑩ 분기별</th>
+                <th>⑪ 금액</th>                     
             </tr>
             <tbody id="utilityTableBody">
               <!-- 행이 동적으로 생성됩니다. -->
             </tbody>
             <tr class="total">
-                <td>계</td>
-                <td colspan="2"></td>
-                <td id="utilityTotal">0</td>
+                <th>⑫ 계</th>
+                <th colspan="2"></th>
+                <th id="utilityTotal">0</th>
             </tr>
         </table>
       
         <!-- 장례비용 테이블 -->
-        <h4>다. 장례비용</h4>
+        <h3>다. 장례비용</h3>
         <table id="funeralTable">
             <tr>
                 <th colspan="2">지급처</th>
-                <th rowspan="2">지급내역</th>
-                <th rowspan="2">금액</th>
+                <th rowspan="2">⑮ 지급내역</th>
+                <th rowspan="2">⑯ 금액</th>
             </tr>
             <tr>
-                <td>주민등록번호<br>(사업자등록번호)</td>
-                <td>성명(상호)</td>
+                <th>⑬ 주민등록번호<br>(사업자등록번호)</th>
+                <th> ⑭ 성명(상호)</th>
             </tr>
             <tbody id="funeralTableBody">
               <!-- 행이 동적으로 생성됩니다. -->
             </tbody>
             <tr class="total">
-                <td>계</td>
-                <td colspan="2"></td>
-                <td id="funeralTotal">0</td>
+                <th>⑰ 계</th>
+                <th colspan="2"></th>
+                <th id="funeralTotal">0</th>
             </tr>
         </table>
       
         <!-- 상속 공제 테이블 -->
-        <h4>라.상속 공제</h4>
+        <h3>라. 상속 공제</h3>
         <table>
           <tbody>
               <tbody>
               
                   <tr>
-                    <td rowspan="5"> 기초공제 및 <br> 그 밖의 인적공제 </td>
-                    <td>1. 기초공제</td>
+                    <td rowspan="5"> ⑱ 기초공제 및 <br> 그 밖의 인적공제 </td>
+                    <td> ⑱ 기초공제</td>
                     <td><input type="text" id="baseDeduction" class="input-field" value="200,000,000" readonly></td>
                    
                   </tr>
                   <tr>
-                    <td>2. 자녀공제 <button onclick="openmodalStep2('child')">계산</button></td>
+                    <td>⑲ 자녀공제 <button onclick="openmodalStep2('child')">계산</button></td>
                     <td><input type="text" id="childDeduction" class="input-field" value="0" readonly></td>
                    
                   </tr>
                   <tr>
-                    <td>3. 미성년자공제 <button onclick="openmodalStep2('minor')">계산</button></td>
+                    <td>⑳ 미성년자공제 <button onclick="openmodalStep2('minor')">계산</button></td>
                     <td><input type="text" id="minorDeduction" class="input-field" value="0" readonly></td>
                    
                   </tr>
                   <tr>
-                    <td>4. 연로자공제 <button onclick="openmodalStep2('elder')">계산</button></td>
+                    <td>㉑ 연로자공제 <button onclick="openmodalStep2('elder')">계산</button></td>
                     <td><input type="text" id="elderDeduction" class="input-field" value="0" readonly></td>
                    
                   </tr>
                   <tr>
-                    <td>5. 장애인공제 <button onclick="openmodalStep2('disabled')">계산</button></td>
+                    <td>㉒ 장애인공제 <button onclick="openmodalStep2('disabled')">계산</button></td>
                     <td><input type="text" id="disabledDeduction" class="input-field" value="0" readonly></td>
                     
                   </tr>
                   <tr>
-                    <td colspan="2">6. 일괄공제</td>
+                    <td colspan="2">㉓ 일괄공제</td>
                     <td><input type="text" id="totalDeduction" class="input-field" value="500,000,000" readonly></td>
                    
                   </tr>
                   <tr>
                     <td rowspan="2">추가 상속공제 </td>
-                    <td>7. 가업상속공제</td>
+                    <td>㉔ 가업상속공제</td>
                     <td><input type="text" id="businessInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
                    
                   </tr>
                   <tr>
-                    <td>8. 영농상속공제</td>
+                    <td> ㉕ 영농상속공제</td>
                     <td><input type="text" id="farmingInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
                    
                   </tr>
                   <tr>
-                    <td colspan="2">9.<a href="sposeInheritDeduction.html" target="_blank">배우자상속공제</a></td>
+                    <td colspan="2"><a href="sposeInheritDeduction.html" target="_blank">㉖ 배우자상속공제</a></td>
                     <td><input type="text" id="spouseInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
                    
                   </tr>
                   <tr>
-                    <td colspan="2">10.<a href="finantialAssetDeduction.html" target="_blank">금융재산 상속공제</a> </td>
+                    <td colspan="2"><a href="finantialAssetDeduction.html" target="_blank">㉗ 금융재산 상속공제</a> </td>
                     <td><input type="text" id="financialInheritance" class="input-field" value="0" oninput="formatAndCalculate()"></td>
                    
                   </tr>
                   <tr>
-                    <td colspan="2">11. 재해손실세액공제</td>
+                    <td colspan="2">㉘ 재해손실세액공제</td>
                     <td><input type="text" id="disasterTaxDeduction" class="input-field" value="0" oninput="formatAndCalculate()"></td>
                     
                   </tr>
                   <tr>
-                    <td colspan="2">12. <a href="coHabitationDeduction.html" target="_blank">동거주택 상속공제</a></td>
+                    <td colspan="2"><a href="coHabitationDeduction.html" target="_blank"> ㉙ 동거주택 상속공제</a></td>
                     <td><input type="text" id="cohabitationDeduction" class="input-field" value="0" oninput="formatAndCalculate()"></td>
                    
                   </tr>
                   <tr>
-                    <td colspan="2">13. <a href="inheritanceDeductionLimit.html" target="_blank">공제 적용 한도액</a></td>
+                    <td colspan="2"><a href="inheritanceDeductionLimit.html" target="_blank">㉚ 공제 적용 한도액</a></td>
                     <td><input type="text" id="deductionLimit" class="input-field" value="0" oninput="formatAndCalculate()"></td>
                   
                   </tr>
             
                   <tr>
-                    <td colspan="2"><strong>14. 상속 공제 금액 합계</strong></td>
+                    <td colspan="2"><strong>㉛ 상속 공제 금액 합계</strong></td>
                     <td><input type="text" id="totalDeductionSum" class="input-field" value="0" readonly></td>
                   
                   </tr>
           </tbody>
+        </table>
+        <table>
+            <tr>
+                <td>신청(신고인)제출서류 </td>
+                <td> 1. 채무부담 및 공과금 장례비 감정평가수수료 지급 입증서류 </td>
+            </tr>
+
         </table>
       
         <!-- 저장, 불러오기, 삭제 버튼 -->
@@ -567,8 +652,7 @@
             <input type="number" id="modalStep2Input1" class="input-field" placeholder="입력값">
             <input type="number" id="modalStep2Input2" class="input-field" placeholder="추가 입력값" style="display:none;">
             <div class="modal-actions">
-              <button onclick="closemodalStep2()">닫기</button>
-              <button onclick="applymodalStep2()">반영</button>
+              <button onclick="applymodalStep2()">반영</button><button onclick="closemodalStep2()">닫기</button>
             </div>
           </div>
         </div>
@@ -590,7 +674,7 @@
             <hr>
            
             
-            <h2>가. 상속받은 총재산명세</h2>
+            <h3>가. 상속받은 총재산명세</h3>
             <div style="position: relative;">
                 <div style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background-color: #f5f5f5; border: 1px solid black; padding: 5px 10px; font-weight: bold; font-size: 1em;">
                     별지 참조
@@ -662,10 +746,10 @@
 
             </table>
         </div>
-        <h2>나. 상속세 과세가액 계산</h2>
+        
         
         <!-- STEP3의 상속세 과세가액 계산 부분 -->
-<h2>나. 상속세 과세가액 계산</h2>
+<h3>나. 상속세 과세가액 계산</h3>
 
 <table>
     <tr>
@@ -771,132 +855,284 @@
 
     <div id="step4" style="display: none;" class="step step-landscape">
         <div class="print-area">
+            <h1>상속세 과세표준신고 및 자진납부계산서</h1>
+            <table >               
+                   
+                <table>
+                    <!-- 신고인 Section -->
+                    <tr>
+                        <td rowspan="3">신고인</td>
+                        <td>① 성명</td>
+                        <td><input type="text" id="applicant_name"></td>
+                        <td>② 주민등록번호</td>
+                        <td><input type="text" id="applicant_ssn"></td>
+                        <td>③ 전자우편 주소</td>
+                        <td><input type="text" id="applicant_email"></td>                        
+                    </tr>
+                    <tr>
+                        <td>④ 주소</td>
+                        <td colspan="3"><input type="text" id="applicant_address" style="width: 97%;"></td>
+                        <td>⑤ 피상속인<br>과의관계</td>
+                        <td>
+                            <span>
+                                <select id="relationship">
+                                    <option value="">선택하세요</option>
+                                    <option value="배우자">배우자</option>
+                                    <option value="자녀">자녀</option>
+                                    <option value="손자녀">손자녀</option>
+                                    <option value="기타상속인">기타상속인</option>
+                                </select>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>⑥ 전화번호:자택 </td>
+                        <td><input type="text" id="applicant_phone_home"></td>           
+                        <td> 휴대전화:</td>
+                        <td><input type="text" id="applicant_phone_mobile"></td>                              
+                        <td>사후관리위반신고</td>
+                        <td><input type="checkbox" id="post_management_violation"></td>
+                    </tr>
+                
+                    <!-- 피상속인 Section -->
+                    <tr>
+                        <td rowspan="3">피상속인</td>
+                        <td>⑦ 성명</td>
+                        <td><input type="text" id="deceased_name"></td>
+                        <td>⑧ 주민등록번호</td>
+                        <td><input type="text" id="deceased_ssn"></td>
+                        <td>⑨ 거주구분</td>
+                        <td>
+                            <label><input type="radio" name="residency" value="거주자" checked>거주자</label>
+                            <label><input type="radio" name="residency" value="비거주자">비거주자</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>⑩ 주소</td>
+                        <td colspan="5"><input type="text" id="deceased_address" style="width: 97%;"></td>
+                    </tr>
+                    <tr>
+                        <td>⑪ 상속원인</td>
+                        <td colspan="3">
+                            <label><input type="radio" name="inheritance_cause" value="사망">사망</label>
+                            <label><input type="radio" name="inheritance_cause" value="실종">실종</label>
+                            <label><input type="radio" name="inheritance_cause" value="인정사망">인정사망</label>
+                            <label><input type="radio" name="inheritance_cause" value="기타">기타</label>
+                        </td>                    
+                        <td>⑫ 상속개시일</td>
+                        <td><input type="date" id="inheritance_date"></td>
+                    </tr>
+                
+                    <!-- 세무대리인 Section -->
+                    <tr>
+                        <td rowspan="2">세무<br>대리인</td>
+                        <td>⑬ 성명</td>
+                        <td><input type="text" id="agent_name"></td>
+                        <td>⑭ 사업자등록번호</td>
+                        <td><input type="text" id="agent_business_number"></td>
+                        <td>⑮ 관리번호</td>
+                        <td><input type="text" id="agent_management_number"></td>
+                    </tr>
+                    <tr>
+                        <td>⑯ 전화번호</td>
+                        <td>사무실: </td>
+                        <td><input type="text" id="agent_office_phone">  </td>
+                        <td>휴대전화: </td>
+                        <td colspan="2"><input type="text" id="agent_mobile_phone"></td>
+                    </tr>
+                </table>
+
             
             <table>
                 <tr>
-                    <th>항목</th>
-                    <th>금액</th>
+                    <tr>
+                        <th width="30%" colspan="3">항목</th>
+                        <th width="20%">금액</th>
+                        <th width="30%" colspan="3">항목</th>
+                        <th width="20%">금액</th>
+                    </tr>
                 </tr>
                 <tr>
-                    <td>⑰ 상속세 과세가액</td>
+                    <td colspan="3">⑰ 상속세 과세가액</td>
                     <td><input type="text" id="taxableInheritanceAmount" class="currency-input" placeholder="금액을 입력하세요"></td>
+                    <td rowspan="3">영리<br>법인<br>면제</td>
+                    <td colspan="2">유증 등 재산가액</td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td>⑱ 상속공제액</td>
+                    <td colspan="3">⑱ 상속공제액</td>
                     <td><input type="text" id="inheritanceDeductionAmount" class="currency-input" placeholder="금액을 입력하세요"></td>
+                    <td colspan="2">면제세액<br>( 「상속세 및 증여세법 제3조2」)</td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td>⑲ 감정평가 수수료</td>
+                    <td colspan="3">⑲ 감정평가 수수료</td>
                     <td><input type="text" id="appraisalFee" class="currency-input" placeholder="5백초과시 5백만원 한도"></td>
+                    <td colspan="2" onclick="alert('영리법인에게 유증한 경우로서 특수관계자가 있는 경우 일정액을 입력합니다.');" style="cursor: pointer;">㉟ 영리법인면제분납부세액 <button id="openModal4">입력</button></td>
+                    <td><input type="text" id="profitCorpTaxExemption" class="currency-input" readonly></td>
                 </tr>
                 <tr>
-                    <td>⑳ 과세표준 (⑰-⑱-⑲)</td>
-                    <td><input type="text" id="taxableBase" class="currency-input" readonly></td>
+                    <td rowspan="2" colspan="3">⑳ 과세표준 (⑰-⑱-⑲)</td>
+                    <td rowspan="2"><input type="text" id="taxableBase" class="currency-input" readonly></td>
+                    <td colspan="3">㊱ 공제면제후 납부할 세액<br>㉔ + ㉕ + ㉖ - ㉗ + ㉟</td>
+                    <td><input type="text" id="amountAfterDeductions" class="currency-input" readonly></td>
                 </tr>
                 <tr>
-                    <td>㉑ 세율 (%)</td>
-                    <td><input type="text" id="taxRate" readonly></td>
+                    <td colspan="3" onclick="alert('가업상속이 있는 경우 유예세액입니다.');" style="cursor: pointer;">㊲ 가업상속납부유예세액</td>
+                    <td><input type="text" id="deferredBusinessInheritanceTax" class="currency-input" placeholder="금액을 입력하세요"></td>
                 </tr>
                 <tr>
-                    <td>㉒ 산출세액</td>
+                    <td rowspan="2" colspan="3">㉑ 세율 (%)</td>
+                    <td rowspan="2"><input type="text" id="taxRate" readonly></td>
+                    <td colspan="3" onclick="alert('신고기한 내 신고하지 못한 경우입니다.');" style="cursor: pointer;">㊳ 신고불성실가산세</td>
+                    <td><input type="text" id="underReportingPenalty" class="currency-input" placeholder="금액을 입력하세요"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" onclick="alert('신고기한 내 납부하지 못한 경우입니다.');" style="cursor: pointer;">㊴ 납부지연가산세</td>
+                    <td><input type="text" id="delayedPaymentPenalty" class="currency-input" placeholder="금액을 입력하세요"></td>
+                </tr>
+                <tr>
+                    <td colspan="3">㉒ 산출세액</td>
                     <td><input type="text" id="calculatedTax" class="currency-input" readonly></td>
+                    <td colspan="3">㊵ 납부할 세액 (합계액) <br>㊱ - ㊲ + ㊳ + ㊴</td>
+                    <td><input type="text" id="amountToBePaid" class="currency-input" readonly></td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="3">
                         <a href="https://tuzaga.com/%ec%84%b8%eb%8c%80%eb%a5%bc-%ea%b1%b4%eb%84%88%eb%9b%b4-%ec%83%81%ec%86%8d%ec%9d%98-%ed%95%a0%ec%a6%9d%ea%b3%bc%ec%84%b8/" target="_blank">㉓ 세대생략가산액</a>
                         <button id="openModal1">입력</button>
                     </td>
                     <td><input type="text" id="generationSkippingSurtax" class="currency-input" readonly></td>
+                    <td>납부방법</td>
+                    <td colspan="2">납부신청일자</td>
+                    <td></td>
+                    
                 </tr>
                 <tr>
-                    <td>㉔ 총산출세액</td>
+                    <td colspan="3">㉔ 총산출세액( ㉒ + ㉓ ) </td>
                     <td><input type="text" id="totalCalculatedTax" class="currency-input" readonly></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('가업상속공제와 영농상속공제에 대한 이행을 하지 못한 경우 이자상당액입니다.');" style="cursor: pointer;">㉕ 이자상당액</td>
-                    <td><input type="text" id="interestAmount" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td>㉖ 문화재 등 징수유예세액 <button id="openModal2">입력</button></td>
-                    <td><input type="text" id="culturalHeritageDeferredTax" class="currency-input" readonly></td>
-                </tr>
-                <tr>
-                    <td>㉘ 소계 (㉙ + ㉚)</td>
-                    <td><input type="text" id="subtotal" class="currency-input" readonly></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('10년(5년)이내 상속인(상속인 외의 자)에게 증여 시 증여세 산출세액입니다.');" style="cursor: pointer;">㉙ 상증법 증여세액</td>
-                    <td><input type="text" id="giftTaxInheritanceAct" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('창업자에 대한 증여세 과세특례, 가업승계 증여세 특례 적용 시 증여세액 공제액입니다.');" style="cursor: pointer;">㉚ 조특법 증여세액</td>
-                    <td><input type="text" id="giftTaxSpecialAct" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td>계 (㉘ + ㉛ + ㉜ + ㉝ + ㉞)</td>
-                    <td><input type="text" id="totalDeductions" class="currency-input" readonly></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('외국에 있는 상속재산에 대하여 외국법령에 의해 상속세를 부과받은 경우 일정액을 공제합니다.');" style="cursor: pointer;">㉛ 외국납부세액공제</td>
-                    <td><input type="text" id="foreignTaxCredit" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td>㉜ 단기세액공제</td>
-                    <td><input type="text" id="shortTermTaxCredit" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td>㉝ 신고세액공제 <button id="openModal3">입력</button></td>
-                    <td><input type="text" id="reportedTaxCredit" class="currency-input" readonly></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('그 외 해당 사항이 있는 경우 입력합니다.');" style="cursor: pointer;">㉞ 그 밖의 공제</td>
-                    <td><input type="text" id="otherDeductions" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('영리법인에게 유증한 경우로서 특수관계자가 있는 경우 일정액을 입력합니다.');" style="cursor: pointer;">㉟ 영리법인면제분납부세액 <button id="openModal4">입력</button></td>
-                    <td><input type="text" id="profitCorpTaxExemption" class="currency-input" readonly></td>
-                </tr>
-                <tr>
-                    <td>㊱ 공제면제후 납부할 세액</td>
-                    <td><input type="text" id="amountAfterDeductions" class="currency-input" readonly></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('가업상속이 있는 경우 유예세액입니다.');" style="cursor: pointer;">㊲ 가업상속납부유예세액</td>
-                    <td><input type="text" id="deferredBusinessInheritanceTax" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('신고기한 내 신고하지 못한 경우입니다.');" style="cursor: pointer;">㊳ 신고불성실가산세</td>
-                    <td><input type="text" id="underReportingPenalty" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td onclick="alert('신고기한 내 납부하지 못한 경우입니다.');" style="cursor: pointer;">㊴ 납부지연가산세</td>
-                    <td><input type="text" id="delayedPaymentPenalty" class="currency-input" placeholder="금액을 입력하세요"></td>
-                </tr>
-                <tr>
-                    <td>㊵ 납부할 세액</td>
-                    <td><input type="text" id="amountToBePaid" class="currency-input" readonly></td>
-                </tr>
-                <tr>
                     <td onclick="alert('상속세 연부연납입니다.');" style="cursor: pointer;">㊶ 연부연납</td>
+                    <td colspan="2"><input type="date" id="installmentPaymentDay"></td>
                     <td><input type="text" id="installmentPayment" class="currency-input" placeholder="금액을 입력하세요"></td>
                 </tr>
                 <tr>
+                    <td colspan="3" onclick="alert('가업상속공제와 영농상속공제에 대한 이행을 하지 못한 경우 이자상당액입니다.');" style="cursor: pointer;">㉕ 이자상당액</td>
+                    <td><input type="text" id="interestAmount" class="currency-input" placeholder="금액을 입력하세요"></td>
                     <td onclick="alert('상속받은 재산으로 물납하는 경우입니다.');" style="cursor: pointer;">㊷ 물납</td>
+                    <td colspan="2"><input type="date" id="inKindPaymentDay"></td>
                     <td><input type="text" id="paymentInKind" class="currency-input" placeholder="금액을 입력하세요"></td>
                 </tr>
                 <tr>
+                    <td colspan="3">㉖ 문화재 등 징수유예세액 <button id="openModal2">입력</button></td>
+                    <td><input type="text" id="culturalHeritageDeferredTax" class="currency-input" readonly></td>
+                    <td rowspan="2">현금</td>
                     <td onclick="alert('분납 2개월입니다.');" style="cursor: pointer;">㊸ 분납</td>
+                    <td><input type="date" id="partialPaymentDay"></td>
                     <td><input type="text" id="partialPayment" class="currency-input" placeholder="금액을 입력하세요"></td>
                 </tr>
                 <tr>
+                    <td rowspan="9">세<br>액 <br>공<br> 제 </td>
+                    <td colspan="2"> ㉗ 계 (㉘ + ㉛ + ㉜ + ㉝ + ㉞)</td>
+                    <td><input type="text" id="totalDeductions" class="currency-input" readonly></td>
                     <td>㊹ 신고납부</td>
+                    <td></td>
                     <td><input type="text" id="finalPaymentAmount" class="currency-input" readonly></td>
+
                 </tr>
+                <tr>
+                    <td rowspan="3">㉘ 증<br>여<br>세<br>액<br>공<br>제</td>
+                    <td>㉘ 소계 (㉙ + ㉚)</td>
+                    <td><input type="text" id="subtotal" class="currency-input" readonly></td>
+                    <td rowspan="5" colspan="4" > 「상속세 및 증여세법」 제67조 및 같은 법 시행령 제67 64 조제1 <br>
+                        항에 따라 상속세의 과세가액 및 과세표준을 신고하며, <strong></strong>위 <br>
+                        내용을 충분히 검토하였고 신고인이 알고 있는 사실<br>
+                        을 그대로 적었음을 확인합니다.</strong><br>
+                        년      월      일   <br>                                  
+                        신고인                              서명 또는 인( )</td>
+                </tr>
+                <tr>
+                    <td onclick="alert('10년(5년)이내 상속인(상속인 외의 자)에게 증여 시 증여세 산출세액입니다.');" style="cursor: pointer;">㉙ 「상속세 및 증여세법」<br> 제28조</td>
+                    <td><input type="text" id="giftTaxInheritanceAct" class="currency-input" placeholder="금액을 입력하세요"></td>
+                </tr>
+                <tr>
+                    <td onclick="alert('창업자에 대한 증여세 과세특례, 가업승계 증여세 특례 적용 시 증여세액 공제액입니다.');" style="cursor: pointer;">㉚ 「조세특례제한법」<br>제30조의5 및 제30조의 6</td>
+                    <td><input type="text" id="giftTaxSpecialAct" class="currency-input" placeholder="금액을 입력하세요"></td>
+                </tr>
+                <tr>
+                    
+                </tr>
+                <tr>
+                    <td colspan="2"  onclick="alert('외국에 있는 상속재산에 대하여 외국법령에 의해 상속세를 부과받은 경우 일정액을 공제합니다.');" style="cursor: pointer;">㉛ 외국납부세액공제 <br> 「상속세 및 증여세법」<br> 제29조</td>
+                    <td><input type="text" id="foreignTaxCredit" class="currency-input" placeholder="금액을 입력하세요"></td>
+                    
+                <tr>
+                    <td colspan="2">㉜ 단기세액공제</td>
+                    <td><input type="text" id="shortTermTaxCredit" class="currency-input" placeholder="금액을 입력하세요"></td>
+                    <td rowspan="2" colspan="4"> 세무대리인은 조세전문자격자로서 위 신고서를 성실하고 
+                        공정하게 작성하였음을 확인합니다.  
+                        세무대리인                          서명 또는 인( )</td>
+                </tr>
+                    
+                </tr>
+                <tr>
+                    <td colspan="2">㉝ 신고세액공제 <button id="openModal3">입력</button></td>
+                    <td><input type="text" id="reportedTaxCredit" class="currency-input" readonly></td>
+                </tr>
+                <tr>
+                    <td colspan="2" onclick="alert('그 외 해당 사항이 있는 경우 입력합니다.');" style="cursor: pointer;">㉞ 그 밖의 공제</td>
+                    <td><input type="text" id="otherDeductions" class="currency-input" placeholder="금액을 입력하세요"></td>
+                    <td colspan="4"> <strong>세무서장</strong> 귀하 </td>
+                </tr>
+                
+                
             </table>
+
+            <table>
+                <tr>
+                     <td>신고인제출서류 </td>
+                     <td>
+                         <ol>
+                             <li>상속세과세가액계산명세서(부표1) 1부</li>
+                             <li>상속인별 상속재산 및 평가명세서(부표2) 1부</li>
+                             <li>채무ㆍ공과금ㆍ장례비용 및 상속공제명세서(부표3) 1부</li>
+                             <li>상속개시 전 1년 이내 재산처분ㆍ채무부담 내역 및 사용처소명명세서(부표4) 1부</li>
+                             <li>영리법인 상속세 면제 및 납부 명세서(부표5) 1부</li>
+                         </ol>
+                     </td>
+                     <td rowspan="2">수수료 없음</td>
+                </tr>
+                <tr>
+                  <td>담당공무원 확인사항 </td>
+                  <td>
+                     <ol>
+                         <li>주민등록표등본</li>
+                         <li>피상속인 및 상속인의 관계를 알 수 있는 가족관계등록부</li>                            
+                     </ol>
+                  </td>
+                </tr>              
+             </table>
+             
+             <table>                    
+                 <tr>
+                     <th colspan="3">행정정보 공동이용 동의서</th>
+                 </tr>
+                 <tr>
+                     <td colspan="3">본인은 이 건 업무처리와 관련하여 담당 공무원이 「전자정부법」
+                          제36조제1항에 따른 행정정보의 공동이용을 통하여 위의 담당 공무원 확인사항을 
+                          확인하는 것에 동의합니다. *동의하지 않는 경우에는 신고인이 직접 관련 
+                          서류를 제출해야 합니다.</td>   
+                 </tr>
+                 <tr>
+                     <td>신고인</td>
+                     <td><input type="text" id="applicant_name"></td>
+                     <td> (서명 또는 인 ) </td>
+                 </tr>
+             </table>               
+
             
             <!-- 모달 창들 -->
             <!-- 세대생략가산액 입력 모달 -->
-            <div id="modal1" class="modal">
+            <div id="modal1" class="modal" style="display: none;">
               <div class="modal-content">
                 <span class="close" data-modal="modal1">&times;</span>
                 <h3>㉓ 세대생략가산액 입력</h3>
@@ -909,7 +1145,7 @@
             </div>
             
             <!-- 문화재 등 징수유예세액 입력 모달 -->
-            <div id="modal2" class="modal">
+            <div id="modal2" class="modal" style="display: none;">
               <div class="modal-content">
                 <span class="close" data-modal="modal2">&times;</span>
                 <h3>㉖ 문화재 등 징수유예세액 입력</h3>
@@ -922,7 +1158,7 @@
             </div>
             
             <!-- 신고세액공제 입력 모달 -->
-            <div id="modal3" class="modal">
+            <div id="modal3" class="modal" style="display: none;">
               <div class="modal-content">
                 <span class="close" data-modal="modal3">&times;</span>
                 <h3>㉝ 신고세액공제 계산 결과</h3>
@@ -935,7 +1171,7 @@
             </div>
             
             <!-- 영리법인면제분납부세액 입력 모달 -->
-            <div id="modal4" class="modal">
+            <div id="modal4" class="modal" style="display: none;">
               <div class="modal-content">
                 <span class="close" data-modal="modal4">&times;</span>
                 <h3>㉟ 영리법인면제분납부세액 입력</h3>
@@ -955,103 +1191,64 @@
     <div id="step5" style="display: none;" class="step step-landscape">
         <div class="print-area">
             
-          
-            <h2 style="text-align: center;">재해손실 공제신고서 </h2>
-                <hr>
+            <h1>자진납부 납부서 작성 및 납부 안내</h1>
 
-            HTML은 기본 구조만 정의하고 있습니다.
-            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
-            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
-            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
+            <h2>1. 홈택스 접속 후 로그인</h2>
+            <div class="image-container">
+                <img src="https://tuzaga.com/wp-content/uploads/홈텍스자진납부1.png" alt="자진납부서 작성 화면">
+            </div>
+            <ol>
+                <li><a href="https://www.hometax.go.kr" target="_blank">홈택스(https://www.hometax.go.kr)</a> 주소줄이 맞는지 확인하세요.</li>
+                <li>홈택스 로그인 후 [납부] 메뉴에서 [자진납부]를 선택하세요.</li>
+            </ol>
+
+            <h2>2. 상속세 납부서 작성 및 납부방법</h2>
+            <div class="image-container">
+                <img src="https://tuzaga.com/wp-content/uploads/상속세-자진납부-2.png" alt="상속세 자진납부 화면">
+            </div>
+            <ol>
+                <li>납부구분에는 "확정분 자납"을 선택하세요.</li>
+                <li>세목은 32.상속세를 선택하세요.</li>
+                <li>상속세 금액에 납부할 세금액을 입력하세요.</li>
+                <li>납부기한은 사망일이 속하는 달의 마지막일로부터 6개월이 되는 날까지입니다. 예) 사망일이 2024년 3월 15일인 경우, 2024년 9월 30일까지입니다.</li>
+                <li>납부하기를 선택하면 바로 납부할 수 있고, 납부서 출력을 선택하면 납부서를 출력할 수 있습니다.</li>
+                <li>납부하고 나면 납부내역을 확인할 수 있습니다.</li>
+            </ol>
+
+            <h2>3. 주의사항</h2>
+            <div class="note">
+                <p class="highlight">홈택스 납부시간: 07:00~23:30</p>
+                <ul>
+                    <li><strong>22시 이후 납부결과는 다음날 07시 이후 확인 가능</strong></li>
+                    <li>가상계좌 이체시간은 <strong>금융기관에 따라 차이가 있습니다</strong>.</li>
+                </ul>
+            </div>
+
+            <p><span class="highlight">납부한 세금은 취소할 수 없으며, 세무서에 직접 연락하여 환급신청해야 합니다. 카드 관련 수수료는 납세자가 부담해야 합니다.</span></p>
+
+            <ul>
+                <li><strong>납부대행 수수료</strong>는 납부세액의 신용카드 <span class="highlight">0.8%</span>, 체크카드 <span class="highlight">0.5%</span>입니다.</li>
+                <li>신용카드 할부 수수료는 별도이므로 각 신용카드사에 문의하시기 바랍니다.</li>
+            </ul>
+
+            <p>홈택스에 접속한 <span class="highlight">본인 명의의 계좌 또는 카드</span>로만 납부할 수 있습니다. 타인 명의 카드(또는 계좌)로 납부를 원하시는 경우, 해당 <strong>카드(또는 계좌) 명의자로 홈택스 로그인 후 [타인세금 납부] 메뉴</strong>를 이용하세요.</p>
+
+            <p>버튼을 선택하여도 팝업창이 안 뜰 경우, 사용 중인 브라우저에서 <strong>팝업차단을 해제</strong>하시기 바랍니다.</p>
+
+            <ul>
+                <li>예시: 익스플로러는 [인터넷옵션-개인정보-팝업차단 사용] 체크 해제</li>
+            </ul>
             
-            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
              
         </div>
-            <button class="no-print" onclick="nextStep(6)">다음</button>
+
+        <div>
+            
             <button class="no-print" onclick="previousStep(4)">뒤로가기</button> 
             <button onclick="printStep(5)">5단계 인쇄</button> 
-    </div>
-
-    <div id="step6" style="display: none;" class="step step-landscape">
-        <div class="print-area">
-            
-          
-            <h2 style="text-align: center;">동거주택상속공제신고서 </h2>
-                <hr>
-
-            HTML은 기본 구조만 정의하고 있습니다.
-            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
-            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
-            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
-            
-            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
-             
         </div>
-            <button class="no-print" onclick="nextStep(7)">다음</button>
-            <button class="no-print" onclick="previousStep(5)">뒤로가기</button>
-            <button onclick="printStep(6)">6단계 인쇄</button>  
-    </div>
 
-    <div id="step7" style="display: none;" class="step step-landscape">
-        <div class="print-area">
-            
-          
-            <h2 style="text-align: center;">채무 공과금 장례비용 및 상속공제명세서 </h2>
-                <hr>
-
-            HTML은 기본 구조만 정의하고 있습니다.
-            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
-            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
-            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
-            
-            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
-             
-        </div>
-            <button class="no-print" onclick="nextStep(8)">다음</button>
-            <button class="no-print" onclick="previousStep(6)">뒤로가기</button> 
-            <button onclick="printStep(7)">7단계 인쇄</button>  
-    </div>
-
-    <div id="step8" style="display: none;" class="step step-landscape">
-        <div class="print-area">
-            
-          
-            <h2 style="text-align: center;">상속세과세표준신고서 및 자진납부계산서 </h2>
-                <hr>
-
-            HTML은 기본 구조만 정의하고 있습니다.
-            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
-            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
-            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
-            
-            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
-             
-        </div>
-            <button class="no-print" onclick="nextStep(9)">다음</button>
-            <button class="no-print" onclick="previousStep(7)">뒤로가기</button> 
-            <button onclick="printStep(8)">8단계 인쇄</button>  
-    </div>
-
-    <div id="step9" style="display: none;" class="step step-landscape">
-        <div class="print-area">
-            
-          
-            <h2 style="text-align: center;">납부서출력  </h2>
-                <hr>
-
-            HTML은 기본 구조만 정의하고 있습니다.
-            CSS는 별도 파일로 분리되어 스타일을 관리하며, 반응형 디자인을 위한 미디어 쿼리를 포함합니다.
-            JavaScript는 모듈 패턴을 사용하여 전역 네임스페이스 오염을 방지하고, 이벤트 위임을 통해 동적으로 생성되는 요소들의 이벤트를 효율적으로 관리합니다.
-            JavaScript에서는 직접적인 스타일 조작 대신 CSS 클래스를 토글하여 스타일을 변경합니다.
-            
-            이러한 구조를 사용하면 코드의 유지보수성이 향상되고, 성능도 최적화할 수 있습니다. 프로젝<br>
-             
-        </div>
-            
-            <button class="no-print" onclick="previousStep(8)">뒤로가기</button> 
-            <button onclick="printStep(9)">9단계 인쇄</button>  
-    </div>
-
+    
 
     <script>
 
@@ -1063,6 +1260,12 @@
     if (stepNum === 3) {
         updateStep3Fields();
     }
+
+    // step4로 이동할 때 필드 채우기
+    if (stepNum === 4) {
+        populateStep4Fields();
+    }
+
     }
 
     function previousStep(stepNum) {
@@ -1634,6 +1837,9 @@ function calculateInheritDeductionTotal() {
         }
 
         document.getElementById('totalDeductionSum').value = formatNumber(finalTotal);
+
+        window.totalDeductionSumValue = finalTotal;// 전역 변수에 저장
+
     }
 
 // 데이터 저장 함수
@@ -1784,6 +1990,9 @@ function updateStep3Fields() {
     document.getElementById('field25').textContent = formatNumber(field25Value);
 
     document.getElementById('field29').textContent = formatNumber(field29Value);
+
+      // 전역 변수에 값 저장
+      window.field29Value = field29Value;
 }
 
 function getAssetTotalByCodes(codes) {
@@ -1819,6 +2028,20 @@ function getStep2Totals() {
 }
 
 // step4 단계 함수 
+
+function populateStep4Fields() {
+    // 전역 변수에서 값 가져오기 (값이 없으면 0으로 대체)
+    const field29Value = window.field29Value || 0;
+    const totalDeductionSumValue = window.totalDeductionSumValue || 0;
+
+    // step4의 필드에 값 설정
+    document.getElementById('taxableInheritanceAmount').value = formatNumber(field29Value);
+    document.getElementById('inheritanceDeductionAmount').value = formatNumber(totalDeductionSumValue);
+
+    // 계산 함수 호출하여 계산 업데이트
+    InheritanceTaxSelfAssessment();
+}
+
 
  // 천 단위 구분자 함수
  function formatCurrency(input) {
@@ -1986,8 +2209,24 @@ function getStep2Totals() {
         document.getElementById("finalPaymentAmount").value = Math.round(finalPaymentAmount).toLocaleString();
     }
 
+ // 거주구분 라디오 버튼 이벤트 리스너 설정
+ const residencyRadios = document.getElementsByName('residency');
+
+residencyRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+        if (radio.value === '비거주자' && radio.checked) {
+            alert('국내자산만 상속과세');
+        }
+    });
+});
 
 
+//납부서 부분 함수
+document.querySelectorAll('.image-container img').forEach(img => {
+            img.addEventListener('click', function() {
+                this.classList.toggle('zoomed');
+            });
+        });
 
     </script>
 </body>
