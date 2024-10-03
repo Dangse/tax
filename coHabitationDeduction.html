@@ -16,10 +16,10 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
-            margin-top: 0px;
-           
+            margin-bottom: 0px;
+            margin-top: 10px;           
         }
+        
         td, th {
         padding: 2px; /* 패딩을 2px로 설정 */
         font-size: 16px; /* 폰트 크기 조정 */
@@ -44,27 +44,24 @@
             border-right: none;
         }
 
-        .table-container {
-            margin-bottom: 0px;
-        }
+        
         input[type="text"] {
             width: 100%;
             height: 100%;
             padding: 0px;
             box-sizing: border-box;
-            font-size: 12px;
+            font-size: 16px;
         }  
 
         .result {
             font-weight: bold;
             text-align: right;
-            font-size: 14px;
+            font-size: 16px;
         }
         select, input[type="text"], input[type="number"] {
             width: 100%;
             padding: 5px;
-            box-sizing: border-box;
-           
+            box-sizing: border-box;           
             text-align: center;
         }
         .checkbox-container {
@@ -91,16 +88,16 @@
         /* Set the page size to A4 */
         @page {
             size: A4;
-            margin: 20mm; /* Adjust margins as needed */
+            margin: 15mm; /* Adjust margins as needed */
         }
         
-        p, h4, input, td, th {
-            font-size: 8pt;
+        p, h4, td, th {
+            font-size: 8.5pt;
         }
 
         input[type="text"] {
         padding: 0;
-        border: none;
+        font-size: 8pt;
         }
 
         /* Hide elements that shouldn't appear in print */
@@ -112,7 +109,7 @@
         /* Adjust table styles for printing */
         table {
             width: 100%;
-            font-size: 9px; /* Adjust font size for print */
+            font-size: 8pt; /* Adjust font size for print */
         }
 
         td, th {
@@ -128,6 +125,7 @@
         border: none; /* 테두리 제거 */
         background: transparent; /* 배경 제거 */
         box-shadow: none; /* 그림자 제거 */
+        font-size: 9pt;
     }
     
         
@@ -137,7 +135,7 @@
 
     <p style="font-size: 10px; color: #2b2a2a; text-align: left; margin-bottom: -10px;">[별지 제5호서식] (2020.03.13 개정)</p>
     <h2 style="text-align: center; color: #333; margin-bottom: 0px;">동거주택상속공제신고서 </h2>
-    <p style="font-size: 10px; color: #2b2a2a; text-align: left; margin-bottom: -10px;">፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.</p>
+    <p style="font-size: 10px; color: #2b2a2a; text-align: left; margin-bottom: 0px;">፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.</p>
 
     <div style="text-align: right; margin-top: -10px;">
         <button id="saveButton"  style="padding: 10px 20px;">저장</button>
@@ -218,7 +216,7 @@
     <tr>
         <td rowspan="7">상속인</td>
         <td rowspan="2">성명</td>
-        <td rowspan="2">주민등록번호</td>
+        <td rowspan="2" style="width: 20%;">주민등록번호</td>
         <td rowspan="2">⑤ 동거주택지분 (%)</td>
         <td colspan="2" style="text-align: center; vertical-align: middle;">요건충족 여부</td>
         <td rowspan="2" style="text-align: center; vertical-align: middle;">⑧ 요건충족지분</td>
@@ -232,32 +230,32 @@
         <td><input type="text" name="heirName1"></td>
         <td><input type="text" name="heirID1"></td>
         <td><input type="number" name="heirShare1" step="0.01"></td>
-        <td><input type="checkbox" name="heirCondition1_10years"></td>
-        <td><input type="checkbox" name="heirCondition1_noHouse"></td>
+        <td style="text-align: center;"><input type="checkbox" name="heirCondition1_10years"></td>
+        <td style="text-align: center;"><input type="checkbox" name="heirCondition1_noHouse"></td>
         <td><input type="text" name="heirEligibleShare1"></td>
     </tr>
     <tr>
         <td><input type="text" name="heirName2"></td>
         <td><input type="text" name="heirID2"></td>
         <td><input type="number" name="heirShare2" step="0.01"></td>
-        <td><input type="checkbox" name="heirCondition2_10years"></td>
-        <td><input type="checkbox" name="heirCondition2_noHouse"></td>
+        <td style="text-align: center;"><input type="checkbox" name="heirCondition2_10years"></td>
+        <td style="text-align: center;"><input type="checkbox" name="heirCondition2_noHouse"></td>
         <td><input type="text" name="heirEligibleShare2"></td>
     </tr>
     <tr>
         <td><input type="text" name="heirName3"></td>
         <td><input type="text" name="heirID3"></td>
         <td><input type="number" name="heirShare3" step="0.01"></td>
-        <td><input type="checkbox" name="heirCondition3_10years"></td>
-        <td><input type="checkbox" name="heirCondition3_noHouse"></td>
+        <td style="text-align: center;"><input type="checkbox" name="heirCondition3_10years"></td>
+        <td style="text-align: center;"><input type="checkbox" name="heirCondition3_noHouse"></td>
         <td><input type="text" name="heirEligibleShare3"></td>
     </tr>
     <tr>
         <td><input type="text" name="heirName4"></td>
         <td><input type="text" name="heirID4"></td>
         <td><input type="number" name="heirShare4" step="0.01"></td>
-        <td><input type="checkbox" name="heirCondition4_10years"></td>
-        <td><input type="checkbox" name="heirCondition4_noHouse"></td>
+        <td style="text-align: center;"><input type="checkbox" name="heirCondition4_10years"></td>
+        <td style="text-align: center;"><input type="checkbox" name="heirCondition4_noHouse"></td>
         <td><input type="text" name="heirEligibleShare4"></td>
     </tr>
     <tr>
@@ -311,14 +309,15 @@
         <td>1. 건물 등기사항 증명서  2. 주민등록표등본</td>
     </tr>
 </table>
+
 <table>
     <tr>        
         <td  style="text-align: center;" ><strong>행정정보 공동이용 동의서</strong></td>
     </tr>    
     <tr>        
-        <td>본인은 이 건 업무처리와 관련하여 담당 공무원이 「전자정부법」 제36조제1항에 따른 행정정보의 공동이용을 통하여 위의 담당 
+        <td><small>본인은 이 건 업무처리와 관련하여 담당 공무원이 「전자정부법」 제36조제1항에 따른 행정정보의 공동이용을 통하여 위의 담당 
             공무원 확인사항 제2호를 확인하는 것에 동의합니다.  * 동의하지 아니하는 경우에는 신청인이 직접 관련 서류를 제출하여야 합니다.
-            신청인 <span id="declarerName" style="font-weight: bold;">(서명 또는 인)</span> </td>
+            신청인 <span id="declarerName" style="font-weight: bold;">(서명 또는 인)</span></small> </td>
     </tr>  
 
 </table>
@@ -349,6 +348,11 @@ function formatInput(input) {
 // 모든 입력 필드에 이벤트 리스너 추가
 document.querySelectorAll('input, select').forEach(input => {
     input.addEventListener('input', calculate);
+});
+
+// propertyValue 필드에 천 단위 쉼표 적용
+document.getElementById('propertyValue').addEventListener('input', function() {
+    formatInput(this); // 입력 값에 천 단위 쉼표 적용
 });
 
 function calculate() {

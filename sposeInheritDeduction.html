@@ -65,7 +65,7 @@
         /* Set the page size to A4 */
         @page {
             size: A4;
-            margin: 20mm; /* Adjust margins as needed */
+            margin: 15mm; /* Adjust margins as needed */
         }
 
         /* Adjust body margins and padding for print */
@@ -75,7 +75,7 @@
         }
 
         /* Hide elements that shouldn't appear in print */
-        #resetButton , #printButton {
+        #resetButton , #printButton , #spouseLegalSharePercent {
             display: none;
 
         }
@@ -173,7 +173,7 @@
             <tr>
                 <td>⑫ 배우자의 법정상속지분</td>
                 <td>
-                    <input type="text" id="spouseLegalShare" placeholder="예) 자녀 2명인 경우:  1.5 / 3.5" style="width: 70%;">
+                    <input type="text" id="spouseLegalShare" placeholder="자녀 2명인 경우:  1.5 / 3.5" style="width: 50%;">
                     <span id="spouseLegalSharePercent" style="margin-left: 10px;"></span>
                 </td>
             </tr>
@@ -198,7 +198,7 @@
                 <td> ⑮ 배우자 상속공제 금액 (④ 와 ⑭ 중 적은금액 )<br>
                 ( 다만, 배우자가 실제 상속받은 금액이 없거나 실제 상속받은 <br>
                  금액이 5억원 미만인 경우는 5억원 ) </td>
-                <td  width="30%" ><span id="spouseInheritanceAmount" class="result"></span></td>
+                <td class="amount-cell" width="30%" ><span id="spouseInheritanceAmount" class="result"></span></td>
             </tr>
         </table>
     </div>
@@ -251,7 +251,7 @@
             return `${this.numerator}/${this.denominator}`;
         }
 
-        toDecimal(precision = 2) {
+        toDecimal(precision = 6) {
             return (this.numerator / this.denominator).toFixed(precision);
         }
     }
@@ -280,8 +280,9 @@
     function parseFraction(fractionStr) {
         const parts = fractionStr.split('/');
         if (parts.length === 2) {
-            const numerator = parseInt(parts[0], 10);
-            const denominator = parseInt(parts[1], 10);
+            const numerator = parseFloat(parts[0]);
+            const denominator = parseFloat(parts[1]);
+
             if (!isNaN(numerator) && !isNaN(denominator) && denominator !== 0) {
                 return new Fraction(numerator, denominator);
             }
@@ -302,7 +303,7 @@
         const fractionValue = this.value;
         const fraction = parseFraction(fractionValue);
         if (fraction) {
-            const percentValue = (fraction.toDecimal() * 100).toFixed(2);
+            const percentValue = (fraction.toDecimal() * 100).toFixed(6);
             document.getElementById('spouseLegalSharePercent').textContent = `(${percentValue}%)`;
             calculateAll();
         } else {

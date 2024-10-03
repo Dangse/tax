@@ -16,13 +16,13 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: -10px;
+            margin-bottom:0px;
             margin-top: -10px;
            
         }
         td, th {
         padding: 2px; /* 패딩을 2px로 설정 */
-        font-size: 15px; /* 폰트 크기 조정 */
+        font-size: 16px; /* 폰트 크기 조정 */
         }
 
         td {
@@ -44,43 +44,49 @@
             border-right: none;
         }
 
-        .table-container {
-            margin-bottom: -10px;
-        }
+       
+      
         input[type="text"] {
             width: 100%;
             height: 100%;
             padding: 2px;
             box-sizing: border-box;
-            font-size: 12px;
+            font-size: 16px;
+            text-align: center;
         }  
 
+        input[type="text"].amount {
+        text-align: right;
+        }
+
+        
         .result {
             font-weight: bold;
             text-align: right;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .amount, 
-.total-row td, 
-#netAsset, 
-#inheritanceLimit, 
-#inheritanceDeduction {
-    text-align: right;
-}
+        .total-row td, 
+        #netAsset, 
+        #inheritanceLimit, 
+        #inheritanceDeduction {
+            text-align: right;
+        }
 
         @media print {
         /* Set the page size to A4 */
         @page {
             size: A4;
-            margin: 20mm; /* Adjust margins as needed */
+            margin: 15mm; /* Adjust margins as needed */
         }
         
-        p, h4, input, td, th {
+        p, h4,  td, th {
             font-size: 9pt;
         }
 
         input[type="text"] {
+        font-size: 8pt;
         padding: 0;
         }
 
@@ -93,7 +99,7 @@
         /* Adjust table styles for printing */
         table {
             width: 100%;
-            font-size: 10px; /* Adjust font size for print */
+            font-size: 9pt; /* Adjust font size for print */
         }
 
         td, th {
@@ -106,7 +112,7 @@
     </style>
 </head>
 <body>
-    <p style="font-size: 10px; color: #2b2a2a; text-align: left; margin-bottom:-20px;">[별지 제5호서식] (2020.03.13 개정)</p>
+    <p style="font-size: 10px; color: #2b2a2a; text-align: left; margin-bottom:-10px;">[별지 제5호서식] (2020.03.13 개정)</p>
     <h2 style="text-align: center; color: #333; margin-bottom: 0px;">금융재산 상속공제 신고서 </h2>
     <p style="font-size: 10px; color: #2b2a2a; text-align: left; margin-bottom: 0px;">፠ 뒤쪽의 작성방법을 읽고 작성하시기 바랍니다.</p>
     <div  style="text-align: right; margin-top: 0px;">
@@ -115,7 +121,7 @@
         <button id="deleteButton"style="padding: 10px 20px;">삭제</button>
         <button id="printButton"style="padding: 10px 20px;">인쇄</button>
     </div>
-    <h4>1.피상속인 및 신고인 ( 상속인) 인적사항 </h4>
+    <p><strong>1.피상속인 및 신고인 ( 상속인) 인적사항</strong> <p>
     <table id="inheritance-table">
         <tr id="deceased-row">
             <td>피상속인</td>
@@ -132,13 +138,13 @@
             <td><input type="text" id="heir-id-number"></td>
         </tr>
     </table>
-    <h4>2.금융재산 및 금융채무</h4>
-    
-    <h4>가-1. 금융재산</h4>
+
+    <p><strong>2.금융재산 및 금융채무</strong> </p>    
+    <p><strong>가-1. 금융재산</strong> </p>
     <table id="financeAssetTable">
         <tr>
             <th>종류</th>
-            <th>계좌번호 등</th>
+            <th style="width: 20%;">계좌번호 등</th>
             <th>상호</th>
             <th>사업자등록번호</th>
             <th>단가</th>
@@ -215,15 +221,15 @@
        
         <tr class="total-row">
             <td colspan="5">합계</td>
-            <td id="assetTotal">0</td>
+            <td id="assetTotal" style="font-weight: bold;">0</td>
         </tr>
     </table>
 
-    <h4>가-2.금융채무</h4>
+    <p><strong>가-2.금융채무</strong> </p>
     <table id="financeDebtTable">
         <tr>
             <th>종류</th>
-            <th>계좌번호 등</th>
+            <th style="width: 20%;">계좌번호 등</th>
             <th>상호</th>
             <th>사업자등록번호</th>
             <th>단가</th>
@@ -290,11 +296,11 @@
         
         <tr class="total-row">
             <td colspan="5">합계</td>
-            <td id="debtTotal">0</td>
+            <td id="debtTotal" style="font-weight: bold;">0</td>
         </tr>
     </table>
 
-    <h4>금융재산 상속공제금액</h4>
+    <p><strong>3.금융재산 상속공제금액</strong> </p>
     <table>
         <tr>
             <td>③ 순금융재산가액 (① -② )</td>
