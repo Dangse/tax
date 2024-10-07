@@ -25,13 +25,14 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 0px;
-            margin-top: 10px; 
-            .currency-input  /* 4단계 칸 확장  */ 
+            margin-top: 10px;
+        }
+
+        .currency-input {
             width: 100%;
             box-sizing: border-box;
-           
         }
-               
+                    
 
         th {
             border: 1px solid;
@@ -59,13 +60,23 @@
         td#grandTotal,
         td input.input-field, 
         td input.currency-input,
+        .currency-input,
         td input.debt-amount,
         td input.utility-amount,
         td input.funeral-amount,
         td#debtTotal,  /* id가 'debtTotal'인 td와 th 요소 */
         td#utilityTotal, /* id가 'utilityTotal'인 td와 th 요소 */
-        td#funeralTotal  /* id가 'funeralTotal'인 td와 th 요소 */ {
+        td#funeralTotal,  /* id가 'funeralTotal'인 td와 th 요소 */
+        #field13,
+        #field17,
+        #field25,
+        #field29
+         {
             text-align: right; /*각종금액 오른쪽정렬  */
+        }
+
+        input.currency-input {
+            text-align: right !important;
         }
         
 
@@ -155,7 +166,8 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            background-color: #fff;
+            background-color: #9F244D; /* 배경색 변경 */
+            color: white; /* 글자색 흰색으로 변경 */
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -518,7 +530,7 @@
                             <td><input type="number" name="quantity" value="0"></td>
                             <td><input type="number" name="price" value="0"></td>
                             <td class="total">0</td>
-                            <td><span class="evaluationStandardSelector selector">선택</span></td>
+                            <td><span class="evaluationStandardSelector selector" style="display: flex; justify-content: center; align-items: center; height: 100%;">선택</span></td>
                             <td><button onclick="deleteRow(this)">삭제</button></td>
                         </tr>
                     </tbody>
@@ -538,12 +550,13 @@
                     <button onclick="clearAssetData()">데이터 삭제</button>
                 </div>
 
-                                <!-- 자산 유형 선택 모달 -->
+                                <!-- 재산구분코드 선택 모달 -->
                 <div id="assetTypeModal" class="modal-overlay">
                     <div class="modal">
                         <span class="close">&times;</span>
                         <div class="modal-content">
-                            <h2>자산 유형 선택</h2>
+                            <h2>재산구분코드  </h2>
+                            <p>※ 여기는 반드시 선택해야만 다음 단계에서 값을 이어 받아 계산할수 있습니다.  </p>
                             <div id="assetTypeContent"></div>
                         </div>
                     </div>
@@ -553,7 +566,7 @@
                     <div class="modal">
                         <span class="close">&times;</span>
                         <div class="modal-content">
-                            <h2>재산 종류 선택</h2>
+                            <h2>재산 종류 코드 선택</h2>
                             <div id="propertyTypeContent"></div>
                         </div>
                     </div>
@@ -838,11 +851,13 @@
                 <!-- STEP3의 상속세 과세가액 계산 부분 -->
         <h3>나. 상속세 과세가액 계산</h3>
 
-        <table>
+        <table style="table-layout: fixed; width: 100%;">
             <tr>
                 <td rowspan="3">총상속재산가액</td>
                 <td>⑩ 상속재산가액</td>
-                <td><input type="text" id="field10" class="currency-input" readonly></td>
+                <td style="width: 25%;">
+                    <input type="text" id="field10" class="currency-input" readonly style="width: 100%;">
+                  </td>
             </tr>
             <tr>
                 <td>⑪ 상속개시전 처분재산등 산입액 (「상속세 및 증여세법」 제15조)</td>
@@ -873,7 +888,7 @@
 
             <tr>
                 <td rowspan="4">과세가액불산입</td>
-                <td class="currency-input">계</td>
+                <td class="currency-input">⑰ 계</td>
                 <td id="field17"></td> <!-- 계산된 불산입 가액 총액 표시 -->
             </tr>
             <tr>
@@ -892,7 +907,7 @@
             <tr>
                 <td rowspan="4">공제금액 (「상속세 및 증여세법」 제14조)</td>
                 <td>㉑ 계</td>
-                <td id="field21"></td> <!-- 계산된 공제금액 총액 표시 -->
+                <td class="currency-input" id="field21"></td> <!-- 계산된 공제금액 총액 표시 -->
             </tr>
             <tr>
                 <td> ㉒공과금</td>
@@ -910,7 +925,7 @@
             <tr>
                 <td rowspan="4">가산하는 증여재산가액</td>
                 <td>㉕ 계(㉖ + ㉗ 또는㉗ + ㉘)</td>
-                <td id="field25"></td> <!-- 계산된 증여재산가액 총액 표시 -->
+                <td class="currency-input" id="field25"></td> <!-- 계산된 증여재산가액 총액 표시 -->
             </tr>
             <tr>
                 <td>㉖ 「상속세 및 증여세법」 제13조</td>
@@ -927,7 +942,7 @@
 
             <tr>
                 <td colspan="2"> ㉙ 상속세 과세가액[ ⑫ - ( ⑬ + ⑰ + ㉑ ) + ㉕]</td>
-                <td id="field29"></td> <!-- 계산된 상속세 과세가액 표시 -->
+                <td class="currency-input" id="field29"></td> <!-- 계산된 상속세 과세가액 표시 -->
             </tr>
         </table>
 
@@ -1482,7 +1497,7 @@
                 <td><input type="number" name="quantity" value="0"></td>
                 <td><input type="number" name="price" value="0"></td>
                 <td class="total">0</td>
-                <td><span class="evaluationStandardSelector selector">선택</span></td>
+                <td><span class="evaluationStandardSelector selector" style="display: flex; justify-content: center; align-items: center; height: 100%;">선택</span></td>
                 <td><button onclick="deleteRow(this)">삭제</button></td>
             `;
 
@@ -1918,23 +1933,23 @@ generateTableRows('utilityTableBody', 4, [
         document.getElementById('modalStep2Input1').value = '';
 
         switch (type) {
-            case 'child':
-                modalStep2Title.textContent = '자녀공제'; 
-                modalStep2Description.textContent = ': 자녀수 * 1인당 5천만원 ';
-                break;
-            case 'minor':
-                modalStep2Title.textContent = '미성년자공제';
-                modalStep2Description.textContent = ': 미성년자들의 잔여연수(19세까지) 합산 * 1천만원';
-                break;
-            case 'elder':
-                modalStep2Title.textContent = '연로자 공제';
-                modalStep2Description.textContent = ':연로자수 * 1인당 5천만원';
-                break;
-            case 'disabled':
-                modalStep2Title.textContent = '장애인 공제';
-                modalStep2Description.textContent = ': 장애인 기대여명 연수 합계 * 1천만원 ';
-                break;
-        }
+        case 'child':
+            modalStep2Title.textContent = '자녀공제';
+            modalStep2Description.innerHTML = ': <strong>자녀수 * 1인당 5천만원</strong>';
+            break;
+        case 'minor':
+            modalStep2Title.textContent = '미성년자공제';
+            modalStep2Description.innerHTML = ': <strong>미성년자들의 잔여연수(19세까지) 합산 * 1천만원</strong>';
+            break;
+        case 'elder':
+            modalStep2Title.textContent = '연로자 공제';
+            modalStep2Description.innerHTML = ': <strong>연로자수 * 1인당 5천만원</strong>';
+            break;
+        case 'disabled':
+            modalStep2Title.textContent = '장애인 공제';
+            modalStep2Description.innerHTML = ': <strong>장애인 기대여명 연수 합계 * 1천만원</strong>';
+            break;
+    }
         modalStep2.classList.add('open');
     }
 
@@ -2087,9 +2102,9 @@ function getGrandTotalValue() {
 // updateStep3Fields 함수 수정
 function updateStep3Fields() {
     // 자산 데이터 가져오기
-    const field12Value = getAssetTotalByCodes(['A11', 'A12','B11','B12','B13','B21','B22']); // 사전증여 재산을 뺀  자산의 합계 (Field 12에 사용)
+    const field10Value = getAssetTotalByCodes(['A11', 'A12','B11','B12','B13','B21','B22']); // 사전증여 재산을 뺀  자산의 합계 (Field 10에 사용)
     const preInheritanceDisposalValue = getAssetTotalByCodes(['A13']); // Field 11
-    const field10Value = field12Value - preInheritanceDisposalValue; // Field 10
+    const field12Value = field10Value + preInheritanceDisposalValue; // Field 12
 
     // 비과세 재산가액 계산
     const field14Value = getAssetTotalByCodes(['B11']); // Field 14
