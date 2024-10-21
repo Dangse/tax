@@ -10,15 +10,15 @@
             line-height: 1.4;
             margin: 0;
             padding: 30px;
-            font-size: 16px;           
+            font-size: 16px;
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom:0px;
             margin-top: -10px;
-           
+
         }
         td, th {
         padding: 2px; /* 패딩을 2px로 설정 */
@@ -29,8 +29,8 @@
             border: 1px solid;
             padding: 0px;
             text-align: left;
-        }        
-        
+        }
+
         /*  위쪽과 아래쪽 굵은 테두리 */
         table tr:first-child {
             border-top: 2px solid #000;
@@ -44,8 +44,8 @@
             border-right: none;
         }
 
-       
-      
+
+
         input[type="text"] {
             width: 100%;
             height: 100%;
@@ -53,23 +53,23 @@
             box-sizing: border-box;
             font-size: 16px;
             text-align: center;
-        }  
+        }
 
         input[type="text"].amount {
         text-align: right;
         }
 
-        
+
         .result {
             font-weight: bold;
             text-align: right;
             font-size: 16px;
         }
 
-        .amount, 
-        .total-row td, 
-        #netAsset, 
-        #inheritanceLimit, 
+        .amount,
+        .total-row td,
+        #netAsset,
+        #inheritanceLimit,
         #inheritanceDeduction {
             text-align: right;
         }
@@ -80,7 +80,7 @@
             size: A4;
             margin: 15mm; /* Adjust margins as needed */
         }
-        
+
         p, h4,  td, th {
             font-size: 9pt;
         }
@@ -108,7 +108,7 @@
 
         /* Additional print-specific styles if needed */
     }
-         
+
     </style>
 </head>
 <body>
@@ -122,6 +122,7 @@
         <button id="printButton"style="padding: 10px 20px;">인쇄</button>
     </div>
     <p><strong>1.피상속인 및 신고인 ( 상속인) 인적사항</strong> <p>
+
     <table id="inheritance-table">
         <tr id="deceased-row">
             <td>피상속인</td>
@@ -139,7 +140,7 @@
         </tr>
     </table>
 
-    <p><strong>2.금융재산 및 금융채무</strong> </p>    
+    <p><strong>2.금융재산 및 금융채무</strong> </p>
     <p><strong>가-1. 금융재산</strong> </p>
     <table id="financeAssetTable">
         <tr>
@@ -165,7 +166,7 @@
             <td><input type="text" name="assetCompany2"></td>
             <td><input type="text" name="assetBusinessNumber2"></td>
             <td><input type="text" name="assetUnitPrice2"></td>
-            <td><input type="text" name="assetAmount2" class="amount" data-type="asset"></td>   
+            <td><input type="text" name="assetAmount2" class="amount" data-type="asset"></td>
         </tr>
         <tr>
             <td><input type="text" name="assetType3"></td>
@@ -173,7 +174,7 @@
             <td><input type="text" name="assetCompany3"></td>
             <td><input type="text" name="assetBusinessNumber3"></td>
             <td><input type="text" name="assetUnitPrice3"></td>
-            <td><input type="text" name="assetAmount3" class="amount" data-type="asset"></td>       
+            <td><input type="text" name="assetAmount3" class="amount" data-type="asset"></td>
         </tr>
         <tr>
             <td><input type="text" name="assetType4"></td>
@@ -214,11 +215,11 @@
             <td><input type="text" name="assetCompany8"></td>
             <td><input type="text" name="assetBusinessNumber8"></td>
             <td><input type="text" name="assetUnitPrice8"></td>
-            <td><input type="text" name="assetAmount8" class="amount" data-type="asset"></td>   
+            <td><input type="text" name="assetAmount8" class="amount" data-type="asset"></td>
         </tr>
 
-       
-       
+
+
         <tr class="total-row">
             <td colspan="5">합계</td>
             <td id="assetTotal" style="font-weight: bold;">0</td>
@@ -250,7 +251,7 @@
             <td><input type="text" name="debtCompany2"></td>
             <td><input type="text" name="debtBusinessNumber2"></td>
             <td><input type="text" name="debtUnitPrice2"></td>
-            <td><input type="text" name="debtAmount2" class="amount" data-type="debt"></td> 
+            <td><input type="text" name="debtAmount2" class="amount" data-type="debt"></td>
         </tr>
         <tr>
             <td><input type="text" name="debtType3"></td>
@@ -293,7 +294,7 @@
             <td><input type="text" name="debtUnitPrice7"></td>
             <td><input type="text" name="debtAmount7" class="amount" data-type="debt"></td>
         </tr>
-        
+
         <tr class="total-row">
             <td colspan="5">합계</td>
             <td id="debtTotal" style="font-weight: bold;">0</td>
@@ -317,21 +318,21 @@
     </table>
     <!-- 날짜 입력 필드 추가 및 기본값 설정 -->
         <p>  「상속세 및 증여세법」 제22조 및 같은 법 시행령 제19조제3항에 따라 금융재산 상속공제 신고서를 제출합니다. </p>
-       
+
         <p>
             <input type="text" id="inputYear" placeholder="년" style="width: 50px;">년
             <input type="text" id="inputMonth" placeholder="월" style="width: 30px;">월
             <input type="text" id="inputDay" placeholder="일" style="width: 30px;">일.
-            신고인 <span id="declarerName" style="font-weight: bold;">(서명 또는 인)</span>      
-         </p>    
+            신고인 <span id="declarerName" style="font-weight: bold;">(서명 또는 인)</span>
+         </p>
          <p> <input type="text"  style="width: 50px;">세무서장  귀하</p>
-         
+
          <table>
             <tr>
                 <td>신고인제출서류</td><td>금융재산보유 및 금융채무 사실을 확인할수 있는 서류 </td> <td> 수수료 없음</td>
         </table>
 
- 
+
 
 <script>
     // 상수 정의
@@ -427,7 +428,7 @@
             alert('저장된 데이터가 없습니다.');
         }
     }
-    
+
     // 삭제 기능 구현
     function deleteData() {
         localStorage.removeItem('formData');
@@ -477,7 +478,7 @@ document.getElementById('printButton').addEventListener('click', function() {
     window.print();
 });
 
-        
+
 </script>
 </body>
 </html>
