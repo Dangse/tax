@@ -221,6 +221,14 @@ textarea{resize:vertical;min-height:70px;}
   .doc-wrap{border:none;border-radius:0;}
   .doc-body{max-height:none;padding:20px 40px;}
   .editable{border-bottom:none;}
+  /* 비어 있는 항목의 회색 예시 안내문("예) 2026년 01월 01일" 등)은 인쇄 시 숨김 → 손으로 기입 가능 */
+  .editable:empty::before{content:""!important;}
+  /* 정관 상호·본점·주식수·1주금액 등 미작성 칸은 인쇄 시 밑줄로 표시 → 손으로 기입 */
+  .editable.d2-blank:empty{border-bottom:1px solid #333!important;display:inline-block;min-width:180px;}
+  #d2-company2.d2-blank:empty{min-width:240px;}
+  #d2-addr.d2-blank:empty{min-width:300px;}
+  /* 인쇄 전 안내 팝업은 인쇄물에 나오지 않도록 */
+  #print-guide-modal{display:none!important;}
   /* 정관·법률 서식 권장 여백: 상·하 25mm / 좌·우 20mm */
   @page{size:A4;margin:25mm 20mm;}
   * { -webkit-print-color-adjust: exact; }
@@ -257,6 +265,26 @@ textarea{resize:vertical;min-height:70px;}
   .main{margin-left:0;}
   .form-grid,.form-grid3{grid-template-columns:1fr;}
 }
+/* 인쇄 전 머리글·바닥글 끄기 안내 팝업 */
+.pg-overlay{display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(17,24,39,.55);align-items:center;justify-content:center;padding:20px;}
+.pg-box{background:#fff;border-radius:14px;max-width:440px;width:100%;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);overflow:hidden;
+  font-family:'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;}
+.pg-head{background:var(--primary);color:#fff;padding:16px 22px;font-size:16px;font-weight:700;
+  display:flex;align-items:center;gap:8px;}
+.pg-body{padding:20px 22px;font-size:14px;color:var(--dark);line-height:1.75;}
+.pg-body b{color:var(--primary-h);}
+.pg-steps{margin:14px 0 4px;padding:14px 16px;background:#eff6ff;border:1px solid #bfdbfe;
+  border-radius:8px;font-size:13px;color:#1e40af;line-height:2;}
+.pg-steps .pg-step{display:flex;align-items:flex-start;gap:8px;}
+.pg-steps .pg-num{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--primary);
+  color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:3px;}
+.pg-note{margin-top:12px;font-size:12px;color:var(--light);line-height:1.6;}
+.pg-foot{display:flex;gap:8px;align-items:center;padding:14px 22px;border-top:1px solid var(--border2);background:#fafafa;}
+.pg-foot .btn{min-width:90px;text-align:center;}
+.pg-dontshow{font-size:12px;color:var(--mid);display:flex;align-items:center;gap:6px;cursor:pointer;margin-right:auto;user-select:none;}
+.pg-dontshow input{cursor:pointer;accent-color:var(--primary);}
 </style>
 </head>
 <body>
@@ -568,7 +596,7 @@ textarea{resize:vertical;min-height:70px;}
       <table class="doc-table" id="d1-chg-table">
         <tr><th>변경 전 조항</th><th>변경 후 조항</th><th>구분</th><th>변경 내용 설명</th></tr>
         <tbody id="d1-chg-body">
-          <tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:12px;">기본 정보 입력 후 <strong>모든 문서에 적용</strong> 버튼을 눌러주세요.</td></tr>
+          <tr class="print-hide"><td colspan="4" style="text-align:center;color:#9ca3af;padding:12px;">기본 정보 입력 후 <strong>모든 문서에 적용</strong> 버튼을 눌러주세요.</td></tr>
         </tbody>
       </table>
       <p style="margin-left:18px;">의장은 이의 없음을 확인하고 표결에 부쳤다.<br>
@@ -642,7 +670,7 @@ textarea{resize:vertical;min-height:70px;}
   <div class="doc-wrap">
     <div class="doc-toolbar"><span>정관</span></div>
     <div class="doc-body" id="d2-body">
-      <div style="padding:40px;text-align:center;color:#9ca3af;">기본 정보 입력 후 <strong>모든 문서에 적용</strong> 버튼을 눌러주세요.</div>
+      <div class="print-hide" style="padding:40px;text-align:center;color:#9ca3af;">기본 정보 입력 후 <strong>모든 문서에 적용</strong> 버튼을 눌러주세요.</div>
     </div>
   </div>
 </div>
@@ -870,6 +898,9 @@ textarea{resize:vertical;min-height:70px;}
       <div style="flex:1;"></div>
       <button class="btn btn-primary" onclick="bulkPrint()">🖨 선택 문서 인쇄</button>
     </div>
+    <div class="print-hide" style="text-align:right;margin-top:8px;font-size:12px;font-weight:600;color:var(--primary);line-height:1.5;">
+      🖨 인쇄 시 <b>[설정 더보기 ▾] → [머리글 및 바닥글]</b> 체크를 해제하세요.
+    </div>
   </div>
 
   <div id="bulk-preview" class="bulk-preview">
@@ -893,7 +924,8 @@ const DOC_NAMES = {
 
 /* 인쇄 직전 document.title을 변경하면 PDF로 저장 시 파일명 후보가 됨.
    afterprint 이벤트로 안정적으로 원복한다. */
-function _printWithTitle(filename){
+/* 실제 인쇄 실행 (제목 = 파일명 지정 → 복원) */
+function _executePrint(filename){
   const origTitle = document.title;
   document.title = filename;
   const restore = () => {
@@ -904,6 +936,42 @@ function _printWithTitle(filename){
   // 일부 환경(모바일 등) 안전망: 60초 후 강제 복원
   setTimeout(() => { if(document.title === filename) document.title = origTitle; }, 60000);
   window.print();
+}
+
+/* 인쇄 전, 머리글·바닥글 끄기 안내 팝업을 먼저 띄운다 */
+let _pendingPrintName = null;
+const _PRINT_GUIDE_SKIP_KEY = 'jg_print_guide_skip';
+function _printGuideSkipped(){
+  try { return localStorage.getItem(_PRINT_GUIDE_SKIP_KEY) === '1'; } catch(e){ return false; }
+}
+function _printWithTitle(filename){
+  _pendingPrintName = filename;
+  const modal = document.getElementById('print-guide-modal');
+  // "다시 보지 않기"를 선택했거나 팝업이 없으면 바로 인쇄
+  if(modal && !_printGuideSkipped()){
+    modal.style.display = 'flex';
+  } else {
+    _pendingPrintName = null;
+    _executePrint(filename);
+  }
+}
+function closePrintGuide(){
+  const modal = document.getElementById('print-guide-modal');
+  if(modal) modal.style.display = 'none';
+  _pendingPrintName = null;
+}
+function proceedPrint(){
+  const modal = document.getElementById('print-guide-modal');
+  // "이 안내 다시 보지 않기" 체크 시 브라우저에 기억
+  const chk = document.getElementById('pg-dont-show');
+  if(chk && chk.checked){
+    try { localStorage.setItem(_PRINT_GUIDE_SKIP_KEY, '1'); } catch(e){}
+  }
+  if(modal) modal.style.display = 'none';
+  const name = _pendingPrintName || document.title;
+  _pendingPrintName = null;
+  // 모달이 닫힌 뒤 인쇄 (렌더 반영 보장)
+  setTimeout(() => _executePrint(name), 30);
 }
 
 function doPrint(docId) {
@@ -1489,15 +1557,22 @@ function getArtBody(k, tp, vals) {
   const parval = vals.parval || '10,000원';
   const issued = vals.issued || '○○○주';
 
+  /* 값이 있으면 그 값을, 없으면 빈 칸(인쇄 시 밑줄)으로 렌더링.
+     비어 있을 때 예시글씨는 data-ph(화면 안내용)로만 두고 인쇄물에는 안 나옴. */
+  const blankF = (id, ph, val) => {
+    const filled = val && String(val).trim() !== '';
+    return `<span class="editable${filled ? '' : ' d2-blank'}" contenteditable id="${id}" data-ph="${ph}">${filled ? val : ''}</span>`;
+  };
+
   const T = {
-    a1:  `본 회사는 <span class="editable" contenteditable id="d2-company2" data-ph="회사명">${c}</span>이라고 한다.`,
+    a1:  `본 회사는 ${blankF('d2-company2','예) ○○주식회사', vals.company)}이라고 한다.`,
     a2:  `본 회사는 다음 사업을 경영함을 목적으로 한다.<div class="art-item"><span class="editable" contenteditable id="d2-purpose" style="display:block;min-width:100%;min-height:80px;white-space:pre-wrap;" data-ph="목적사업 입력">${vals.purpose||''}</span></div>`,
-    a3:  `본 회사의 본점은 <span class="editable" contenteditable id="d2-addr" data-ph="예) 경기도 화성시">${addr}</span>내에 둔다.`,
+    a3:  `본 회사의 본점은 ${blankF('d2-addr','예) ○○시 ○○구', vals.addr)}내에 둔다.`,
     a4:  `본 회사는 ${이사회결의} 각지에 지점 및 영업소를 설치할 수 있다.`,
     a5:  `본 회사의 공고는 <span class="editable" contenteditable id="d2-notice" data-ph="예) 조선일보">${notice}</span>에 게재한다.`,
-    a6:  `본 회사가 발행할 주식의 총수는 <span class="editable" contenteditable id="d2-maxshares" data-ph="예) 1,000,000주">${maxshares}</span>로서 보통주식으로 한다.`,
-    a7:  `본 회사가 발행하는 주식 1주의 금액은 금 <span class="editable" contenteditable id="d2-parval" data-ph="예) 10,000원">${parval}</span>정으로 한다.`,
-    a8:  `본 회사는 <span class="editable" contenteditable id="d2-issued" data-ph="예) 71,000주">${issued}</span>의 주식을 발행하기로 한다.`,
+    a6:  `본 회사가 발행할 주식의 총수는 ${blankF('d2-maxshares','예) 1,000,000주', vals.maxshares)}로서 보통주식으로 한다.`,
+    a7:  `본 회사가 발행하는 주식 1주의 금액은 금 ${blankF('d2-parval','예) 10,000원', vals.parval)}정으로 한다.`,
+    a8:  `본 회사는 ${blankF('d2-issued','예) 71,000주', vals.issued)}의 주식을 발행하기로 한다.`,
     a9:  `① 본 회사의 주식은 보통주식으로서 전부 기명식으로 하고, 주권은 1주권, 10주권, 100주권의 3종으로 한다.<br>② 본 회사는 이익배당, 잔여재산분배, 주식의 전환·상환 등에 관하여 내용이 다른 종류주식을 발행할 수 있다.<br>③ 의결권이 없거나 제한되는 종류주식의 총수는 발행주식 총수의 4분의 1을 초과하지 못한다.`,
     a10: `① 회사가 ${이사회결의} 신주를 발행하는 경우에는 그 종류와 수, 발행가액과 납입기일, 신주인수권을 부여할 대상 등을 정하여야 한다.<br>② 신주의 발행가액은 공정하게 산정하되, 주주 이외의 자에게 발행하는 경우에는 주주에게 불이익이 없도록 하여야 한다.`,
     a11: `① 회사의 주식을 발행하는 경우 주주에게 그 소유 주식 수에 비례하여 신주를 배정할 권리를 준다.<br>② 제1항에도 불구하고 다음 각 호의 경우에는 ${이사회결의} 주주 이외의 자에게 신주를 배정할 수 있다.<br>1. 자본시장과 금융투자업에 관한 법률에 따른 일반공모 방식으로 발행하는 경우<br>2. 우리사주조합원에게 우선 배정하는 경우<br>3. 주식매수선택권 행사로 인하여 발행하는 경우<br>4. 기타 법률이 정하는 바에 따른 경우<br>③ 신주 인수 방법에 관한 세부 사항은 ${이사회결의} 정한다.`,
@@ -2109,5 +2184,25 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+<!-- ══ 인쇄 전 안내 팝업 (머리글·바닥글 끄기) ══ -->
+<div id="print-guide-modal" class="pg-overlay print-hide" onclick="if(event.target===this)closePrintGuide()">
+  <div class="pg-box">
+    <div class="pg-head">🖨 인쇄 전 확인해 주세요</div>
+    <div class="pg-body">
+      깔끔한 출력을 위해 인쇄 창에서 <b>머리글 및 바닥글</b>(URL·날짜·페이지 번호)을 꺼주세요.
+      <div class="pg-steps">
+        <div class="pg-step"><span class="pg-num">1</span><span>인쇄 창에서 <b>[설정 더보기 ▾]</b> 를 클릭</span></div>
+        <div class="pg-step"><span class="pg-num">2</span><span><b>[머리글 및 바닥글]</b> 체크를 <b>해제</b></span></div>
+        <div class="pg-step"><span class="pg-num">3</span><span>아래 <b>[인쇄 계속하기]</b> 를 누르세요</span></div>
+      </div>
+      <div class="pg-note">※ 이 설정은 브라우저에 기억되어, 한 번 꺼두면 다음부터는 그대로 유지됩니다.</div>
+    </div>
+    <div class="pg-foot">
+      <label class="pg-dontshow"><input type="checkbox" id="pg-dont-show"> 이 안내 다시 보지 않기</label>
+      <button class="btn" onclick="closePrintGuide()">취소</button>
+      <button class="btn btn-primary" onclick="proceedPrint()">인쇄 계속하기</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
