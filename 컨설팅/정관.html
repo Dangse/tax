@@ -108,6 +108,8 @@ textarea{resize:vertical;min-height:70px;}
   padding:0 3px;cursor:text;color:inherit;background:transparent;}
 .editable:focus{outline:none;border-bottom-color:#1d4ed8;background:#eff6ff;border-radius:2px;}
 .editable:empty::before{content:attr(data-ph);color:#9ca3af;font-style:italic;}
+/* 이사회결의서 "금 ___ 원" 금액 입력칸: 기입 여백을 약 3배로 확대 */
+.editable-num{min-width:120px;}
 /* 변경표 */
 .chg-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
 .chg-table th{background:#f3f4f6;padding:6px 8px;border:1px solid #d1d5db;text-align:center;font-size:11px;font-weight:600;}
