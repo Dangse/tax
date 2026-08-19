@@ -3,494 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="대한세무법인 - 당신을 지키는 가장 가까운 울타리. 세무 · 경영 · 재산 컨설팅 도우미 모음">
+    <meta name="description" content="대한세무법인 - 세무 · 경영 · 재산 · 컨설팅 도우미 모음">
     <meta name="theme-color" content="#005a9e">
     <title>대한세무법인</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        /* ===========================================================
-           대한세무법인 · Identity + Summer Theme
-           Brand Navy #005a9e  |  Ocean Aqua  |  Sun Yellow  |  Coral
-           =========================================================== */
+        /* ===== 대한세무법인 · 심플 레이아웃 ===== */
         :root {
-            /* 아이덴티티 (대한세무법인 기본 블루) */
             --brand-900: #00325c;
-            --brand-700: #004a80;
             --brand: #005a9e;
-            --brand-500: #1a7ac2;
+            --accent: #00b4d8;
 
-            /* 여름 (바다 · 태양 · 모래) */
-            --aqua: #00b4d8;
-            --aqua-light: #7fe0f0;
-            --sea-foam: #e6f7fb;
-            --sun: #ffb703;
-            --sun-light: #ffd569;
-            --coral: #ff6b5b;
-            --sand: #fff9ef;
-
-            --bg: #f2f9fd;
+            --bg: #f5f8fb;
             --surface: #ffffff;
-            --text: #16324a;
-            --muted: #5b7791;
-            --line: #d8e9f4;
+            --text: #1c2b3a;
+            --muted: #6b7f92;
+            --line: #e2e9f0;
 
-            --radius-lg: 22px;
-            --radius: 14px;
-            --shadow-sm: 0 2px 10px rgba(0, 90, 158, .07);
-            --shadow: 0 10px 30px rgba(0, 90, 158, .10);
-            --shadow-lg: 0 18px 45px rgba(0, 90, 158, .16);
+            /* 업로드한 배경사진이 들어가는 자리 */
+            --photo: none;
         }
 
         * { box-sizing: border-box; }
 
-        html { scroll-behavior: smooth; }
-
         body {
-            font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-            line-height: 1.65;
-            color: var(--text);
             margin: 0;
-            padding: 0;
-            background:
-                radial-gradient(1200px 500px at 90% -10%, #fff4d9 0%, rgba(255, 244, 217, 0) 60%),
-                radial-gradient(900px 420px at -10% 5%, var(--sea-foam) 0%, rgba(230, 247, 251, 0) 65%),
-                var(--bg);
-            background-attachment: fixed;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
         }
 
+        /* 전체 배경 모드일 때 사진을 페이지 뒤에 고정 */
+        body.photo-full::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: var(--photo);
+            background-size: cover;
+            background-position: center;
+        }
+        body.photo-full::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(245, 248, 251, .86);
+        }
+        body.photo-full { background: transparent; }
+
         .container {
-            width: min(100% - 32px, 1200px);
+            width: min(100% - 32px, 1120px);
             margin-inline: auto;
         }
 
-        /* ========================= HERO ========================= */
-        .hero {
+        /* ===== 헤더 ===== */
+        header {
             position: relative;
-            overflow: hidden;
+            background: var(--brand);
             color: #fff;
-            background:
-                linear-gradient(170deg, var(--brand-900) 0%, var(--brand) 45%, #0a86bd 78%, var(--aqua) 100%);
-            padding: 46px 0 96px;
-            isolation: isolate;
+            overflow: hidden;
         }
-
-        /* 태양 */
-        .hero::before {
+        /* 상단 배경사진 */
+        body.has-photo header {
+            background-image: var(--photo);
+            background-size: cover;
+            background-position: center;
+        }
+        body.has-photo header::before {
             content: "";
             position: absolute;
-            top: -110px; right: -80px;
-            width: 340px; height: 340px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--sun-light) 0%, rgba(255, 183, 3, .55) 42%, rgba(255, 183, 3, 0) 70%);
-            filter: blur(2px);
-            z-index: -1;
-            animation: sun-pulse 7s ease-in-out infinite;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 40, 75, .55) 0%, rgba(0, 50, 92, .68) 100%);
         }
+        /* 전체 배경 모드에서는 헤더 자체 사진은 끄고 반투명 브랜드 색만 */
+        body.photo-full header { background-image: none; background: rgba(0, 90, 158, .92); }
+        body.photo-full header::before { display: none; }
 
-        /* 바다 빛 반짝임 */
-        .hero::after {
-            content: "";
-            position: absolute;
-            inset: auto 0 0 0;
-            height: 260px;
-            background:
-                repeating-linear-gradient(115deg, rgba(255,255,255,.12) 0 2px, rgba(255,255,255,0) 2px 26px);
-            opacity: .5;
-            z-index: -1;
-        }
-
-        @keyframes sun-pulse {
-            0%, 100% { transform: scale(1); opacity: .95; }
-            50% { transform: scale(1.08); opacity: 1; }
-        }
-
-        .hero-inner {
+        .header-inner {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 28px;
+            gap: 16px;
+            min-height: 132px;
+            padding: 26px 0;
         }
+        body.has-photo:not(.photo-full) .header-inner { min-height: 220px; }
 
-        .hero-text { flex: 1 1 420px; }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin: 0 0 14px;
-            padding: 6px 16px;
-            font-size: .86rem;
-            font-weight: 700;
-            letter-spacing: .02em;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .16);
-            border: 1px solid rgba(255, 255, 255, .32);
-            backdrop-filter: blur(6px);
-        }
-
-        .hero h1 {
+        header h1 {
             margin: 0;
-            font-size: clamp(2.1rem, 5.2vw, 3.3rem);
+            font-size: clamp(1.7rem, 4.5vw, 2.4rem);
             font-weight: 900;
             letter-spacing: -.02em;
-            line-height: 1.15;
-            text-shadow: 0 4px 20px rgba(0, 40, 75, .32);
         }
+        body.has-photo header h1 { text-shadow: 0 2px 14px rgba(0, 30, 55, .5); }
 
-        .hero h1 .dot { color: var(--sun-light); }
-
-        .tagline {
-            margin: 12px 0 22px;
-            font-size: clamp(1rem, 2.2vw, 1.2rem);
-            font-weight: 500;
-            color: rgba(255, 255, 255, .92);
-        }
-
-        .hero-badges {
+        /* 배경사진 컨트롤 */
+        .photo-tools {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
+            align-items: center;
         }
-
-        .hero-badges span {
-            padding: 7px 14px;
-            font-size: .84rem;
+        .photo-tool {
+            font-family: inherit;
+            font-size: .82rem;
             font-weight: 700;
-            border-radius: 999px;
+            color: #fff;
+            padding: 7px 14px;
+            cursor: pointer;
             background: rgba(255, 255, 255, .14);
-            border: 1px solid rgba(255, 255, 255, .28);
+            border: 1px solid rgba(255, 255, 255, .38);
+            border-radius: 999px;
+            transition: background .2s;
         }
+        .photo-tool:hover { background: rgba(255, 255, 255, .28); }
+        .photo-tool[hidden] { display: none; }
 
-        .hero-character {
-            display: block;
-            width: clamp(148px, 24vw, 230px);
-            aspect-ratio: 1;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 5px solid rgba(255, 255, 255, .9);
-            outline: 6px solid rgba(255, 255, 255, .18);
-            box-shadow: 0 18px 34px rgba(0, 35, 65, .38);
-            animation: float 5.5s ease-in-out infinite;
-            flex: 0 0 auto;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(-1.5deg); }
-            50% { transform: translateY(-16px) rotate(1.5deg); }
-        }
-
-        /* 파도 */
-        .wave {
-            position: absolute;
-            left: 0; right: 0; bottom: -1px;
-            width: 100%;
-            height: 90px;
-            display: block;
-        }
-        .wave .w1 { fill: rgba(255, 255, 255, .35); }
-        .wave .w2 { fill: rgba(255, 255, 255, .65); }
-        .wave .w3 { fill: var(--bg); }
-
-        /* ========================= NAV ========================= */
+        /* ===== 내비게이션 ===== */
         nav {
             position: sticky;
             top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, .82);
-            backdrop-filter: blur(14px);
+            z-index: 100;
+            background: var(--surface);
             border-bottom: 1px solid var(--line);
-            box-shadow: 0 4px 18px rgba(0, 90, 158, .06);
         }
-
         nav ul {
             display: flex;
-            justify-content: center;
-            flex-wrap: nowrap;
-            gap: 6px;
+            gap: 4px;
             list-style: none;
             margin: 0;
-            padding: 10px 0;
+            padding: 8px 0;
             overflow-x: auto;
             scrollbar-width: none;
         }
         nav ul::-webkit-scrollbar { display: none; }
-
         nav a {
             display: block;
             white-space: nowrap;
-            color: var(--brand-700);
+            color: var(--muted);
             text-decoration: none;
-            font-size: .96rem;
+            font-size: .94rem;
             font-weight: 700;
-            padding: 8px 16px;
-            border-radius: 999px;
-            transition: background .25s, color .25s, transform .25s;
+            padding: 8px 14px;
+            border-radius: 6px;
         }
-        nav a:hover { background: var(--sea-foam); color: var(--brand); transform: translateY(-1px); }
-        nav a.active {
-            background: linear-gradient(135deg, var(--brand) 0%, var(--aqua) 100%);
-            color: #fff;
-            box-shadow: 0 6px 14px rgba(0, 130, 180, .32);
-        }
+        nav a:hover { color: var(--brand); background: #f0f5fa; }
+        nav a.active { color: #fff; background: var(--brand); }
 
-        /* ===================== VISITOR CARD ===================== */
+        /* ===== 본문 ===== */
+        main { padding: 28px 0 60px; }
+
         #visitor-count {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            text-align: center;
-            padding: 18px 24px;
-            margin-top: 26px;
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: var(--brand-700);
-            background: linear-gradient(120deg, #ffffff 0%, var(--sand) 100%);
-            border: 1px solid var(--line);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
+            padding: 12px 0 22px;
+            font-size: .92rem;
+            color: var(--muted);
         }
-        .highlight-num {
-            color: var(--coral);
-            font-weight: 900;
-            font-size: 1.55em;
-            line-height: 1;
-        }
+        .highlight-num { color: var(--brand); font-weight: 700; }
 
-        /* ====================== SECTIONS ====================== */
         .product-section {
-            background: var(--surface);
-            margin: 26px 0;
-            padding: clamp(22px, 3.4vw, 38px);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--line);
-            box-shadow: var(--shadow);
             display: none;
-            position: relative;
-            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: clamp(20px, 3vw, 32px);
         }
-        .product-section::before {
-            content: "";
-            position: absolute;
-            inset: 0 0 auto 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--brand) 0%, var(--aqua) 45%, var(--sun) 80%, var(--coral) 100%);
-        }
-        .product-section.active {
-            display: block;
-            animation: rise .45s ease both;
-        }
-        @keyframes rise {
-            from { opacity: 0; transform: translateY(14px); }
-            to { opacity: 1; transform: none; }
-        }
+        .product-section.active { display: block; }
 
         .product-section h2 {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 6px 0 6px;
-            font-size: clamp(1.35rem, 3vw, 1.75rem);
+            margin: 0 0 20px;
+            padding-bottom: 14px;
+            font-size: 1.3rem;
             font-weight: 900;
             letter-spacing: -.02em;
             color: var(--brand-900);
-        }
-        .product-section h2 .emoji {
-            display: grid;
-            place-items: center;
-            width: 44px; height: 44px;
-            flex: 0 0 auto;
-            font-size: 1.25rem;
-            border-radius: 14px;
-            background: linear-gradient(135deg, var(--sea-foam) 0%, #fff2d6 100%);
-            border: 1px solid var(--line);
-        }
-        .section-desc {
-            margin: 0 0 22px;
-            color: var(--muted);
-            font-size: .95rem;
+            border-bottom: 2px solid var(--line);
         }
 
-        /* ==================== PRODUCT CARDS ==================== */
         .product-list {
             list-style: none;
             padding: 0;
             margin: 0;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 8px;
         }
         .product-list li {
-            position: relative;
-            background: linear-gradient(160deg, #ffffff 0%, #f7fcff 100%);
             border: 1px solid var(--line);
-            border-radius: var(--radius);
-            overflow: hidden;
-            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+            border-radius: 8px;
+            transition: border-color .2s, background .2s;
         }
-        .product-list li::before {
-            content: "";
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 5px;
-            background: linear-gradient(180deg, var(--brand) 0%, var(--aqua) 100%);
-        }
-        .product-list li:nth-child(3n+2)::before { background: linear-gradient(180deg, var(--aqua) 0%, var(--sun) 100%); }
-        .product-list li:nth-child(3n+3)::before { background: linear-gradient(180deg, var(--sun) 0%, var(--coral) 100%); }
-        .product-list li:hover {
-            transform: translateY(-4px);
-            border-color: var(--aqua-light);
-            box-shadow: var(--shadow-lg);
-        }
+        .product-list li:hover { border-color: var(--accent); background: #f7fbfe; }
         .product-list a {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 16px 16px 16px 21px;
-            color: var(--brand-700);
+            display: block;
+            padding: 13px 16px;
+            color: var(--brand);
             text-decoration: none;
-            font-weight: 700;
-            font-size: .98rem;
+            font-weight: 500;
+            font-size: .95rem;
         }
-        .product-list a::after {
-            content: "→";
-            color: var(--aqua);
-            font-weight: 900;
-            opacity: .55;
-            transition: transform .25s, opacity .25s;
-        }
-        .product-list li:hover a::after { transform: translateX(4px); opacity: 1; }
         .product-list a[href="#"] { color: var(--muted); }
-        .product-list a[target="_blank"]::after { content: "↗"; }
 
-        /* ===================== SUB TABS ===================== */
-        .sub-tab-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 22px;
-        }
+        /* 서브 탭 */
+        .sub-tab-nav { display: flex; gap: 8px; margin-bottom: 18px; }
         .sub-tab-btn {
             font-family: inherit;
-            font-size: .95rem;
+            font-size: .9rem;
             font-weight: 700;
-            padding: 9px 22px;
+            padding: 8px 18px;
             cursor: pointer;
-            color: var(--brand);
-            background: #fff;
-            border: 1.5px solid var(--line);
-            border-radius: 999px;
-            transition: all .25s ease;
+            color: var(--muted);
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 6px;
         }
-        .sub-tab-btn:hover { border-color: var(--aqua); background: var(--sea-foam); }
-        .sub-tab-btn.active {
-            background: linear-gradient(135deg, var(--brand) 0%, var(--aqua) 100%);
-            border-color: transparent;
-            color: #fff;
-            box-shadow: 0 6px 14px rgba(0, 130, 180, .28);
-        }
+        .sub-tab-btn:hover { color: var(--brand); }
+        .sub-tab-btn.active { color: #fff; background: var(--brand); border-color: var(--brand); }
         .property-sub-content { display: none; }
-        .property-sub-content.active { display: block; animation: rise .35s ease both; }
+        .property-sub-content.active { display: block; }
 
-        /* ====================== FOOTER ====================== */
+        /* ===== 푸터 ===== */
         footer {
-            position: relative;
-            margin-top: 60px;
-            padding: 78px 0 40px;
-            color: #eaf6ff;
-            background: linear-gradient(165deg, var(--brand-900) 0%, var(--brand-700) 60%, #0a6c9c 100%);
-            line-height: 1.85;
-            overflow: hidden;
+            padding: 22px 0;
+            font-size: .84rem;
+            color: var(--muted);
+            text-align: center;
+            border-top: 1px solid var(--line);
         }
-        .footer-wave {
-            position: absolute;
-            top: -1px; left: 0;
-            width: 100%;
-            height: 70px;
-            transform: rotate(180deg);
-        }
-        .footer-wave .w1 { fill: rgba(255,255,255,.18); }
-        .footer-wave .w2 { fill: var(--bg); }
-        footer strong {
-            display: block;
-            font-size: 1.08rem;
-            letter-spacing: -.01em;
-            margin-bottom: 12px;
-        }
-        footer strong .sep { color: var(--sun-light); margin: 0 6px; }
-        .footer-info { font-size: .9rem; color: rgba(234, 246, 255, .78); }
-        .footer-info a { color: var(--sun-light); text-decoration: none; }
-        .footer-info a:hover { text-decoration: underline; }
 
-        /* =================== SCROLL TO TOP =================== */
         .scroll-to-top {
             position: fixed;
-            bottom: 24px; right: 24px;
-            z-index: 999;
+            bottom: 20px; right: 20px;
             display: grid;
             place-items: center;
-            width: 50px; height: 50px;
-            font-size: 1.3rem;
-            font-weight: 900;
+            width: 42px; height: 42px;
             color: #fff;
             text-decoration: none;
+            background: var(--brand);
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--brand) 0%, var(--aqua) 100%);
-            box-shadow: 0 10px 22px rgba(0, 130, 180, .38);
-            transition: transform .25s ease, box-shadow .25s ease;
+            opacity: .85;
         }
-        .scroll-to-top:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 14px 28px rgba(0, 130, 180, .48); }
+        .scroll-to-top:hover { opacity: 1; }
 
-        /* ===================== RESPONSIVE ===================== */
-        @media (max-width: 760px) {
-            .hero { padding: 34px 0 78px; }
-            .hero-inner { flex-direction: column-reverse; text-align: center; gap: 16px; }
-            .hero-text { flex: 0 0 auto; }
-            .eyebrow { margin-bottom: 10px; }
-            .hero-badges { justify-content: center; }
-            .hero-character { width: 148px; }
-            nav ul { justify-content: flex-start; }
+        @media (max-width: 640px) {
+            .header-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
             .product-list { grid-template-columns: 1fr; }
-            .scroll-to-top { width: 44px; height: 44px; bottom: 16px; right: 16px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation: none !important;
-                transition: none !important;
-                scroll-behavior: auto !important;
-            }
         }
     </style>
 </head>
 <body>
 
-    <header class="hero">
-        <div class="container hero-inner">
-            <div class="hero-text">
-                <p class="eyebrow">☀️ 시원한 여름, 든든한 세무 파트너</p>
-                <h1>대한세무법인<span class="dot">.</span></h1>
-                <p class="tagline">당신을 지키는 가장 가까운 울타리</p>
-                <div class="hero-badges">
-                    <span>🌊 세무 · 회계</span>
-                    <span>🏖️ 경영 지원</span>
-                    <span>🐚 재산 · 상속</span>
-                    <span>🍹 컨설팅</span>
-                </div>
+    <header>
+        <div class="container header-inner">
+            <h1>대한세무법인</h1>
+            <div class="photo-tools">
+                <button type="button" class="photo-tool" id="photoPick">배경사진 올리기</button>
+                <button type="button" class="photo-tool" id="photoMode" hidden>전체 배경으로</button>
+                <button type="button" class="photo-tool" id="photoReset" hidden>사진 지우기</button>
+                <input type="file" id="photoInput" accept="image/*" hidden>
             </div>
-            <img class="hero-character" src="images/character.png" alt="대한세무법인 캐릭터" loading="eager">
         </div>
-
-        <svg class="wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
-            <path class="w1" d="M0,40 C240,90 480,0 720,32 C960,64 1200,84 1440,44 L1440,90 L0,90 Z"></path>
-            <path class="w2" d="M0,58 C260,18 520,86 780,58 C1020,32 1240,66 1440,40 L1440,90 L0,90 Z"></path>
-            <path class="w3" d="M0,74 C300,44 600,96 900,72 C1140,52 1300,80 1440,66 L1440,90 L0,90 Z"></path>
-        </svg>
     </header>
 
     <nav>
@@ -503,21 +279,19 @@
                 <li><a href="javascript:void(0)" data-section="consulting" onclick="showSection('consulting', this)">컨설팅</a></li>
                 <li><a href="javascript:void(0)" data-section="daehan" onclick="showSection('daehan', this)">대한세무법인</a></li>
                 <li><a href="javascript:void(0)" data-section="internal" onclick="showSection('internal', this)">내부결재문서</a></li>
+                <li><a href="https://daehantax.com/" target="_blank" rel="noopener">대한세무법인외부</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="container">
         <div id="visitor-count">
-            <span>🏝️ 오늘 여기에 오신 분</span>
-            <span id="random-num" class="highlight-num">0</span>
-            <span>명</span>
+            오늘 여기에 오신 분 <span id="random-num" class="highlight-num">0</span> 명
         </div>
 
         <!-- 1. 회계와세무 -->
         <section id="accounting" class="product-section active">
-            <h2><span class="emoji">🌊</span>회계와세무</h2>
-            <p class="section-desc">신고와 절세, 시원하게 풀어드립니다.</p>
+            <h2>회계와세무</h2>
             <ul class="product-list">
                 <li><a href="회계와세무/근로소득 원천징수.html">근로소득 원천징수 계산기</a></li>
                 <li><a href="회계와세무/종합소득세 계산기.html">종소세세율</a></li>
@@ -529,8 +303,7 @@
 
         <!-- 2. 경영도우미 -->
         <section id="business" class="product-section">
-            <h2><span class="emoji">🏖️</span>경영도우미</h2>
-            <p class="section-desc">고용 및 정책지원금, 우리 회사에 맞는 혜택을 찾아보세요.</p>
+            <h2>경영도우미</h2>
             <ul class="product-list">
                 <li><a href="경영/고용및정책지원금.html">고용및정책지원금</a></li>
                 <li><a href="https://daehantax.github.io/dh-map/" target="_blank" rel="noopener">고객지도</a></li>
@@ -540,8 +313,7 @@
 
         <!-- 3. 인사노무도우미 -->
         <section id="hr" class="product-section">
-            <h2><span class="emoji">⛱️</span>인사노무도우미</h2>
-            <p class="section-desc">준비중입니다. 곧 시원하게 찾아뵙겠습니다.</p>
+            <h2>인사노무도우미 (준비중)</h2>
             <ul class="product-list">
                 <li><a href="#">취업규칙 표준 근로계약서 양식</a></li>
                 <li><a href="#">최저임금 및 퇴직금 계산기</a></li>
@@ -552,8 +324,7 @@
 
         <!-- 4. 재산도우미 -->
         <section id="property" class="product-section">
-            <h2><span class="emoji">🐚</span>재산도우미</h2>
-            <p class="section-desc">양도 · 증여 · 상속, 소중한 재산을 안전하게 지킵니다.</p>
+            <h2>재산도우미</h2>
             <div class="sub-tab-nav">
                 <button class="sub-tab-btn active" onclick="showProperty(event, 'tax-calc')">양도 · 증여</button>
                 <button class="sub-tab-btn" onclick="showProperty(event, 'inherit-calc')">상속</button>
@@ -587,8 +358,7 @@
 
         <!-- 5. 컨설팅 -->
         <section id="consulting" class="product-section">
-            <h2><span class="emoji">🍹</span>컨설팅</h2>
-            <p class="section-desc">퇴직 · 정관 · 불복, 전문가의 시선으로 설계합니다.</p>
+            <h2>컨설팅</h2>
             <ul class="product-list">
                 <li><a href="컨설팅/퇴직금한도계산.html">퇴직금한도계산</a></li>
                 <li><a href="컨설팅/퇴직소득세.html">퇴직소득세</a></li>
@@ -601,8 +371,7 @@
 
         <!-- 6. 대한세무법인 (비밀번호 보호 유지) -->
         <section id="daehan" class="product-section">
-            <h2><span class="emoji">🛟</span>대한세무법인 전용</h2>
-            <p class="section-desc">보수기준표 목록입니다.</p>
+            <h2>대한세무법인 전용 (보수표 목록)</h2>
             <ul class="product-list">
                 <li><a href="대한세무법인/세무대리 보수기준표.html">세무대리 보수기준표</a></li>
                 <li><a href="대한세무법인/신고대리 및 증명발급 보수표.html">신고대리 및 증명발급 보수표</a></li>
@@ -615,10 +384,9 @@
             </ul>
         </section>
 
-        <!-- 7. 내부결재문서 — (비밀번호 보호 유지) -->
+        <!-- 7. 내부결재문서 (비밀번호 보호 유지) -->
         <section id="internal" class="product-section">
-            <h2><span class="emoji">📁</span>내부결재문서</h2>
-            <p class="section-desc">내부 업무용 서식 모음입니다.</p>
+            <h2>내부결재문서</h2>
             <ul class="product-list">
                 <li><a href="내부결재문서/pc방 매출 환산표.html">PC방 매출 환산표</a></li>
                 <li><a href="내부결재문서/조정료안내문.html">조정료안내문</a></li>
@@ -632,24 +400,13 @@
     </main>
 
     <footer>
-        <svg class="footer-wave" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true">
-            <path class="w1" d="M0,30 C300,70 620,0 900,30 C1140,56 1300,20 1440,38 L1440,0 L0,0 Z"></path>
-            <path class="w2" d="M0,10 C280,44 560,-6 860,18 C1120,38 1300,6 1440,20 L1440,0 L0,0 Z"></path>
-        </svg>
-        <div class="container">
-            <strong>대한세무법인<span class="sep">·</span>당신의 세무사<span class="sep">·</span>당신을 지키는 가장 가까운 울타리</strong>
-            <div class="footer-info">
-                <p>주소 : 경기도 성남시 분당구 성남대로 912 501호 515호<br>
-                이메일 : <a href="mailto:tax@taxdh.net">tax@taxdh.net</a> | 전화 : <a href="tel:03178388877">031-783-8877</a></p>
-                <p>&copy; 2024 Daehan Tax Corp. All Rights Reserved.</p>
-            </div>
-        </div>
+        <div class="container">&copy; 2024 Daehan Tax Corp. All Rights Reserved.</div>
     </footer>
 
     <a href="#" class="scroll-to-top" aria-label="맨 위로">↑</a>
 
     <script>
-        // 1. 섹션 전환 — 대한세무법인 / 내부결재문서만 비밀번호 보호
+        // ===== 섹션 전환 (대한세무법인 / 내부결재문서는 비밀번호 보호) =====
         function showSection(sectionId, linkEl) {
             if (sectionId === 'daehan') {
                 const pw = prompt("비밀번호를 입력하세요.");
@@ -670,14 +427,14 @@
             document.querySelectorAll('.product-section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
 
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('nav a[data-section]').forEach(a => a.classList.remove('active'));
             const target = linkEl || document.querySelector('nav a[data-section="' + sectionId + '"]');
             if (target) target.classList.add('active');
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo(0, 0);
         }
 
-        // 2. 재산도우미 내부 탭 전환
+        // ===== 재산도우미 내부 탭 전환 =====
         function showProperty(event, subId) {
             document.querySelectorAll('.property-sub-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
@@ -686,7 +443,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        // 3. 방문자 숫자 랜덤 애니메이션
+        // ===== 방문자 숫자 =====
         function animateVisitors() {
             const target = Math.floor(Math.random() * (150 - 100 + 1)) + 100;
             let current = 0;
@@ -702,7 +459,100 @@
             }, 20);
         }
 
-        window.onload = animateVisitors;
+        // ===== 추억사진 배경 =====
+        // 올린 사진은 이 브라우저에만 저장됩니다(localStorage).
+        (function () {
+            const IMG_KEY = 'dh-bg-photo';
+            const MODE_KEY = 'dh-bg-mode';   // 'top' = 상단만, 'full' = 전체 배경
+            const MAX_WIDTH = 1920;
+
+            const pickBtn = document.getElementById('photoPick');
+            const modeBtn = document.getElementById('photoMode');
+            const resetBtn = document.getElementById('photoReset');
+            const input = document.getElementById('photoInput');
+
+            function render(dataUrl, mode) {
+                const body = document.body;
+                if (dataUrl) {
+                    document.documentElement.style.setProperty('--photo', 'url("' + dataUrl + '")');
+                    body.classList.add('has-photo');
+                    body.classList.toggle('photo-full', mode === 'full');
+                    modeBtn.hidden = false;
+                    resetBtn.hidden = false;
+                    modeBtn.textContent = mode === 'full' ? '상단만 배경으로' : '전체 배경으로';
+                    pickBtn.textContent = '배경사진 바꾸기';
+                } else {
+                    document.documentElement.style.removeProperty('--photo');
+                    body.classList.remove('has-photo', 'photo-full');
+                    modeBtn.hidden = true;
+                    resetBtn.hidden = true;
+                    pickBtn.textContent = '배경사진 올리기';
+                }
+            }
+
+            // 저장 용량을 줄이기 위해 긴 변 기준으로 축소 후 JPEG로 변환
+            function shrink(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onerror = () => reject(new Error('파일을 읽지 못했습니다.'));
+                    reader.onload = () => {
+                        const img = new Image();
+                        img.onerror = () => reject(new Error('이미지를 불러오지 못했습니다.'));
+                        img.onload = () => {
+                            const scale = Math.min(1, MAX_WIDTH / img.width);
+                            const canvas = document.createElement('canvas');
+                            canvas.width = Math.round(img.width * scale);
+                            canvas.height = Math.round(img.height * scale);
+                            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                            resolve(canvas.toDataURL('image/jpeg', 0.82));
+                        };
+                        img.src = reader.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            pickBtn.addEventListener('click', () => input.click());
+
+            input.addEventListener('change', async () => {
+                const file = input.files && input.files[0];
+                if (!file) return;
+                try {
+                    const dataUrl = await shrink(file);
+                    const mode = localStorage.getItem(MODE_KEY) || 'top';
+                    render(dataUrl, mode);
+                    try {
+                        localStorage.setItem(IMG_KEY, dataUrl);
+                        localStorage.setItem(MODE_KEY, mode);
+                    } catch (e) {
+                        alert('사진이 너무 커서 저장하지 못했습니다.\n이번 방문에만 배경으로 표시됩니다.');
+                    }
+                } catch (e) {
+                    alert(e.message);
+                }
+                input.value = '';
+            });
+
+            modeBtn.addEventListener('click', () => {
+                const next = document.body.classList.contains('photo-full') ? 'top' : 'full';
+                render(localStorage.getItem(IMG_KEY), next);
+                try { localStorage.setItem(MODE_KEY, next); } catch (e) {}
+            });
+
+            resetBtn.addEventListener('click', () => {
+                if (!confirm('배경사진을 지울까요?')) return;
+                render(null, 'top');
+                try { localStorage.removeItem(IMG_KEY); } catch (e) {}
+            });
+
+            // 저장된 사진 복원
+            try {
+                const saved = localStorage.getItem(IMG_KEY);
+                if (saved) render(saved, localStorage.getItem(MODE_KEY) || 'top');
+            } catch (e) {}
+        })();
+
+        window.addEventListener('load', animateVisitors);
     </script>
 </body>
 </html>
