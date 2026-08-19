@@ -1,112 +1,163 @@
-
-
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <title>종합부동산세 계산기</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css\styles\layouts_simpleCalculator.css"> 
-
+  <meta name="theme-color" content="#005a9e">
+  <title>상속 후 재산세 · 종합부동산세 비교 | 대한세무법인</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/daehan-brand.css">
 </head>
 <body>
-  <h2>상속후 종합부동산세 너무 많다고요 ?</h2>
 
-  <p>상속받은 주택이 추가되면서 세금이 얼마나 늘어날지 궁금하신가요? 상속 전후의 재산세와 종부세를 비교해보세요.</p>
-  
+  <header class="dh-header">
+    <div class="dh-wrap">
+      <span class="dh-brandline">🌊 대한세무법인 · 재산도우미</span>
+      <h1>상속 후 종합부동산세,<br>너무 많다고 느끼셨나요?</h1>
+      <p class="dh-lead">상속받은 주택이 추가되면서 세금이 얼마나 늘어날지 궁금하신가요? 상속 전후의 <strong>재산세와 종부세</strong>를 나란히 비교해 보세요.</p>
+    </div>
+    <svg class="dh-wave" viewBox="0 0 1440 54" preserveAspectRatio="none" aria-hidden="true">
+      <path class="w1" d="M0,26 C280,54 560,0 860,22 C1120,42 1300,12 1440,30 L1440,54 L0,54 Z"></path>
+      <path class="w2" d="M0,40 C300,16 600,58 900,38 C1140,22 1300,46 1440,34 L1440,54 L0,54 Z"></path>
+    </svg>
+  </header>
 
-  <h3>▶ 상속 후 재산세 비교</h3>
-<label for="owned_houses">상속 전 나의 소유주택 수:</label>
-<input type="text" id="owned_houses" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속 전 주택수">
-  
-<br>
-<label for="gongsi_1">상속전 나의 주택 공시가 합 :</label>
-<input type="text" id="gongsi_1" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속 전 주택 공시가 합">
-<br>
-<label for="ownedHousesAfter">상속 후 나의 소유주택 수:</label>
-<input type="text" id="ownedHousesAfter" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 지분으로 소유하고 있는 주택 포함">
-<br>
-<label for="gongsi_2">상속주택의 공시가격:</label>
-<input type="text" id="gongsi_2" inputmode="numeric" oninput="formatNumber(this)" placeholder=" 상속받은 주택분 공시가">
-  
-  <button onclick="comparePropertyTax()">계산하기</button>
-  <p><strong>계산결과 :</strong></p>
-  <table id="resultTableProperty" style="display: none;">
-    <thead>
-      <tr>
-        <th>구분</th>
-        <th>종전주택만 있는 경우</th>
-        <th>상속주택 추가된 경우</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>재산세</td>
-        <td id="property_tax_1"></td>
-        <td id="property_tax_2"></td>
-      </tr>
-      <tr>
-        <td>도시계획세</td>
-        <td id="dosi_tax_1"></td>
-        <td id="dosi_tax_2"></td>
-      </tr>
-      <tr>
-        <td>지방교육세</td>
-        <td id="p_edu_tax_1"></td>
-        <td id="p_edu_tax_2"></td>
-      </tr>
-      <tr>
-        <td>총 세금</td>
-        <td id="total_tax_1"></td>
-        <td id="total_tax_2"></td>
-      </tr>
-    </tbody>
-  </table>
-  <br>
+  <main class="dh-wrap dh-main">
 
-  <h3>▶ 상속후 종부세비교하기</h3>
-  
+    <section class="dh-card">
+      <h2><span class="dh-step">1</span>상속 후 재산세 비교</h2>
+      <p class="dh-note">상속 전 보유 현황과 상속받은 주택의 공시가격을 입력하세요.</p>
+      <div class="dh-fields">
+        <div class="dh-field">
+          <label for="owned_houses">상속 전 나의 소유주택 수</label>
+          <input type="text" id="owned_houses" inputmode="numeric" oninput="formatNumber(this)" placeholder="상속 전 주택수">
+        </div>
+        <div class="dh-field">
+          <label for="gongsi_1">상속 전 나의 주택 공시가 합</label>
+          <input type="text" id="gongsi_1" inputmode="numeric" oninput="formatNumber(this)" placeholder="상속 전 주택 공시가 합">
+        </div>
+        <div class="dh-field">
+          <label for="ownedHousesAfter">상속 후 나의 소유주택 수</label>
+          <input type="text" id="ownedHousesAfter" inputmode="numeric" oninput="formatNumber(this)" placeholder="지분으로 소유하고 있는 주택 포함">
+        </div>
+        <div class="dh-field">
+          <label for="gongsi_2">상속주택의 공시가격</label>
+          <input type="text" id="gongsi_2" inputmode="numeric" oninput="formatNumber(this)" placeholder="상속받은 주택분 공시가">
+        </div>
+      </div>
 
-  <label for="age">상속받는 나의 연령(만):</label>
-  <input type="text" id="age" inputmode="numeric" placeholder="상속받는 나의 연령(만)">
-  <br>
-  <label for="period">상속전 나의 주택 보유기간(년):</label>
-  <input type="text" id="period" inputmode="numeric" placeholder="상속전 내가 보유한 주택의 보유기간(만)">
- 
-  <br>
-  <button onclick="compareComprehensiveTax()">계산하기</button>
-  <p><strong>계산결과 :</strong></p>
-  <div id="result"></div>
+      <div class="dh-actions">
+        <button class="dh-btn" onclick="comparePropertyTax()">재산세 계산하기</button>
+      </div>
 
-  <p> 어떤가요?  여기서 계산한 것보다 세금이 더 많나요  ? </p>
+      <div class="dh-result">
+        <h3>계산 결과</h3>
+        <div class="dh-table-scroll">
+          <table id="resultTableProperty" style="display: none;">
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>종전주택만 있는 경우</th>
+                <th>상속주택 추가된 경우</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>재산세</td>
+                <td id="property_tax_1"></td>
+                <td id="property_tax_2"></td>
+              </tr>
+              <tr>
+                <td>도시계획세</td>
+                <td id="dosi_tax_1"></td>
+                <td id="dosi_tax_2"></td>
+              </tr>
+              <tr>
+                <td>지방교육세</td>
+                <td id="p_edu_tax_1"></td>
+                <td id="p_edu_tax_2"></td>
+              </tr>
+              <tr>
+                <td>총 세금</td>
+                <td id="total_tax_1"></td>
+                <td id="total_tax_2"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-  <p>  재산세와 종부세는 보유하고 있는 기간 동안 매년 나오는 세금입니다. 지금 상담 하세요. </p>
+    <section class="dh-card">
+      <h2><span class="dh-step">2</span>상속 후 종부세 비교하기</h2>
+      <p class="dh-note">연령별 · 보유기간별 세액공제가 반영됩니다. (1번 입력값이 함께 사용됩니다)</p>
+      <div class="dh-fields">
+        <div class="dh-field">
+          <label for="age">상속받는 나의 연령 (만)</label>
+          <input type="text" id="age" inputmode="numeric" placeholder="예) 65">
+        </div>
+        <div class="dh-field">
+          <label for="period">상속 전 나의 주택 보유기간 (년)</label>
+          <input type="text" id="period" inputmode="numeric" placeholder="예) 12">
+        </div>
+      </div>
 
-  <div class="contact-form">
-    <h2> 상담 문의하기</h2>
-    <form id="questionForm" onsubmit="return submitForm()">
-        <div class="form-group">
-            <label for="name">이름:</label>
+      <div class="dh-actions">
+        <button class="dh-btn" onclick="compareComprehensiveTax()">종부세 계산하기</button>
+      </div>
+
+      <div class="dh-result">
+        <h3>계산 결과</h3>
+        <div id="result"></div>
+      </div>
+
+      <p class="dh-notice">어떤가요? 여기서 계산한 것보다 세금이 더 많나요?<br>
+      재산세와 종부세는 <strong>보유하고 있는 기간 동안 매년</strong> 나오는 세금입니다. 지금 상담하세요.</p>
+    </section>
+
+    <section class="dh-card contact-form">
+      <h2><span class="dh-step">3</span>상담 문의하기</h2>
+      <p class="dh-note">아래 내용을 작성하신 뒤 인쇄(PDF 저장) 후 메일로 보내주세요.</p>
+      <form id="questionForm" onsubmit="return false;">
+        <div class="dh-fields">
+          <div class="dh-field form-group">
+            <label for="name">이름</label>
             <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-            <label for="email">이메일:</label>
+          </div>
+          <div class="dh-field form-group">
+            <label for="email">이메일</label>
             <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">전화번호:</label>
+          </div>
+          <div class="dh-field form-group">
+            <label for="phone">전화번호</label>
             <input type="tel" id="phone" name="phone" required>
+          </div>
         </div>
-        <div class="form-group">
-            <label for="message">문의사항:</label>
+        <div class="dh-fields">
+          <div class="dh-field form-group">
+            <label for="message">문의사항</label>
             <textarea id="message" name="message" required></textarea>
+          </div>
         </div>
-       
-    </form>
-</div>
+      </form>
 
-<button id="printButton" onclick="printContent()">인쇄하기</button>
-   
-    <p style="font-weight: bold; text-align: center;">* 문의하기는 PDF 인쇄 후 tax@taxdh.net 로 보내주세요.</p>
+      <div class="dh-actions">
+        <button class="dh-btn" id="printButton" onclick="printContent()">인쇄하기 (PDF 저장)</button>
+      </div>
+      <p class="dh-notice">문의하기는 PDF 인쇄 후 <strong>tax@taxdh.net</strong> 로 보내주세요.</p>
+    </section>
+
+    <footer class="dh-footer">
+      <strong>대한세무법인 · 당신의 세무사</strong>
+      당신을 지키는 가장 가까운 울타리<br>
+      경기도 성남시 분당구 성남대로 912 501호 515호 ·
+      <a href="mailto:tax@taxdh.net">tax@taxdh.net</a> ·
+      <a href="tel:03178388877">031-783-8877</a>
+    </footer>
+
+  </main>
 
   <script>
 
@@ -404,7 +455,7 @@ let period = parseInt(document.getElementById('period').value) || 0;
   let result2 = calculateComprehensiveTax(gongsi_1 + gongsi_2, owned_houses, age, period, propertyTaxes.after);
 
   // 결과 테이블 생성
-  let table = '<table border="1">';
+  let table = '<div class="dh-table-scroll"><table>';
   table += '<tr><th></th><th>상속 전</th><th>상속 후</th></tr>';
   table += '<tr><td>과세표준</td><td>' + (Math.floor(result1.tax_base / 10) * 10).toLocaleString('ko-KR') + '</td><td>' + (Math.floor(result2.tax_base / 10) * 10).toLocaleString('ko-KR') + '</td></tr>';
   table += '<tr><td>종합부동산세액</td><td>' + (Math.floor(result1.tax / 10) * 10).toLocaleString('ko-KR') + '</td><td>' + (Math.floor(result2.tax / 10) * 10).toLocaleString('ko-KR') + '</td></tr>';
@@ -415,7 +466,7 @@ let period = parseInt(document.getElementById('period').value) || 0;
   table += '<tr><td>납부할 세액</td><td>' + (Math.floor(result1.payable_tax / 10) * 10).toLocaleString('ko-KR') + '</td><td>' + (Math.floor(result2.payable_tax / 10) * 10).toLocaleString('ko-KR') + '</td></tr>';
   table += '<tr><td>농어촌특별세</td><td>' + (Math.floor(result1.rural_tax / 10) * 10).toLocaleString('ko-KR') + '</td><td>' + (Math.floor(result2.rural_tax / 10) * 10).toLocaleString('ko-KR') + '</td></tr>';
   table += '<tr><td>총 납부세액</td><td>' + (Math.floor(result1.total_tax / 10) * 10).toLocaleString('ko-KR') + '</td><td>' + (Math.floor(result2.total_tax / 10) * 10).toLocaleString('ko-KR') + '</td></tr>';
-  table += '</table>';
+  table += '</table></div>';
   
   // 결과 출력
   document.getElementById('result').innerHTML = table;
@@ -475,8 +526,10 @@ function loadFormData() {
 
 // 이벤트 리스너 설정
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('saveFormData').addEventListener('click', saveFormData);
-    document.getElementById('loadFormData').addEventListener('click', loadFormData);
+    const saveBtn = document.getElementById('saveFormData');
+    const loadBtn = document.getElementById('loadFormData');
+    if (saveBtn) saveBtn.addEventListener('click', saveFormData);
+    if (loadBtn) loadBtn.addEventListener('click', loadFormData);
 });
 
 function printContent() {
