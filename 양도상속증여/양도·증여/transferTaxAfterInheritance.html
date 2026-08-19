@@ -1,72 +1,125 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css\styles\layouts_simpleCalculator.css">
-    
-    <title>상속으로 인한 양도세 시뮬레이션</title>
-   
+    <meta name="theme-color" content="#005a9e">
+    <title>상속으로 인한 양도세 시뮬레이션 | 대한세무법인</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/daehan-brand.css">
 </head>
 <body>
-    <h2>상속으로 인한 양도세 시뮬레이션</h2>
-    <p> 상속인이 농사짓지 않는 "비사업용 토지"는 사망일로부터 5년 이후 양도하는 경우 기본세율에  10% 추가합니다.</p>
-    <p>※ 보유기간 : 사망일 ~ 양도일 (만, 년)</p>
-    
-    <div id="calculator-1" class="calculator-section">
-        <h2>1) 6개월 이내 양도시</h2>
-        <p>※ 양도가액과 취득가액이 동일하여 양도차익이 없습니다. 감정을 받을 필요없습니다.</p>
-        <label for="transferPrice1">양도가액:</label>
-        <input type="text" id="transferPrice1" inputmode="numeric" oninput="formatNumber(this)"><br>
-       <label for="acquisitionPrice1">취득가액(=양도가액):</label>
-        <input type="text" id="acquisitionPrice1" readonly><br>
-    </div>
 
-    <div id="calculator-2" class="calculator-section">
-        <h2>2) 시가 신고후 미래 양도시</h2>
-        <p>※ 상속세 신고후 몇년이 지난후를 예상한 경우입니다.</p>
-        <p>※ 상속세 신고한 가격이 취득가액이 됩니다.</p>
-        
-        <label for="transferPrice2">양도가액:</label>
-        <input type="text" id="transferPrice2" inputmode="numeric" oninput="formatNumber(this); syncTransferPrice();"><br>
-        <label for="acquisitionPrice2">취득가액(상속세신고시 신고한 가액) : </label>
-        <input type="text" id="acquisitionPrice2" inputmode="numeric" oninput="formatNumber(this)"><br>
-        <label for="holdingPeriod2">보유기간(년):</label>
-        <input type="number" id="holdingPeriod2" step="0.1" min="0" oninput="syncHoldingPeriod();"><br>
-        <label for="nonBusinessUse2">비사업용 여부(5년이내 항상 사업용으로 봄):</label>
-        <input type="checkbox" id="nonBusinessUse2" onchange="syncNonBusinessUse();"><br>
-    </div>
+    <header class="dh-header">
+        <div class="dh-wrap">
+            <span class="dh-brandline">🌊 대한세무법인 · 재산도우미</span>
+            <h1>상속으로 인한 양도세 시뮬레이션</h1>
+            <p class="dh-lead">상속받은 부동산을 <strong>언제, 어떤 신고가액으로</strong> 팔았는지에 따라 양도세가 크게 달라집니다. 세 가지 경우를 한 번에 비교해 보세요.</p>
+        </div>
+        <svg class="dh-wave" viewBox="0 0 1440 54" preserveAspectRatio="none" aria-hidden="true">
+            <path class="w1" d="M0,26 C280,54 560,0 860,22 C1120,42 1300,12 1440,30 L1440,54 L0,54 Z"></path>
+            <path class="w2" d="M0,40 C300,16 600,58 900,38 C1140,22 1300,46 1440,34 L1440,54 L0,54 Z"></path>
+        </svg>
+    </header>
 
-    <div id="calculator-3" class="calculator-section">
-        <h2>3) 기준시가 신고후 미래 양도시</h2>
-        <p>※ 기준시가로 신고하거나 무신고한 경우 경우입니다.</p>
-        <p>※ 취득가액이 기준시가가 됩니다. </p>
-        <label for="transferPrice3">양도가액:</label>
-        <input type="text" id="transferPrice3" inputmode="numeric" readonly><br>
-        <label for="acquisitionPrice3">취득가액(상속당시 기준시가): </label>
-        <input type="text" id="acquisitionPrice3" inputmode="numeric" oninput="formatNumber(this)"><br>
-        <label for="holdingPeriod3">보유기간(년): </label>
-        <input type="number" id="holdingPeriod3" step="0.1" min="0" readonly><br>
-        <label for="nonBusinessUse3">비사업용 여부(5년이내 항상 사업용으로 봄):</label>
-        <input type="checkbox" id="nonBusinessUse3" disabled><br>
-    </div>
+    <main class="dh-wrap dh-main">
 
-    <button onclick="calculateAllTaxes()">모두 계산하기</button>
+        <section class="dh-card">
+            <h2>시뮬레이션 안내</h2>
+            <p class="dh-note">상속인이 농사짓지 않는 <strong>비사업용 토지</strong>는 사망일로부터 5년 이후 양도하는 경우 기본세율에 10%를 추가합니다.</p>
+            <p class="dh-note">보유기간은 <strong>사망일 ~ 양도일</strong> (만, 년) 기준입니다.</p>
+            <p class="dh-note">아래 세 가지 경우를 입력한 뒤 <strong>모두 계산하기</strong>를 누르면 한 표로 비교됩니다.</p>
+        </section>
 
-    <div id="resultTableTrance" style="display:none;"></div>
+        <section id="calculator-1" class="dh-card calculator-section">
+            <h2><span class="dh-step">1</span>6개월 이내 양도시</h2>
+            <p class="dh-note">양도가액과 취득가액이 동일하여 양도차익이 없습니다. 감정을 받을 필요가 없습니다.</p>
+            <div class="dh-fields">
+                <div class="dh-field">
+                    <label for="transferPrice1">양도가액</label>
+                    <input type="text" id="transferPrice1" inputmode="numeric" placeholder="예) 500,000,000" oninput="formatNumber(this)">
+                </div>
+                <div class="dh-field">
+                    <label for="acquisitionPrice1">취득가액 (= 양도가액)</label>
+                    <input type="text" id="acquisitionPrice1" placeholder="자동 계산됩니다" readonly>
+                </div>
+            </div>
+        </section>
 
-    <div class="result">
-        <ul>
-            <li>상속세는 줄일수 있는 세금입니다.</li>
-            <li>상속으로 인한 취득세, 상속받은 물건을 팔때 양도세, 1세대 1주택 비과세 등 중요한 문제가 많습니다</li>
-            
-            <li>상속,취득,양도,종부세 한번에 줄이는 모든 방법이 [상속세 절세 보고서]에 담겨 있습니다.</li>
+        <section id="calculator-2" class="dh-card calculator-section">
+            <h2><span class="dh-step">2</span>시가 신고후 미래 양도시</h2>
+            <p class="dh-note">상속세 신고 후 몇 년이 지난 뒤를 예상한 경우입니다.</p>
+            <p class="dh-note">상속세를 신고한 가격이 그대로 취득가액이 됩니다.</p>
+            <div class="dh-fields">
+                <div class="dh-field">
+                    <label for="transferPrice2">양도가액</label>
+                    <input type="text" id="transferPrice2" inputmode="numeric" placeholder="예) 700,000,000" oninput="formatNumber(this); syncTransferPrice();">
+                </div>
+                <div class="dh-field">
+                    <label for="acquisitionPrice2">취득가액 (상속세 신고시 신고한 가액)</label>
+                    <input type="text" id="acquisitionPrice2" inputmode="numeric" placeholder="예) 500,000,000" oninput="formatNumber(this)">
+                </div>
+                <div class="dh-field">
+                    <label for="holdingPeriod2">보유기간 (년)</label>
+                    <input type="number" id="holdingPeriod2" step="0.1" min="0" placeholder="예) 7" oninput="syncHoldingPeriod();">
+                </div>
+                <div class="dh-field dh-field-check">
+                    <input type="checkbox" id="nonBusinessUse2" onchange="syncNonBusinessUse();">
+                    <label for="nonBusinessUse2">비사업용 여부 (5년 이내는 항상 사업용으로 봄)</label>
+                </div>
+            </div>
+        </section>
 
-        </ul>
-     <br>
-    
+        <section id="calculator-3" class="dh-card calculator-section">
+            <h2><span class="dh-step">3</span>기준시가 신고후 미래 양도시</h2>
+            <p class="dh-note">기준시가로 신고하거나 무신고한 경우입니다.</p>
+            <p class="dh-note">취득가액이 상속당시 기준시가가 됩니다. 양도가액·보유기간·비사업용 여부는 <strong>2번과 동일하게</strong> 자동 반영됩니다.</p>
+            <div class="dh-fields">
+                <div class="dh-field">
+                    <label for="transferPrice3">양도가액 (2번과 동일)</label>
+                    <input type="text" id="transferPrice3" inputmode="numeric" placeholder="2번 입력값이 반영됩니다" readonly>
+                </div>
+                <div class="dh-field">
+                    <label for="acquisitionPrice3">취득가액 (상속당시 기준시가)</label>
+                    <input type="text" id="acquisitionPrice3" inputmode="numeric" placeholder="예) 300,000,000" oninput="formatNumber(this)">
+                </div>
+                <div class="dh-field">
+                    <label for="holdingPeriod3">보유기간 (년, 2번과 동일)</label>
+                    <input type="number" id="holdingPeriod3" step="0.1" min="0" readonly>
+                </div>
+                <div class="dh-field dh-field-check">
+                    <input type="checkbox" id="nonBusinessUse3" disabled>
+                    <label for="nonBusinessUse3">비사업용 여부 (2번과 동일)</label>
+                </div>
+            </div>
 
-   
-    <button class="premium-button" onclick="goToPremiumPage()">진짜! 상속,취득,양도,종부세 한번에 줄이기 ! [ 상속세 절세 보고서 ]</button>
+            <div class="dh-actions">
+                <button class="dh-btn" onclick="calculateAllTaxes()">모두 계산하기</button>
+            </div>
+        </section>
+
+        <div id="resultTableTrance" class="dh-card dh-result" style="display:none;"></div>
+
+        <section class="dh-card result">
+            <h2>상속세는 줄일 수 있는 세금입니다</h2>
+            <ul class="dh-points">
+                <li>상속으로 인한 취득세, 상속받은 물건을 팔 때의 양도세, 1세대 1주택 비과세 등 중요한 문제가 많습니다.</li>
+                <li>상속 · 취득 · 양도 · 종부세를 한 번에 줄이는 모든 방법이 <strong>[상속세 절세 보고서]</strong>에 담겨 있습니다.</li>
+            </ul>
+            <button class="dh-btn dh-btn-accent" onclick="goToPremiumPage()">상속 · 취득 · 양도 · 종부세 한 번에 줄이기 → [ 상속세 절세 보고서 ]</button>
+        </section>
+
+        <footer class="dh-footer">
+            <strong>대한세무법인 · 당신의 세무사</strong>
+            당신을 지키는 가장 가까운 울타리<br>
+            경기도 성남시 분당구 성남대로 912 501호 515호 ·
+            <a href="mailto:tax@taxdh.net">tax@taxdh.net</a> ·
+            <a href="tel:03178388877">031-783-8877</a>
+        </footer>
+
+    </main>
 
     <script>
     let results = {};
@@ -156,7 +209,8 @@
     function updateResultTable() {
         let tableHtml = `
             <h2>계산 결과</h2>
-            <table>
+            <div class="dh-table-scroll">
+            <table class="dh-has-note">
                 <tr>
                     <th>구분</th>
                     <th>1) 6개월 이내 양도</th>
@@ -190,7 +244,7 @@
             `;
         });
 
-        tableHtml += '</table>';
+        tableHtml += '</table></div>';
         document.getElementById('resultTableTrance').innerHTML = tableHtml;
         document.getElementById('resultTableTrance').style.display = 'block';
     }
