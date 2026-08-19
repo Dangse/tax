@@ -65,7 +65,6 @@
             position: relative;
             background: var(--brand);
             color: #fff;
-            overflow: hidden;
         }
         /* 상단 배경사진 */
         body.has-photo header {
@@ -102,27 +101,61 @@
         }
         body.has-photo header h1 { text-shadow: 0 2px 14px rgba(0, 30, 55, .5); }
 
-        /* 배경사진 컨트롤 */
+        /* 배경사진 컨트롤 — 평소엔 작은 아이콘 하나만 */
         .photo-tools {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            z-index: 200;
         }
-        .photo-tool {
-            font-family: inherit;
-            font-size: .82rem;
-            font-weight: 700;
-            color: #fff;
-            padding: 7px 14px;
+        .photo-fab {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            font-size: 15px;
+            line-height: 1;
             cursor: pointer;
-            background: rgba(255, 255, 255, .14);
-            border: 1px solid rgba(255, 255, 255, .38);
-            border-radius: 999px;
-            transition: background .2s;
+            color: #fff;
+            background: rgba(255, 255, 255, .10);
+            border: 1px solid rgba(255, 255, 255, .22);
+            border-radius: 50%;
+            opacity: .45;
+            transition: opacity .2s, background .2s;
         }
-        .photo-tool:hover { background: rgba(255, 255, 255, .28); }
+        .photo-fab:hover,
+        .photo-tools.open .photo-fab { opacity: 1; background: rgba(255, 255, 255, .22); }
+        .photo-menu {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            min-width: 150px;
+            padding: 6px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 40, 75, .18);
+        }
+        .photo-menu[hidden] { display: none; }
+        .photo-tool {
+            display: block;
+            width: 100%;
+            font-family: inherit;
+            font-size: .86rem;
+            font-weight: 500;
+            text-align: left;
+            color: var(--text);
+            padding: 8px 12px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            border-radius: 6px;
+        }
+        .photo-tool:hover { background: #f0f5fa; color: var(--brand); }
         .photo-tool[hidden] { display: none; }
+        #photoReset { color: #b0483f; }
+        #photoReset:hover { background: #fbf1f0; color: #b0483f; }
 
         /* ===== 내비게이션 ===== */
         nav {
@@ -250,7 +283,7 @@
         .scroll-to-top:hover { opacity: 1; }
 
         @media (max-width: 640px) {
-            .header-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+            .header-inner { justify-content: flex-start; }
             .product-list { grid-template-columns: 1fr; }
         }
     </style>
@@ -260,10 +293,13 @@
     <header>
         <div class="container header-inner">
             <h1>대한세무법인</h1>
-            <div class="photo-tools">
-                <button type="button" class="photo-tool" id="photoPick">배경사진 올리기</button>
-                <button type="button" class="photo-tool" id="photoMode" hidden>전체 배경으로</button>
-                <button type="button" class="photo-tool" id="photoReset" hidden>사진 지우기</button>
+            <div class="photo-tools" id="photoTools">
+                <button type="button" class="photo-fab" id="photoToggle" title="배경사진 설정" aria-label="배경사진 설정" aria-expanded="false">📷</button>
+                <div class="photo-menu" id="photoMenu" hidden>
+                    <button type="button" class="photo-tool" id="photoPick">배경사진 올리기</button>
+                    <button type="button" class="photo-tool" id="photoMode" hidden>전체 배경으로</button>
+                    <button type="button" class="photo-tool" id="photoReset" hidden>사진 지우기</button>
+                </div>
                 <input type="file" id="photoInput" accept="image/*" hidden>
             </div>
         </div>
@@ -470,6 +506,25 @@
             const modeBtn = document.getElementById('photoMode');
             const resetBtn = document.getElementById('photoReset');
             const input = document.getElementById('photoInput');
+            const tools = document.getElementById('photoTools');
+            const toggleBtn = document.getElementById('photoToggle');
+            const menu = document.getElementById('photoMenu');
+
+            function setMenu(open) {
+                menu.hidden = !open;
+                tools.classList.toggle('open', open);
+                toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setMenu(menu.hidden);
+            });
+            document.addEventListener('click', (e) => {
+                if (!menu.hidden && !tools.contains(e.target)) setMenu(false);
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') setMenu(false);
+            });
 
             function render(dataUrl, mode) {
                 const body = document.body;
@@ -512,7 +567,7 @@
                 });
             }
 
-            pickBtn.addEventListener('click', () => input.click());
+            pickBtn.addEventListener('click', () => { setMenu(false); input.click(); });
 
             input.addEventListener('change', async () => {
                 const file = input.files && input.files[0];
@@ -534,12 +589,14 @@
             });
 
             modeBtn.addEventListener('click', () => {
+                setMenu(false);
                 const next = document.body.classList.contains('photo-full') ? 'top' : 'full';
                 render(localStorage.getItem(IMG_KEY), next);
                 try { localStorage.setItem(MODE_KEY, next); } catch (e) {}
             });
 
             resetBtn.addEventListener('click', () => {
+                setMenu(false);
                 if (!confirm('배경사진을 지울까요?')) return;
                 render(null, 'top');
                 try { localStorage.removeItem(IMG_KEY); } catch (e) {}
