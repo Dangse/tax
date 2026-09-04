@@ -118,11 +118,33 @@
     transition: border-color .15s, transform .15s;
   }
   ul.items li:hover { border-color: var(--accent); transform: translateY(-1px); }
-  ul.items .doc-icon {
-    flex: none; width: 38px; height: 38px; border-radius: 9px;
+  /* 발표자 이름 배지 — 누구 자료인지 한눈에 */
+  ul.items .who {
+    flex: none; min-width: 68px; max-width: 120px; padding: 9px 12px; border-radius: 9px;
     background: #e8f3fb; color: var(--brand);
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: 700;
+    font-size: 14.5px; font-weight: 700; letter-spacing: -.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  ul.items .who.link { background: #eaf7ef; color: #1e8a4c; }
+
+  /* 오른쪽 버튼 묶음 */
+  ul.items .actions { flex: none; display: flex; align-items: center; gap: 6px; }
+  ul.items .done-btn {
+    background: #fff; color: var(--brand); border: 1px solid var(--brand);
+    font-size: 12.5px; padding: 5px 10px; border-radius: 6px; white-space: nowrap;
+  }
+  ul.items .done-btn:hover { background: var(--brand); color: #fff; }
+
+  /* 발표완료 상태 — 목록 아래로 내려가고 흐리게 */
+  ul.items li.done { background: #f3f6f9; opacity: .75; }
+  ul.items li.done .title { color: var(--muted); }
+  ul.items li.done .who { background: #e6ebf0; color: var(--muted); }
+  ul.items li.done .done-btn { color: var(--muted); border-color: var(--line); }
+  ul.items li.done .done-btn:hover { background: #fff; color: var(--text); border-color: var(--muted); }
+  ul.items .done-tag {
+    display: inline-block; font-size: 11.5px; font-weight: 500; color: #1e8a4c; background: #eaf7ef;
+    border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle;
   }
   ul.items .body { flex: 1 1 auto; min-width: 0; }
   ul.items .title {
@@ -144,7 +166,6 @@
     border: 1px solid var(--line); font-weight: 500;
   }
   .mode-tabs button.on { background: var(--brand); color: #fff; border-color: var(--brand); }
-  ul.items .doc-icon.link { background: #eaf7ef; color: #1e8a4c; font-size: 15px; }
 
   .state { text-align: center; color: var(--muted); font-size: 14px; padding: 36px 12px; }
 
@@ -325,11 +346,18 @@ function viewUrl(id) {
   return url + (url.includes('?') ? '&' : '?') + 'action=view&id=' + encodeURIComponent(id);
 }
 
+/* 발표 전 자료는 최신순 그대로, 발표완료 자료는 완료한 순서대로 맨 아래에 */
+function sorted(items) {
+  const pending = items.filter(it => !it.done);
+  const done = items.filter(it => it.done).sort((a, b) => String(a.done).localeCompare(String(b.done)));
+  return pending.concat(done);
+}
+
 function render() {
   const q = $('search').value.trim().toLowerCase();
-  const list = q
+  const list = sorted(q
     ? ITEMS.filter(it => (it.title + ' ' + it.name + ' ' + (it.desc || '')).toLowerCase().includes(q))
-    : ITEMS;
+    : ITEMS);
 
   $('count').textContent = ITEMS.length ? '(' + list.length + '건)' : '';
   const ul = $('items');
@@ -346,16 +374,24 @@ function render() {
 
   for (const it of list) {
     const isLink = !!it.link;
+    const isDone = !!it.done;
     const href = isLink ? safeUrl(it.link) : viewUrl(it.id);
     const li = document.createElement('li');
+    if (isDone) li.classList.add('done');
     li.innerHTML =
-      '<div class="doc-icon' + (isLink ? ' link' : '') + '">' + (isLink ? '🔗' : 'H') + '</div>' +
+      '<div class="who' + (isLink ? ' link' : '') + '" title="' + esc(it.name) + '">' + esc(it.name) + '</div>' +
       '<div class="body">' +
-        '<a class="title" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + esc(it.title) + '</a>' +
+        '<a class="title" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + esc(it.title) +
+          (isDone ? '<span class="done-tag">발표완료</span>' : '') + '</a>' +
         (it.desc ? '<div class="desc">' + esc(it.desc) + '</div>' : '') +
-        '<div class="meta">' + esc(it.name) + ' · ' + esc(it.date) + (isLink ? ' · 링크' : '') + '</div>' +
+        '<div class="meta">' + esc(it.date) + (isLink ? ' · 링크' : ' · HTML') +
+          (isDone ? ' · 완료 ' + esc(it.done) : '') + '</div>' +
       '</div>' +
-      '<button type="button" class="del" title="삭제" aria-label="삭제">×</button>';
+      '<div class="actions">' +
+        '<button type="button" class="done-btn">' + (isDone ? '되돌리기' : '발표완료') + '</button>' +
+        '<button type="button" class="del" title="삭제" aria-label="삭제">×</button>' +
+      '</div>';
+    li.querySelector('.done-btn').addEventListener('click', () => toggleDone(it));
     li.querySelector('.del').addEventListener('click', () => removeItem(it));
     ul.appendChild(li);
   }
@@ -422,6 +458,31 @@ $('uploadForm').addEventListener('submit', async (e) => {
     btn.textContent = '올리기';
   }
 });
+
+/* ---------- 발표완료 / 되돌리기 ---------- */
+async function toggleDone(it) {
+  if (!ensureAuth()) return;
+  const next = !it.done;
+  const prev = it.done;
+
+  // 서버 응답을 기다리지 않고 먼저 화면에 반영
+  const n = new Date(), p = v => String(v).padStart(2, '0');
+  it.done = next
+    ? n.getFullYear() + '-' + p(n.getMonth() + 1) + '-' + p(n.getDate()) + ' ' + p(n.getHours()) + ':' + p(n.getMinutes())
+    : '';
+  render();
+
+  try {
+    const data = await callApi({ action: 'done', pw: INTERNAL_PW, id: it.id, done: next });
+    if (!data.ok) throw new Error(data.error || '처리에 실패했습니다.');
+    it.done = data.done || '';
+    render();
+  } catch (err) {
+    it.done = prev;
+    render();
+    alert((next ? '발표완료 처리' : '되돌리기') + ' 실패: ' + err.message);
+  }
+}
 
 /* ---------- 삭제 ---------- */
 async function removeItem(it) {

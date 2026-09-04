@@ -17,7 +17,7 @@ var 비밀번호 = '0625';                 // index.html 의 내부결재문서 
 var 폴더이름 = '워크샵 결과물 발표';
 var 시트이름 = '워크샵 결과물 발표 목록';
 var 최대용량 = 5 * 1024 * 1024;         // 5MB
-var 헤더 = ['등록일시', '발표자', '제목', '설명', '파일ID', '파일명', '링크'];
+var 헤더 = ['등록일시', '발표자', '제목', '설명', '파일ID', '파일명', '링크', '발표완료'];
 
 
 /* ==================================================================
@@ -56,6 +56,7 @@ function doPost(e) {
     }
     if (req.action === 'upload') return json_(올리기_(req));
     if (req.action === 'delete') return json_(지우기_(req));
+    if (req.action === 'done')   return json_(완료_(req));
 
     return json_({ ok: false, error: '알 수 없는 요청입니다: ' + req.action });
   } catch (err) {
@@ -87,7 +88,8 @@ function 목록_() {
       desc: String(r[3] || ''),
       id: String(r[4]),
       filename: String(r[5] || ''),
-      link: String(r[6] || '')
+      link: String(r[6] || ''),
+      done: 날짜_(r[7])                        // 발표완료 시각, 비어 있으면 아직 발표 전
     });
   }
   return items.reverse();
@@ -112,7 +114,7 @@ function 올리기_(req) {
       throw new Error('http:// 또는 https:// 로 시작하는 주소만 등록할 수 있습니다.');
     }
     var key = Utilities.getUuid();          // 삭제할 때 쓰는 구분값
-    info.sheet.appendRow([new Date(), name, title, desc, key, '', link]);
+    info.sheet.appendRow([new Date(), name, title, desc, key, '', link, '']);
     return { ok: true, id: key, link: link };
   }
 
@@ -126,7 +128,7 @@ function 올리기_(req) {
   var blob = Utilities.newBlob(bytes, 'text/html', stamp + '_' + name + '_' + filename);
   var file = info.folder.createFile(blob);
 
-  info.sheet.appendRow([new Date(), name, title, desc, file.getId(), filename, '']);
+  info.sheet.appendRow([new Date(), name, title, desc, file.getId(), filename, '', '']);
 
   return { ok: true, id: file.getId() };
 }
@@ -154,6 +156,25 @@ function 지우기_(req) {
     // 파일이 이미 없어도 목록에서 지워졌으면 성공으로 처리
   }
   return { ok: true };
+}
+
+/** 발표완료 표시 / 되돌리기 — done: true 면 완료 시각 기록, false 면 지움 */
+function 완료_(req) {
+  var id = String(req.id || '').trim();
+  if (!id) throw new Error('대상이 지정되지 않았습니다.');
+
+  var sheet = 준비_().sheet;
+  var col = 헤더.indexOf('발표완료') + 1;
+  var last = sheet.getLastRow();
+
+  for (var row = 2; row <= last; row++) {
+    if (String(sheet.getRange(row, 5).getValue()) === id) {
+      var value = req.done ? new Date() : '';
+      sheet.getRange(row, col).setValue(value);
+      return { ok: true, id: id, done: value ? 날짜_(value) : '' };
+    }
+  }
+  throw new Error('목록에 없는 항목입니다.');
 }
 
 /** 열람 — 등록된 파일만 HTML 로 그려서 보여줍니다. */
@@ -227,9 +248,12 @@ function 준비_() {
     sheet.appendRow(헤더);
     sheet.getRange(1, 1, 1, 헤더.length).setFontWeight('bold');
     sheet.setFrozenRows(1);
-  } else if (sheet.getRange(1, 헤더.length).getValue() !== 헤더[헤더.length - 1]) {
-    // 이전 버전 시트에는 '링크' 열이 없으므로 자동으로 추가합니다.
-    sheet.getRange(1, 헤더.length).setValue(헤더[헤더.length - 1]).setFontWeight('bold');
+  } else {
+    // 이전 버전 시트에 없는 열('링크', '발표완료' 등)을 자동으로 채워 넣습니다.
+    var head = sheet.getRange(1, 1, 1, 헤더.length).getValues()[0];
+    for (var c = 0; c < 헤더.length; c++) {
+      if (head[c] !== 헤더[c]) sheet.getRange(1, c + 1).setValue(헤더[c]).setFontWeight('bold');
+    }
   }
 
   return { folder: folder, folderId: folderId, sheet: sheet, sheetId: sheetId };
