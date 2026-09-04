@@ -17,7 +17,7 @@ var 비밀번호 = '0625';                 // index.html 의 내부결재문서 
 var 폴더이름 = '워크샵 결과물 발표';
 var 시트이름 = '워크샵 결과물 발표 목록';
 var 최대용량 = 5 * 1024 * 1024;         // 5MB
-var 헤더 = ['등록일시', '발표자', '제목', '설명', '파일ID', '파일명'];
+var 헤더 = ['등록일시', '발표자', '제목', '설명', '파일ID', '파일명', '링크'];
 
 
 /* ==================================================================
@@ -86,37 +86,52 @@ function 목록_() {
       title: String(r[2] || ''),
       desc: String(r[3] || ''),
       id: String(r[4]),
-      filename: String(r[5] || '')
+      filename: String(r[5] || ''),
+      link: String(r[6] || '')
     });
   }
   return items.reverse();
 }
 
-/** 업로드 */
+/** 업로드 — HTML 파일 또는 링크 주소 둘 중 하나 */
 function 올리기_(req) {
   var name = String(req.name || '').trim();
   var title = String(req.title || '').trim();
   var desc = String(req.desc || '').trim();
+  var link = String(req.link || '').trim();
   var filename = String(req.filename || 'untitled.html').trim();
 
   if (!name || !title) throw new Error('이름과 제목은 반드시 입력해야 합니다.');
-  if (!req.content) throw new Error('파일 내용이 비어 있습니다.');
+  if (!req.content && !link) throw new Error('HTML 파일이나 링크 주소 중 하나는 있어야 합니다.');
+
+  var info = 준비_();
+
+  // (1) 링크만 등록 — 드라이브에 파일을 만들지 않습니다.
+  if (!req.content) {
+    if (!/^https?:\/\/.+/i.test(link)) {
+      throw new Error('http:// 또는 https:// 로 시작하는 주소만 등록할 수 있습니다.');
+    }
+    var key = Utilities.getUuid();          // 삭제할 때 쓰는 구분값
+    info.sheet.appendRow([new Date(), name, title, desc, key, '', link]);
+    return { ok: true, id: key, link: link };
+  }
+
+  // (2) HTML 파일 업로드
   if (!/\.(html?|htm)$/i.test(filename)) throw new Error('HTML 파일만 올릴 수 있습니다.');
 
   var bytes = Utilities.base64Decode(req.content);
   if (bytes.length > 최대용량) throw new Error('파일이 5MB를 넘습니다.');
 
-  var info = 준비_();
   var stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyyMMdd_HHmmss');
   var blob = Utilities.newBlob(bytes, 'text/html', stamp + '_' + name + '_' + filename);
   var file = info.folder.createFile(blob);
 
-  info.sheet.appendRow([new Date(), name, title, desc, file.getId(), filename]);
+  info.sheet.appendRow([new Date(), name, title, desc, file.getId(), filename, '']);
 
   return { ok: true, id: file.getId() };
 }
 
-/** 삭제 — 드라이브 파일은 휴지통으로, 시트에서는 행 제거 */
+/** 삭제 — 시트에서 행 제거, 파일이 있으면 휴지통으로 (링크 항목은 파일이 없음) */
 function 지우기_(req) {
   var id = String(req.id || '').trim();
   if (!id) throw new Error('삭제할 파일이 지정되지 않았습니다.');
@@ -152,6 +167,16 @@ function 보기_(id) {
     if (items[i].id === id) { hit = items[i]; break; }
   }
   if (!hit) return 안내_('목록에 등록되지 않은 파일입니다.');
+
+  // 링크로 등록된 항목이면 해당 주소로 넘겨줍니다.
+  if (hit.link) {
+    var safe = hit.link.replace(/"/g, '&quot;');
+    return HtmlService.createHtmlOutput(
+      '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">'
+      + '<meta http-equiv="refresh" content="0; url=' + safe + '"></head>'
+      + '<body><p>이동 중입니다… <a href="' + safe + '" target="_blank">바로 열기</a></p></body></html>')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
 
   var html;
   try {
@@ -202,6 +227,9 @@ function 준비_() {
     sheet.appendRow(헤더);
     sheet.getRange(1, 1, 1, 헤더.length).setFontWeight('bold');
     sheet.setFrozenRows(1);
+  } else if (sheet.getRange(1, 헤더.length).getValue() !== 헤더[헤더.length - 1]) {
+    // 이전 버전 시트에는 '링크' 열이 없으므로 자동으로 추가합니다.
+    sheet.getRange(1, 헤더.length).setValue(헤더[헤더.length - 1]).setFontWeight('bold');
   }
 
   return { folder: folder, folderId: folderId, sheet: sheet, sheetId: sheetId };
